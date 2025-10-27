@@ -4,7 +4,6 @@ Application de gestion des livraisons avec Spring Boot, pour suivre, planifier e
 ![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen?style=for-the-badge)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-8-blue?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
 
 ---
 
@@ -293,7 +292,7 @@ mvn spring-boot:run
 Développeuse Full Stack – YouCode
 
 📧 *[nmissinadia@gmail.com](mailto:nmissinadia@gmail.com)*
-💼 [LinkedIn](https://www.linkedin.com/in/nadia-dupont)
+💼 [LinkedIn](https://www.linkedin.com/in/nadia-nmissi-9bb00619a)
 
 ---
 
