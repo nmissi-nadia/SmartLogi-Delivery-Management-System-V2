@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: nadia
+      changes:
+        - createTable:
+            tableName: colis
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: poids
+                  type: DECIMAL(10,2)
+              - column:
+                  name: statut
+                  type: VARCHAR(50)
+              - column:
+                  name: priorite
+                  type: VARCHAR(50)
+              - column:
+                  name: id_client_expediteur
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_colis_client
+                    references: client_expediteur(id)
+              - column:
+                  name: id_destinataire
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_colis_destinataire
+                    references: destinataire(id)
+              - column:
+                  name: id_livreur
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_colis_livreur
+                    references: livreur(id)
+              - column:
+                  name: id_zone
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_colis_zone
+                    references: zone(id)
+              - column:
+                  name: ville_destination
+                  type: VARCHAR(100)
