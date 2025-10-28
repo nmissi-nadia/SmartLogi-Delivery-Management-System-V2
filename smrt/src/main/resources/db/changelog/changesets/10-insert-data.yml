@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10
+      author: nadia
+      changes:
+        - insert:
+            tableName: zone
+            columns:
+              - column: { name: id, valueNumeric: 1 }
+              - column: { name: nom, value: "Casablanca Centre" }
+              - column: { name: code_postal, value: "20000" }
+
+        - insert:
+            tableName: livreur
+            columns:
+              - column: { name: id, valueNumeric: 1 }
+              - column: { name: nom, value: "Youssef" }
+              - column: { name: prenom, value: "El Amrani" }
+              - column: { name: telephone, value: "0600123456" }
+              - column: { name: vehicule, value: "Moto" }
+              - column: { name: zone_assignée, valueNumeric: 1 }
