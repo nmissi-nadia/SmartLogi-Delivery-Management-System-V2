@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: nadia
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: nom
+                  type: VARCHAR(100)
+              - column:
+                  name: prenom
+                  type: VARCHAR(100)
+              - column:
+                  name: email
+                  type: VARCHAR(150)
+                  constraints:
+                    unique: true
+              - column:
+                  name: telephone
+                  type: VARCHAR(20)
+              - column:
+                  name: role
+                  type: VARCHAR(50)
