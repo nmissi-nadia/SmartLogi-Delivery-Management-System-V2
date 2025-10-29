@@ -1,0 +1,82 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.2
+      author: nadia
+      changes:
+        # Table client_expediteurs
+        - createTable:
+            tableName: client_expediteurs
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    references: users(id)
+                    foreignKeyName: fk_client_user
+              - column:
+                  name: entreprise
+                  type: VARCHAR(150)
+              - column:
+                  name: adresse
+                  type: VARCHAR(255)
+
+        # Table destinataires
+        - createTable:
+            tableName: destinataires
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    references: users(id)
+                    foreignKeyName: fk_destinataire_user
+              - column:
+                  name: adresse
+                  type: VARCHAR(255)
+
+        # Table livreurs
+        - createTable:
+            tableName: livreurs
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    references: users(id)
+                    foreignKeyName: fk_livreur_user
+              - column:
+                  name: vehicule
+                  type: VARCHAR(100)
+              - column:
+                  name: zone_id
+                  type: BIGINT
+              - column:
+                  name: disponibilite
+                  type: BOOLEAN
+        - addForeignKeyConstraint:
+            baseTableName: livreurs
+            baseColumnNames: zone_id
+            referencedTableName: zones
+            referencedColumnNames: id
+            constraintName: fk_livreur_zone
+
+        # Table gestionnaires_logistiques
+        - createTable:
+            tableName: gestionnaires_logistiques
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    references: users(id)
+                    foreignKeyName: fk_gestionnaire_user
+              - column:
+                  name: poste
+                  type: VARCHAR(100)
+              - column:
+                  name: bureau
+                  type: VARCHAR(100)

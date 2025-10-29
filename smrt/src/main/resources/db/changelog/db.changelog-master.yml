@@ -4,9 +4,9 @@ databaseChangeLog:
   - include:
       file: changesets/2-create-client-expediteur.yml
   - include:
-      file: changesets/3-create-destinataire.yml
+      file: changesets/3-create-roles.yml
   - include:
-      file: changesets/4-create-livreur.yml
+      file: changesets/4-create-specialized-users.yml
   - include:
       file: changesets/5-create-zone.yml
   - include:
@@ -14,8 +14,8 @@ databaseChangeLog:
   - include:
       file: changesets/7-create-historique-livraison.yml
   - include:
-      file: changesets/8-create-produit.yml
+      file: changesets/8-create-produits.yml
   - include:
-      file: changesets/9-create-colis-produit.yml
+      file: changesets/9-create-colis-produits.yml
   - include:
       file: changesets/10-insert-data.yml
