@@ -1,7 +1,7 @@
-package com.smartlogi.service;
+package com.smart.service;
 
-import com.smartlogi.entity.User;
-import com.smartlogi.repository.UserRepository;
+import com.smart.entity.User;
+import com.smart.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;

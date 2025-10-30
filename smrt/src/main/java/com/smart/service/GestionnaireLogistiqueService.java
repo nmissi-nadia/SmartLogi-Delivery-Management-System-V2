@@ -1,7 +1,7 @@
-package com.smartlogi.service;
+package com.smart.service;
 
-import com.smartlogi.entity.GestionnaireLogistique;
-import com.smartlogi.repository.GestionnaireLogistiqueRepository;
+import com.smart.entity.GestionnaireLogistique;
+import com.smart.repository.GestionnaireLogistiqueRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

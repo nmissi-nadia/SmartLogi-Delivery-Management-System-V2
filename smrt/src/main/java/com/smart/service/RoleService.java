@@ -1,7 +1,7 @@
-package com.smartlogi.service;
+package com.smart.service;
 
-import com.smartlogi.entity.Role;
-import com.smartlogi.repository.RoleRepository;
+import com.smart.entity.Enum.Role;
+import com.smart.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

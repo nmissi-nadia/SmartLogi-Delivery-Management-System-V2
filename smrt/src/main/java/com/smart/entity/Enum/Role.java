@@ -1,4 +1,4 @@
-package com.smart.entity;
+package com.smart.entity.Enum;
 
 public enum Role {
     CLIENT_EXPEDITEUR,

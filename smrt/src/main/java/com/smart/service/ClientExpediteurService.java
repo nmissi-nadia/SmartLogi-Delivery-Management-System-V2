@@ -1,7 +1,7 @@
-package com.smartlogi.service;
+package com.smart.service;
 
-import com.smartlogi.entity.ClientExpediteur;
-import com.smartlogi.repository.ClientExpediteurRepository;
+import com.smart.entity.ClientExpediteur;
+import com.smart.repository.ClientExpediteurRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

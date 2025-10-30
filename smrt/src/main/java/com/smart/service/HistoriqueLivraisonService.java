@@ -1,7 +1,7 @@
-package com.smartlogi.service;
+package com.smart.service;
 
-import com.smartlogi.entity.HistoriqueLivraison;
-import com.smartlogi.repository.HistoriqueLivraisonRepository;
+import com.smart.entity.HistoriqueLivraison;
+import com.smart.repository.HistoriqueLivraisonRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

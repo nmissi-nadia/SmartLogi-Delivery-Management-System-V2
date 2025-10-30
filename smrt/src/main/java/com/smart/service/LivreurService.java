@@ -1,7 +1,7 @@
-package com.smartlogi.service;
+package com.smart.service;
 
-import com.smartlogi.entity.Livreur;
-import com.smartlogi.repository.LivreurRepository;
+import com.smart.entity.Livreur;
+import com.smart.repository.LivreurRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

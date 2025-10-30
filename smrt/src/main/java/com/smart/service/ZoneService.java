@@ -1,7 +1,7 @@
-package com.smartlogi.service;
+package com.smart.service;
 
-import com.smartlogi.entity.Zone;
-import com.smartlogi.repository.ZoneRepository;
+import com.smart.entity.Zone;
+import com.smart.repository.ZoneRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -15,4 +15,8 @@ public class ZoneService {
 
     public List<Zone> getAllZones() { return zoneRepository.findAll(); }
     public Zone createZone(Zone zone) { return zoneRepository.save(zone); }
+
+    public Zone getZoneById(Long id) {
+
+    }
 }

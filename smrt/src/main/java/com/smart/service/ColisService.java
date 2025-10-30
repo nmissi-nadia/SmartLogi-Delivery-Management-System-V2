@@ -1,7 +1,7 @@
-package com.smartlogi.service;
+package com.smart.service;
 
-import com.smartlogi.entity.Colis;
-import com.smartlogi.repository.ColisRepository;
+import com.smart.entity.Colis;
+import com.smart.repository.ColisRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

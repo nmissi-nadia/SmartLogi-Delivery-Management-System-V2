@@ -1,5 +1,6 @@
 package com.smart.entity;
 
+import com.smart.entity.Enum.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
