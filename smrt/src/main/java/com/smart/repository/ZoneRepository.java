@@ -1,9 +1,10 @@
 package com.smart.repository;
 
-import com.smart.entity.ColisProduit;
+import com.smart.entity.Zone;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ColisProduitRepository extends JpaRepository<ColisProduit, Long> {
+public interface ZoneRepository extends JpaRepository<Zone, Long> {
+    Zone findByNom(String nom);
 }
