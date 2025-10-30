@@ -1,16 +1,38 @@
 package com.smart.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
+import java.util.List;
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "client_expediteurs")
-@PrimaryKeyJoinColumn(name = "id")
-public class ClientExpediteur extends User {
+@Entity
+public class ClientExpediteur {
 
-    private String entreprise;
+    @Id
+    private String id;
+
+    private String nom;
+    private String prenom;
+    private String email;
+    private String telephone;
     private String adresse;
+
+    @OneToMany(mappedBy = "clientExpediteur")
+    private List<Colis> colisEnvoyes;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID().toString();
+        }
+    }
 }

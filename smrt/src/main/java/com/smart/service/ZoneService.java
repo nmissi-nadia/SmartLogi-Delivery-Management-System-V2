@@ -1,22 +1,37 @@
 package com.smart.service;
 
+import com.smart.dto.ZoneDTO;
 import com.smart.entity.Zone;
+import com.smart.mapper.ZoneMapper;
 import com.smart.repository.ZoneRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ZoneService {
-    private final ZoneRepository zoneRepository;
+    private final ZoneRepository repository;
+    private final ZoneMapper mapper;
 
-    public ZoneService(ZoneRepository zoneRepository) {
-        this.zoneRepository = zoneRepository;
+    public List<ZoneDTO> findAll() {
+        return repository.findAll().stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public List<Zone> getAllZones() { return zoneRepository.findAll(); }
-    public Zone createZone(Zone zone) { return zoneRepository.save(zone); }
+    public Optional<ZoneDTO> findById(String id) {
+        return repository.findById(id).map(mapper::toDto);
+    }
 
-    public Zone getZoneById(Long id) {
+    public ZoneDTO save(ZoneDTO dto) {
+        Zone entity = mapper.toEntity(dto);
+        return mapper.toDto(repository.save(entity));
+    }
 
+    public void deleteById(String id) {
+        repository.deleteById(id);
     }
 }

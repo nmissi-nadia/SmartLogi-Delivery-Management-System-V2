@@ -1,17 +1,20 @@
 package com.smart.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "colis_produits")
+@Entity
 public class ColisProduit {
 
     @EmbeddedId
-    private ColisProduitKey id = new ColisProduitKey();
+    private ColisProduitKey id;
 
     @ManyToOne
     @MapsId("colisId")
@@ -23,6 +26,7 @@ public class ColisProduit {
     @JoinColumn(name = "produit_id")
     private Produit produit;
 
-    private int quantite;
-    private Double prix;
+    private Integer quantite;
+    private Double prix; // Prix au moment de l'ajout
+    private LocalDate dateAjout;
 }

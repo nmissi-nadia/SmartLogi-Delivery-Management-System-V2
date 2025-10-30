@@ -2,17 +2,18 @@ package com.smart.service;
 
 import com.smart.entity.GestionnaireLogistique;
 import com.smart.repository.GestionnaireLogistiqueRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class GestionnaireLogistiqueService {
-    private final GestionnaireLogistiqueRepository gestionnaireRepository;
+    private final GestionnaireLogistiqueRepository repository;
 
-    public GestionnaireLogistiqueService(GestionnaireLogistiqueRepository gestionnaireRepository) {
-        this.gestionnaireRepository = gestionnaireRepository;
-    }
-
-    public List<GestionnaireLogistique> getAllGestionnaires() { return gestionnaireRepository.findAll(); }
-    public GestionnaireLogistique createGestionnaire(GestionnaireLogistique gestionnaire) { return gestionnaireRepository.save(gestionnaire); }
+    public List<GestionnaireLogistique> findAll() { return repository.findAll(); }
+    public Optional<GestionnaireLogistique> findById(String id) { return repository.findById(id); }
+    public GestionnaireLogistique save(GestionnaireLogistique gestionnaire) { return repository.save(gestionnaire); }
+    public void deleteById(String id) { repository.deleteById(id); }
 }

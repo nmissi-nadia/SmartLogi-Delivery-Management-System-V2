@@ -1,41 +1,50 @@
 package com.smart.controller;
 
-import com.smart.entity.Livreur;
+import com.smart.dto.LivreurDTO;
 import com.smart.service.LivreurService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/livreurs")
+@RequestMapping("/api/livreurs")
+@RequiredArgsConstructor
 public class LivreurController {
-    private final LivreurService livreurService;
-
-    public LivreurController(LivreurService livreurService) {
-        this.livreurService = livreurService;
-    }
+    private final LivreurService service;
 
     @GetMapping
-    public List<Livreur> getAllLivreurs() {
-        return livreurService.getAllLivreurs();
+    public List<LivreurDTO> getAll() {
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public Livreur getLivreurById(@PathVariable Long id) {
-        return livreurService.getLivreurById(id);
+    public ResponseEntity<LivreurDTO> getById(@PathVariable String id) {
+        return service.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Livreur addLivreur(@RequestBody Livreur livreur) {
-        return livreurService.addLivreur(livreur);
+    public LivreurDTO create(@RequestBody LivreurDTO dto) {
+        return service.save(dto);
     }
 
     @PutMapping("/{id}")
-    public Livreur updateLivreur(@PathVariable Long id, @RequestBody Livreur livreur) {
-        return livreurService.updateLivreur(id, livreur);
+    public ResponseEntity<LivreurDTO> update(@PathVariable String id, @RequestBody LivreurDTO dto) {
+        if (!service.findById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        dto.setId(id);
+        return ResponseEntity.ok(service.save(dto));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteLivreur(@PathVariable Long id) {
-        livreurService.deleteLivreur(id);
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        if (!service.findById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        service.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

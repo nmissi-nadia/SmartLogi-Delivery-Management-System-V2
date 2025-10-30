@@ -1,27 +1,29 @@
 package com.smart.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.UUID;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "zones")
+@Entity
 public class Zone {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private String nom;
-    private String ville;
     private String codePostal;
 
-    @OneToMany(mappedBy = "zone")
-    private List<Livreur> livreurs;
-
-    @OneToMany(mappedBy = "zone")
-    private List<Colis> colis;
+    @PrePersist
+    public void prePersist() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID().toString();
+        }
+    }
 }

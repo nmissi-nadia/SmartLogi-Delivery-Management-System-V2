@@ -1,29 +1,31 @@
 package com.smart.entity;
 
-import com.smart.entity.Enum.StatutColis;
 import jakarta.persistence.*;
-import lombok.*;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
+import java.util.List;
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "colis")
+@Entity
 public class Colis {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String description;
     private Double poids;
-
-    @Enumerated(EnumType.STRING)
-    private StatutColis statut;
-
+    private String statut; // (créé, collecté, en stock, en transit, livré)
     private String priorite;
     private String villeDestination;
+
+    @ManyToOne
+    @JoinColumn(name = "livreur_id")
+    private Livreur livreur;
 
     @ManyToOne
     @JoinColumn(name = "client_expediteur_id")
@@ -37,13 +39,16 @@ public class Colis {
     @JoinColumn(name = "zone_id")
     private Zone zone;
 
-    @ManyToOne
-    @JoinColumn(name = "livreur_id")
-    private Livreur livreur;
+    @OneToMany(mappedBy = "colis", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HistoriqueLivraison> historique;
 
-    @OneToMany(mappedBy = "colis", cascade = CascadeType.ALL)
-    private List<ColisProduit> produits;
+    @OneToMany(mappedBy = "colis", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ColisProduit> produitsContenus;
 
-    @OneToMany(mappedBy = "colis", cascade = CascadeType.ALL)
-    private List<HistoriqueLivraison> historiques;
+    @PrePersist
+    public void prePersist() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID().toString();
+        }
+    }
 }

@@ -1,13 +1,22 @@
 package com.smart.entity;
-import jakarta.persistence.*;
-import lombok.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
-@Embeddable
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Embeddable
 public class ColisProduitKey implements Serializable {
-    private Long colisId;
-    private Long produitId;
+
+    @Column(name = "colis_id")
+    private String colisId;
+
+    @Column(name = "produit_id")
+    private String produitId;
 }

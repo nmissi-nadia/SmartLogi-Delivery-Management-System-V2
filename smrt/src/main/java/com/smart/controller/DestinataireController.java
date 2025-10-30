@@ -1,37 +1,37 @@
 package com.smart.controller;
 
-import com.smart.dto.ZoneDTO;
-import com.smart.service.ZoneService;
+import com.smart.dto.DestinataireDTO;
+import com.smart.service.DestinataireService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/zones")
+@RequestMapping("/api/destinataires")
 @RequiredArgsConstructor
-public class ZoneController {
-    private final ZoneService service;
+public class DestinataireController {
+    private final DestinataireService service;
 
     @GetMapping
-    public List<ZoneDTO> getAll() {
+    public List<DestinataireDTO> getAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ZoneDTO> getById(@PathVariable String id) {
+    public ResponseEntity<DestinataireDTO> getById(@PathVariable String id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ZoneDTO create(@RequestBody ZoneDTO dto) {
+    public DestinataireDTO create(@RequestBody DestinataireDTO dto) {
         return service.save(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ZoneDTO> update(@PathVariable String id, @RequestBody ZoneDTO dto) {
+    public ResponseEntity<DestinataireDTO> update(@PathVariable String id, @RequestBody DestinataireDTO dto) {
         if (!service.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }

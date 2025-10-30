@@ -1,42 +1,42 @@
 package com.smart.controller;
 
-import com.smart.dto.ZoneDTO;
-import com.smart.service.ZoneService;
+import com.smart.entity.GestionnaireLogistique;
+import com.smart.service.GestionnaireLogistiqueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/zones")
+@RequestMapping("/api/gestionnaires")
 @RequiredArgsConstructor
-public class ZoneController {
-    private final ZoneService service;
+public class GestionnaireLogistiqueController {
+    private final GestionnaireLogistiqueService service;
 
     @GetMapping
-    public List<ZoneDTO> getAll() {
+    public List<GestionnaireLogistique> getAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ZoneDTO> getById(@PathVariable String id) {
+    public ResponseEntity<GestionnaireLogistique> getById(@PathVariable String id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ZoneDTO create(@RequestBody ZoneDTO dto) {
-        return service.save(dto);
+    public GestionnaireLogistique create(@RequestBody GestionnaireLogistique gestionnaire) {
+        return service.save(gestionnaire);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ZoneDTO> update(@PathVariable String id, @RequestBody ZoneDTO dto) {
+    public ResponseEntity<GestionnaireLogistique> update(@PathVariable String id, @RequestBody GestionnaireLogistique gestionnaire) {
         if (!service.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        dto.setId(id);
-        return ResponseEntity.ok(service.save(dto));
+        gestionnaire.setId(id);
+        return ResponseEntity.ok(service.save(gestionnaire));
     }
 
     @DeleteMapping("/{id}")

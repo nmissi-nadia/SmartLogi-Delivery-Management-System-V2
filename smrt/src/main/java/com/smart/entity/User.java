@@ -1,27 +1,36 @@
 package com.smart.entity;
 
-import com.smart.entity.Enum.Role;
+import com.smart.entity.Enum.Role; // Import de l'Enum
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.UUID;
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
+@Entity
+@Table(name = "app_user")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    private String nom;
-    private String prenom;
+    private String username;
+    private String password;
     private String email;
-    private String telephone;
-    private String motDePasse;
 
+    // Modification pour utiliser l'Enum :
     @Enumerated(EnumType.STRING)
+    @Column(name = "role") // Le nom de la colonne dans la base de données
     private Role role;
+    // IMPORTANT : EnumType.STRING stocke la valeur exacte de l'enum (ex: "LIVREUR") en TEXT/VARCHAR, ce qui est simple et compatible avec PostgreSQL.
+
+    @PrePersist
+    public void prePersist() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID().toString();
+        }
+    }
 }

@@ -1,32 +1,34 @@
 package com.smart.entity;
 
-import com.smart.entity.Enum.StatutColis;
 import jakarta.persistence.*;
-import lombok.*;
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "historique_livraisons")
+@Entity
 public class HistoriqueLivraison {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-
-    private LocalDateTime dateChangement;
-    private String commentaire;
-
-    @Enumerated(EnumType.STRING)
-    private StatutColis statut;
 
     @ManyToOne
     @JoinColumn(name = "colis_id")
     private Colis colis;
 
-    @ManyToOne
-    @JoinColumn(name = "livreur_id")
-    private Livreur livreur;
+    private String statut;
+    private LocalDateTime dateChangement;
+    private String commentaire;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID().toString();
+        }
+    }
 }
