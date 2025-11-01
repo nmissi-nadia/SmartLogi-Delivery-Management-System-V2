@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface HistoriqueLivraisonRepository extends JpaRepository<HistoriqueLivraison, Long> {
-    List<HistoriqueLivraison> findByColisId(Long colisId);
+public interface HistoriqueLivraisonRepository extends JpaRepository<HistoriqueLivraison, String> {
+    List<HistoriqueLivraison> findByColisId(String colisId);
 }

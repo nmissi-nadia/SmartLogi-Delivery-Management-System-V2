@@ -13,7 +13,7 @@ public interface ColisMapper {
             @Mapping(source = "livreur.id", target = "livreurId"),
             @Mapping(source = "clientExpediteur.id", target = "clientExpediteurId"),
             @Mapping(source = "destinataire.id", target = "destinataireId"),
-            @Mapping(source = "zone.id", target = "zoneId")
+            @Mapping(source = "zoneLivraison.id", target = "zoneId")
     })
     ColisDTO toDto(Colis entity);
 
@@ -21,7 +21,7 @@ public interface ColisMapper {
             @Mapping(source = "livreurId", target = "livreur.id"),
             @Mapping(source = "clientExpediteurId", target = "clientExpediteur.id"),
             @Mapping(source = "destinataireId", target = "destinataire.id"),
-            @Mapping(source = "zoneId", target = "zone.id")
+            @Mapping(source = "zoneId", target = "zoneLivraison.id")
     })
     Colis toEntity(ColisDTO dto);
 }

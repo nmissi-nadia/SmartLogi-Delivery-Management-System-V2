@@ -1,5 +1,6 @@
 package com.smart.entity;
 
+import com.smart.entity.Enum.StatutColis;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,32 +13,51 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "colis")
 public class Colis {
 
     @Id
+    @Column(name = "id") // Bonne pratique: Spécifier le nom de colonne de l'ID
     private String id;
 
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "poids")
     private Double poids;
-    private String statut; // (créé, collecté, en stock, en transit, livré)
+
+    @Column(name = "priorite")
     private String priorite;
+
+    @Column(name = "ville_destination")
     private String villeDestination;
 
-    @ManyToOne
-    @JoinColumn(name = "livreur_id")
+    // Utilisation de l'Enum Java pour correspondre au type 'colis_status_enum' de la DB
+    // CORRECTION: J'ai corrigé l'import, en supposant que l'Enum s'appelle ColisStatus
+    @Enumerated(EnumType.STRING)
+    @Column(name = "statut")
+    private StatutColis statut;
+
+
+    // RELATION LIVREUR (NULLABLE) : Correction pour une meilleure pratique JPA
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "livreur_id") // La colonne 'livreur_id' sera créée par Liquibase et est NULLABLE par défaut ici
     private Livreur livreur;
 
-    @ManyToOne
-    @JoinColumn(name = "client_expediteur_id")
+
+    // Relation Client Expéditeur (NON NULLABLE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_expediteur_id", nullable = false)
     private ClientExpediteur clientExpediteur;
 
-    @ManyToOne
-    @JoinColumn(name = "destinataire_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "destinataire_id", nullable = false)
     private Destinataire destinataire;
 
-    @ManyToOne
-    @JoinColumn(name = "zone_id")
-    private Zone zone;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "zone_id", nullable = false)
+    private Zone zoneLivraison;
+
 
     @OneToMany(mappedBy = "colis", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HistoriqueLivraison> historique;

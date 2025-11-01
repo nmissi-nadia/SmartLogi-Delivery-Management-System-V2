@@ -1,0 +1,43 @@
+# src/main/resources/db/changelog/changesets/10-insert-data.yml
+
+databaseChangeLog:
+
+  # ====================================================================
+  # 1. INSERTION DES ZONES DE LIVRAISON INITIALES
+  # ====================================================================
+  - changeSet:
+      id: 1-insert-initial-zones
+      author: nadia
+      changes:
+        - insert:
+            tableName: zone_livraison
+            columns:
+              - column: {name: nom, value: "Casablanca"}
+              - column: {name: description, value: "Zone industrielle et économique principale."}
+        - insert:
+            tableName: zone_livraison
+            columns:
+              - column: {name: nom, value: "Rabat"}
+              - column: {name: description, value: "Capitale administrative."}
+        - insert:
+            tableName: zone_livraison
+            columns:
+              - column: {name: nom, value: "Safi"}
+              - column: {name: description, value: "Zone côtière et portuaire."}
+
+  # ====================================================================
+  # 2. INSERTION DE L'UTILISATEUR ADMINISTRATEUR INITIAL
+  # ====================================================================
+  - changeSet:
+      id: 2-insert-initial-admin
+      author: nadia
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: id, value: "00000000-0000-0000-0000-000000000001"} # ID statique pour l'admin
+              - column: {name: username, value: "admin"}
+              - column: {name: email, value: "admin@smartlogi.com"}
+              - column: {name: telephone, value: "0600000000"}
+              - column: {name: role, value: "livreur"}
+              - column: {name: password, value: "$2a$10$o8sM2Q6x5t5gI3j3j7k0u.l9zR6t3l5O9eS9j6v7R7E8K0H1E5f7O"} # Hash de 'admin12345'

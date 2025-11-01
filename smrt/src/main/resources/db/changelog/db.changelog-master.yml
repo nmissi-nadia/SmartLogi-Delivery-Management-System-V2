@@ -1,21 +1,5 @@
-databaseChangeLog:
-  - include:
-      file: changesets/1-create-user.yml
-  - include:
-      file: changesets/2-create-client-expediteur.yml
-  - include:
-      file: changesets/3-create-roles.yml
-  - include:
-      file: changesets/4-create-specialized-users.yml
-  - include:
-      file: changesets/5-create-zone.yml
-  - include:
-      file: changesets/6-create-colis.yml
-  - include:
-      file: changesets/7-create-historique-livraison.yml
-  - include:
-      file: changesets/8-create-produits.yml
-  - include:
-      file: changesets/9-create-colis-produits.yml
-  - include:
-      file: changesets/10-insert-data.yml
+    databaseChangeLog:
+      - include:
+            file: db/changelog/01-initial-schema.yml
+      - include:
+            file: db/changelog/02-insert-data.yml
