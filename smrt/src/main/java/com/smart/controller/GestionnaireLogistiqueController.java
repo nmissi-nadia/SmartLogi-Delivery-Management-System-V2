@@ -1,17 +1,22 @@
 package com.smart.controller;
 
+import com.smart.dto.ColisDTO;
 import com.smart.entity.GestionnaireLogistique;
+import com.smart.service.ColisService;
 import com.smart.service.GestionnaireLogistiqueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/gestionnaires")
 @RequiredArgsConstructor
 public class GestionnaireLogistiqueController {
     private final GestionnaireLogistiqueService service;
+    private final ColisService colisService;
 
     @GetMapping
     public List<GestionnaireLogistique> getAll() {
@@ -46,5 +51,28 @@ public class GestionnaireLogistiqueController {
         }
         service.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // gestion des colis 
+    // Assigner un livreur
+    @PostMapping("/colis/{colisId}/assigner")
+    public ResponseEntity<ColisDTO> assignerLivreur(
+            @PathVariable String colisId,
+            @RequestParam String livreurId) {
+        return ResponseEntity.ok(colisService.assignLivreur(colisId, livreurId));
+    }
+
+    // Obtenir des statistiques
+    @GetMapping("/statistiques")
+    public ResponseEntity<Map<String, Object>> getStatistiques(
+            @RequestParam(required = false) String livreurId,
+            @RequestParam(required = false) String zoneId) {
+        return ResponseEntity.ok(colisService.getStatistiques(livreurId, zoneId));
+    }
+
+    // Grouper les colis
+    @GetMapping("/colis/group-by/{field}")
+    public ResponseEntity<Map<String, Long>> groupColisBy(@PathVariable String field) {
+        return ResponseEntity.ok(colisService.groupBy(field));
     }
 }

@@ -1,7 +1,11 @@
 package com.smart.controller;
 
+import com.smart.dto.ColisDTO;
 import com.smart.dto.DestinataireDTO;
+import com.smart.service.ColisService;
 import com.smart.service.DestinataireService;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DestinataireController {
     private final DestinataireService service;
+    private final ColisService colisService;
+
 
     @GetMapping
     public List<DestinataireDTO> getAll() {
@@ -46,5 +52,22 @@ public class DestinataireController {
         }
         service.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+    // colis
+    // Voir les détails d'un colis
+    @GetMapping("/{destinataireId}/colis/{colisId}")
+    public ResponseEntity<ColisDTO> viewColis(
+            @PathVariable String destinataireId,
+            @PathVariable String colisId) {
+        return ResponseEntity.ok(colisService.findById(colisId)
+                .orElseThrow(() -> new EntityNotFoundException("Colis non trouvé")));
+    }
+
+    // Confirmer réception
+    @PostMapping("/{destinataireId}/colis/{colisId}/confirmation")
+    public ResponseEntity<ColisDTO> confirmReception(
+            @PathVariable String destinataireId,
+            @PathVariable String colisId) {
+        return ResponseEntity.ok(colisService.updateStatus(colisId, "LIVRE"));
     }
 }

@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.smart.entity.Enum.StatutColis;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,10 +22,13 @@ public class HistoriqueLivraison {
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "colis_id")
+    @JoinColumn(name = "id_colis")
     private Colis colis;
 
-    private String statut;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "statut")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    private StatutColis statut;
     private LocalDateTime dateChangement;
     private String commentaire;
 
@@ -29,6 +36,9 @@ public class HistoriqueLivraison {
     public void prePersist() {
         if (this.id == null) {
             this.id = UUID.randomUUID().toString();
+        }
+        if (this.dateChangement == null) {
+            this.dateChangement = LocalDateTime.now();
         }
     }
 }

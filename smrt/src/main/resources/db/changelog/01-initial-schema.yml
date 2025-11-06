@@ -2,12 +2,10 @@ databaseChangeLog:
   # ====================================================================
   # 1. CRÉATION DES TYPES ENUM (PostgreSQL)
   # ====================================================================
-
   - changeSet:
       id: 1-create-enums
       author: nadia
       changes:
-        # Type ENUM pour les rôles utilisateur
         - sql:
             splitStatements: false
             sql: |
@@ -18,28 +16,36 @@ databaseChangeLog:
                 END IF;
               END$$;
 
-        # Type ENUM pour le statut du colis
         - sql:
             splitStatements: false
             sql: |
               DO $$
               BEGIN
                 IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'colis_status_enum') THEN
-                  CREATE TYPE colis_status_enum AS ENUM ('cree', 'collecte', 'en_stock', 'en_transit', 'livre');
+                  CREATE TYPE colis_status_enum AS ENUM ('CREE', 'COLLECTE', 'EN_STOCK', 'EN_TRANSIT', 'LIVRE');
+                END IF;
+              END$$;
+
+        - sql:
+            splitStatements: false
+            sql: |
+              DO $$
+              BEGIN
+                IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'priorite_enum') THEN
+                  CREATE TYPE priorite_enum AS ENUM ('BASSE', 'MOYENNE', 'HAUTE');
                 END IF;
               END$$;
 
   # ====================================================================
-  # 2. CRÉATION DES TABLES PRINCIPALES (utilisateurs, produits, zones)
+  # 2. CRÉATION DES TABLES
   # ====================================================================
-
   - changeSet:
-      id: 2-create-main-tables
+      id: 2-create-tables
       author: nadia
       changes:
-        # Table user (Utilisateur)
+        # Table des zones
         - createTable:
-            tableName: users
+            tableName: zone
             columns:
               - column:
                   name: id
@@ -48,75 +54,138 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: username
+                  name: nom
                   type: VARCHAR(100)
-                  constraints:
-                    unique: true
-              - column:
-                  name: password
-                  type: VARCHAR(255)
                   constraints:
                     nullable: false
               - column:
-                  name: email
-                  type: VARCHAR(150)
+                  name: code_postal
+                  type: VARCHAR(10)
                   constraints:
+                    nullable: false
+                    unique: true
+
+        # Table des clients expéditeurs
+        - createTable:
+            tableName: client_expediteur
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: nom
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: prenom
+                  type: VARCHAR(100)
+              - column:
+                  name: email
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
                     unique: true
               - column:
                   name: telephone
                   type: VARCHAR(20)
               - column:
-                  name: role
-                  type: role_enum
-                  constraints:
-                    nullable: false
+                  name: adresse
+                  type: TEXT
+              - column:
+                  name: date_creation
+                  type: TIMESTAMP
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
 
-        # Table zone_livraison
+        # Table des destinataires
         - createTable:
-            tableName: zone_livraison
+            tableName: destinataire
             columns:
               - column:
                   name: id
-                  type: BIGSERIAL
+                  type: VARCHAR(36)
                   constraints:
                     primaryKey: true
+                    nullable: false
               - column:
                   name: nom
                   type: VARCHAR(100)
                   constraints:
-                    unique: true
+                    nullable: false
               - column:
-                  name: description
-                  type: VARCHAR(255)
+                  name: prenom
+                  type: VARCHAR(100)
+              - column:
+                  name: email
+                  type: VARCHAR(100)
+              - column:
+                  name: telephone
+                  type: VARCHAR(20)
+              - column:
+                  name: adresse
+                  type: TEXT
 
-        # Table produit
+        # Table des livreurs
+        - createTable:
+            tableName: livreur
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: nom
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: prenom
+                  type: VARCHAR(100)
+              - column:
+                  name: telephone
+                  type: VARCHAR(20)
+              - column:
+                  name: vehicule
+                  type: VARCHAR(50)
+              - column:
+                  name: zone_assignee_id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_livreur_zone
+                    references: zone(id)
+
+        # Table des produits
         - createTable:
             tableName: produit
             columns:
               - column:
                   name: id
-                  type: BIGSERIAL
+                  type: VARCHAR(36)
                   constraints:
                     primaryKey: true
+                    nullable: false
               - column:
                   name: nom
                   type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: categorie
+                  type: VARCHAR(100)
+              - column:
+                  name: poids
+                  type: DECIMAL(10, 2)
               - column:
                   name: prix
                   type: DECIMAL(10, 2)
-              - column:
-                  name: description
-                  type: TEXT
 
-  # ====================================================================
-  # 3. CRÉATION DES TABLES SECONDAIRES (COLIS, RELATIONS, HISTORIQUES)
-  # ====================================================================
-
-  - changeSet:
-      id: 3-create-secondary-tables
-      author: nadia
-      changes:
-        # Table colis (Colis)
+        # Table des colis
         - createTable:
             tableName: colis
             columns:
@@ -135,113 +204,109 @@ databaseChangeLog:
               - column:
                   name: statut
                   type: colis_status_enum
-                  constraints:
-                    nullable: false
+                  defaultValue: "CREE"
               - column:
                   name: priorite
-                  type: VARCHAR(50)
+                  type: priorite_enum
+                  defaultValue: "MOYENNE"
               - column:
-                  name: ville_destination
-                  type: VARCHAR(100)
-              - column:
-                  name: livreur_id
+                  name: id_livreur
                   type: VARCHAR(36)
                   constraints:
                     nullable: true
                     foreignKeyName: fk_colis_livreur
-                    references: users(id)
+                    references: livreur(id)
               - column:
-                  name: client_expediteur_id
+                  name: id_client_expediteur
                   type: VARCHAR(36)
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_colis_client
-                    references: users(id)
+                    foreignKeyName: fk_colis_client_expediteur
+                    references: client_expediteur(id)
               - column:
-                  name: destinataire_id
+                  name: id_destinataire
                   type: VARCHAR(36)
                   constraints:
                     nullable: false
                     foreignKeyName: fk_colis_destinataire
-                    references: users(id)
+                    references: destinataire(id)
               - column:
-                  name: zone_livraison_id
-                  type: BIGINT
+                  name: id_zone
+                  type: VARCHAR(36)
                   constraints:
-                    nullable: false
+                    nullable: true
                     foreignKeyName: fk_colis_zone
-                    references: zone_livraison(id)
+                    references: zone(id)
+              - column:
+                  name: ville_destination
+                  type: VARCHAR(100)
+              - column:
+                  name: date_creation
+                  type: TIMESTAMP
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+              - column:
+                  name: date_mise_a_jour
+                  type: TIMESTAMP
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
 
-        # Table livreur_zone (Relation M:N)
-        - createTable:
-            tableName: livreur_zone
-            columns:
-              - column:
-                  name: livreur_id
-                  type: VARCHAR(36)
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_livreur_zone_livreur
-                    references: users(id)
-              - column:
-                  name: zone_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_livreur_zone_zone
-                    references: zone_livraison(id)
-        - addPrimaryKey:
-            tableName: livreur_zone
-            columnNames: livreur_id, zone_id
-
-        # Table colis_produit (Relation M:N)
-        - createTable:
-            tableName: colis_produit
-            columns:
-              - column:
-                  name: colis_id
-                  type: VARCHAR(36)
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_colis_produit_colis
-                    references: colis(id)
-              - column:
-                  name: produit_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_colis_produit_produit
-                    references: produit(id)
-              - column:
-                  name: quantite
-                  type: INT
-                  constraints:
-                    nullable: false
-        - addPrimaryKey:
-            tableName: colis_produit
-            columnNames: colis_id, produit_id
-
-        # Table historique_livraison
+        # Table d'historique des livraisons
         - createTable:
             tableName: historique_livraison
             columns:
               - column:
                   name: id
-                  type: BIGSERIAL
+                  type: VARCHAR(36)
                   constraints:
                     primaryKey: true
-              - column:
-                  name: date_heure
-                  type: TIMESTAMP
-                  constraints:
                     nullable: false
               - column:
-                  name: description
-                  type: TEXT
-              - column:
-                  name: colis_id
+                  name: id_colis
                   type: VARCHAR(36)
                   constraints:
                     nullable: false
                     foreignKeyName: fk_historique_colis
                     references: colis(id)
+              - column:
+                  name: statut
+                  type: colis_status_enum
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_changement
+                  type: TIMESTAMP
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+              - column:
+                  name: commentaire
+                  type: TEXT
+
+        # Table de liaison entre colis et produits
+        - createTable:
+            tableName: colis_produit
+            columns:
+              - column:
+                  name: id_colis
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_colis_produit_colis
+                    references: colis(id)
+              - column:
+                  name: id_produit
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_colis_produit_produit
+                    references: produit(id)
+              - column:
+                  name: quantite
+                  type: INTEGER
+                  defaultValue: "1"
+              - column:
+                  name: prix
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: date_ajout
+                  type: TIMESTAMP
+                  defaultValueComputed: "CURRENT_TIMESTAMP"

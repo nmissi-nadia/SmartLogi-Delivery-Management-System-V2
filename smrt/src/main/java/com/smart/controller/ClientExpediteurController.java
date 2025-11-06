@@ -1,17 +1,32 @@
 package com.smart.controller;
 
 import com.smart.dto.ClientExpediteurDTO;
+import com.smart.dto.ColisDTO;
+import com.smart.dto.ColisRequestDTO;
 import com.smart.service.ClientExpediteurService;
+import com.smart.service.ColisService;
+import com.smart.repository.ClientExpediteurRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/clients")
 @RequiredArgsConstructor
 public class ClientExpediteurController {
     private final ClientExpediteurService service;
+    private final ColisService colisService;
+    private final ClientExpediteurRepository clientExpediteurRepository;
 
     @GetMapping
     public List<ClientExpediteurDTO> getAll() {
@@ -47,4 +62,43 @@ public class ClientExpediteurController {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+     @GetMapping("/search")
+    public Page<ClientExpediteurDTO> searchByKeyword(@RequestParam String keyword, Pageable pageable) {
+        return service.searchByKeyword(keyword, pageable);
+    }
+    //partie pour gestion des colis
+    // Créer un nouveau colis
+    @PostMapping("/{clientId}/colis")
+    public ResponseEntity<ColisDTO> createColis(
+            @PathVariable String clientId,
+            @Valid @RequestBody ColisRequestDTO colisRequest) {
+        
+        // Vérifier que le client expéditeur existe
+        if (!clientExpediteurRepository.existsById(clientId)) {
+            throw new EntityNotFoundException("Client expéditeur non trouvé avec l'ID: " + clientId);
+        }
+        
+        // Déléguer la logique de création au service
+        ColisDTO createdColis = colisService.createColisWithDetails(clientId, colisRequest);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdColis);
+    }
+
+    // Lister les colis d'un client
+    @GetMapping("/{clientId}/colis")
+    public ResponseEntity<Page<ColisDTO>> getColisByClient(
+            @PathVariable String clientId,
+            Pageable pageable) {
+        return ResponseEntity.ok(colisService.findColisByClientExpediteur(clientId, pageable));
+    }
+
+    // Suivre un colis
+    @GetMapping("/{clientId}/colis/{colisId}")
+    public ResponseEntity<ColisDTO> trackColis(
+            @PathVariable String clientId,
+            @PathVariable String colisId) {
+        return ResponseEntity.ok(colisService.findById(colisId)
+                .orElseThrow(() -> new EntityNotFoundException("Colis non trouvé")));
+    }
+
 }

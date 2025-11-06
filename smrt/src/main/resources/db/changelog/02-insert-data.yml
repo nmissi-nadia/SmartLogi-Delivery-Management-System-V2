@@ -1,43 +1,171 @@
-# src/main/resources/db/changelog/changesets/10-insert-data.yml
-
 databaseChangeLog:
-
   # ====================================================================
-  # 1. INSERTION DES ZONES DE LIVRAISON INITIALES
+  # DONNÉES DE TEST
   # ====================================================================
   - changeSet:
-      id: 1-insert-initial-zones
+      id: 1-insert-zones
       author: nadia
       changes:
         - insert:
-            tableName: zone_livraison
+            tableName: zone
             columns:
-              - column: {name: nom, value: "Casablanca"}
-              - column: {name: description, value: "Zone industrielle et économique principale."}
+              - column:
+                  name: id
+                  value: "zone-1"
+              - column:
+                  name: nom
+                  value: "Paris Centre"
+              - column:
+                  name: code_postal
+                  value: "75001"
         - insert:
-            tableName: zone_livraison
+            tableName: zone
             columns:
-              - column: {name: nom, value: "Rabat"}
-              - column: {name: description, value: "Capitale administrative."}
-        - insert:
-            tableName: zone_livraison
-            columns:
-              - column: {name: nom, value: "Safi"}
-              - column: {name: description, value: "Zone côtière et portuaire."}
+              - column:
+                  name: id
+                  value: "zone-2"
+              - column:
+                  name: nom
+                  value: "Lyon Centre"
+              - column:
+                  name: code_postal
+                  value: "69002"
 
-  # ====================================================================
-  # 2. INSERTION DE L'UTILISATEUR ADMINISTRATEUR INITIAL
-  # ====================================================================
   - changeSet:
-      id: 2-insert-initial-admin
+      id: 2-insert-clients
       author: nadia
       changes:
         - insert:
-            tableName: users
+            tableName: client_expediteur
             columns:
-              - column: {name: id, value: "00000000-0000-0000-0000-000000000001"} # ID statique pour l'admin
-              - column: {name: username, value: "admin"}
-              - column: {name: email, value: "admin@smartlogi.com"}
-              - column: {name: telephone, value: "0600000000"}
-              - column: {name: role, value: "livreur"}
-              - column: {name: password, value: "$2a$10$o8sM2Q6x5t5gI3j3j7k0u.l9zR6t3l5O9eS9j6v7R7E8K0H1E5f7O"} # Hash de 'admin12345'
+              - column:
+                  name: id
+                  value: "client-1"
+              - column:
+                  name: nom
+                  value: "Dupont"
+              - column:
+                  name: prenom
+                  value: "Jean"
+              - column:
+                  name: email
+                  value: "jean.dupont@example.com"
+              - column:
+                  name: telephone
+                  value: "0612345678"
+              - column:
+                  name: adresse
+                  value: "123 Rue de Paris, 75001 Paris"
+
+  - changeSet:
+      id: 3-insert-destinataires
+      author: nadia
+      changes:
+        - insert:
+            tableName: destinataire
+            columns:
+              - column:
+                  name: id
+                  value: "dest-1"
+              - column:
+                  name: nom
+                  value: "Martin"
+              - column:
+                  name: prenom
+                  value: "Sophie"
+              - column:
+                  name: email
+                  value: "sophie.martin@example.com"
+              - column:
+                  name: telephone
+                  value: "0698765432"
+              - column:
+                  name: adresse
+                  value: "456 Avenue des Champs-Élysées, 75008 Paris"
+
+  - changeSet:
+      id: 4-insert-livreurs
+      author: nadia
+      changes:
+        - insert:
+            tableName: livreur
+            columns:
+              - column:
+                  name: id
+                  value: "livreur-1"
+              - column:
+                  name: nom
+                  value: "Dubois"
+              - column:
+                  name: prenom
+                  value: "Pierre"
+              - column:
+                  name: telephone
+                  value: "0678912345"
+              - column:
+                  name: vehicule
+                  value: "Vélo électrique"
+              - column:
+                  name: zone_assignee_id
+                  value: "zone-1"
+
+  - changeSet:
+      id: 5-insert-produits
+      author: nadia
+      changes:
+        - insert:
+            tableName: produit
+            columns:
+              - column:
+                  name: id
+                  value: "prod-1"
+              - column:
+                  name: nom
+                  value: "Téléphone portable"
+              - column:
+                  name: categorie
+                  value: "Électronique"
+              - column:
+                  name: poids
+                  value: "0.5"
+              - column:
+                  name: prix
+                  value: "699.99"
+
+  - changeSet:
+      id: 6-insert-colis
+      author: nadia
+      changes:
+        - insert:
+            tableName: colis
+            columns:
+              - column:
+                  name: id
+                  value: "colis-1"
+              - column:
+                  name: description
+                  value: "Téléphone neuf sous blister"
+              - column:
+                  name: poids
+                  value: "0.6"
+              - column:
+                  name: statut
+                  value: "CREE"
+              - column:
+                  name: priorite
+                  value: "HAUTE"
+              - column:
+                  name: id_livreur
+                  value: "livreur-1"
+              - column:
+                  name: id_client_expediteur
+                  value: "client-1"
+              - column:
+                  name: id_destinataire
+                  value: "dest-1"
+              - column:
+                  name: id_zone
+                  value: "zone-1"
+              - column:
+                  name: ville_destination
+                  value: "Paris"
