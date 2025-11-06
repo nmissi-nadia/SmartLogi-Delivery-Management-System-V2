@@ -271,24 +271,14 @@ mvn spring-boot:run
 
 ### 4️⃣ Accéder à la documentation API
 
-[http://localhost:8080/swagger-ui/index.html](http://localhost:8082/swagger-ui/index.html)
+[http://localhost:8082/swagger-ui/index.html](http://localhost:8082/swagger-ui/index.html)
 
 ---
 
-## 🧾 Livrables attendus
-
-* ✅ Code source complet sur GitHub
-* ✅ Scripts Liquibase
-* ✅ Diagramme de classes UML
-* ✅ Documentation Swagger/OpenAPI
-* ✅ README complet
-* ✅ Présentation (soutenance)
-
----
 
 ## 🧠 Auteur & Crédits
 
-👩‍💻 **Nadia Dupont**
+👩‍💻 **Nadia NMISSI**
 Développeuse Full Stack – YouCode
 
 📧 *[nmissinadia@gmail.com](mailto:nmissinadia@gmail.com)*
