@@ -3,3 +3,5 @@
             file: db/changelog/01-initial-schema.yml
       - include:
             file: db/changelog/02-insert-data.yml
+      - include:
+            file: db/changelog/03-ajoute-shema-gestion.yml

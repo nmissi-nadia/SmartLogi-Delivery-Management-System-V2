@@ -3,6 +3,7 @@ package com.smart.service;
 import com.smart.dto.ColisDTO;
 import com.smart.dto.ColisProduitDTO;
 import com.smart.dto.ColisRequestDTO;
+import com.smart.dto.HistoriqueLivraisonDTO;
 import com.smart.entity.*;
 import com.smart.entity.Enum.PrioriteEnum;
 import com.smart.entity.Enum.StatutColis;
@@ -31,7 +32,6 @@ public class ColisService {
     private final LivreurRepository livreurRepository;
     private final HistoriqueLivraisonRepository historiqueLivraisonRepository;
     private final ColisMapper colisMapper;
-    private final HistoriqueLivraisonMapper historiqueLivraisonMapper;
     private final ColisProduitRepository colisProduitRepository;
     private final ProduitRepository produitRepository;
     private final DestinataireRepository destinataireRepository;
@@ -42,6 +42,8 @@ public class ColisService {
     private final ClientExpediteurMapper clientExpediteurMapper;
     private final DestinataireMapper destinataireMapper;
     private final ZoneMapper zoneMapper;
+    private final HistoriqueLivraisonMapper historiqueLivraisonMapper;
+    
 
     // ===========================================
     // 1. MÉTHODES CLIENT EXPÉDITEUR
@@ -127,6 +129,10 @@ public class ColisService {
 
             return colisMapper.toDto(colis);
         }
+
+        
+
+
     /**
      * Lister tous les colis d'un client expéditeur
      */
@@ -247,29 +253,72 @@ public class ColisService {
     /**
      * Grouper les colis par critère
      */
-    public Map<String, Long> groupBy(String field) {
+    public Map<String, Object> groupBy(String field) {
+        Map<String, Object> result = new HashMap<>();
+        
         switch (field) {
             case "zone":
-                return colisRepository.groupByZone().stream()
-                        .collect(Collectors.toMap(
-                                o -> (String) o[0], 
-                                o -> (Long) o[1]
-                        ));
+                List<Object[]> zoneResults = colisRepository.groupByZone();
+                Map<String, Object> zoneData = new HashMap<>();
+                
+                for (Object[] row : zoneResults) {
+                    String zone = (String) row[0];
+                    Long count = (Long) row[1];
+                    List<Colis> colisList = colisRepository.findByZoneNom(zone);
+                    zoneData.put(zone, new HashMap<String, Object>() {{
+                        put("count", count);
+                        put("colis", colisList.stream()
+                            .map(colisMapper::toDto)
+                            .collect(Collectors.toList()));
+                    }});
+                }
+                result.put("groupBy", "zone");
+                result.put("data", zoneData);
+                break;
+                
             case "statut":
-                return colisRepository.groupByStatut().stream()
-                        .collect(Collectors.toMap(
-                                o -> (String) o[0], 
-                                o -> (Long) o[1]
-                        ));
+                List<Object[]> statutResults = colisRepository.groupByStatut();
+                Map<String, Object> statutData = new HashMap<>();
+                
+                for (Object[] row : statutResults) {
+                    StatutColis statut = (StatutColis) row[0];
+                    Long count = (Long) row[1];
+                    List<Colis> colisList = colisRepository.findByStatut(statut);
+                    statutData.put(statut.name(), new HashMap<String, Object>() {{
+                        put("count", count);
+                        put("colis", colisList.stream()
+                            .map(colisMapper::toDto)
+                            .collect(Collectors.toList()));
+                    }});
+                }
+                result.put("groupBy", "statut");
+                result.put("data", statutData);
+                break;
+                
             case "priorite":
-                return colisRepository.groupByPriorite().stream()
-                        .collect(Collectors.toMap(
-                                o -> (String) o[0], 
-                                o -> (Long) o[1]
-                        ));
+                List<Object[]> prioriteResults = colisRepository.groupByPriorite();
+                Map<String, Object> prioriteData = new HashMap<>();
+                
+                for (Object[] row : prioriteResults) {
+                    PrioriteEnum priorite = (PrioriteEnum) row[0];
+                    Long count = (Long) row[1];
+                    List<Colis> colisList = colisRepository.findByPriorite(priorite);
+                    prioriteData.put(priorite.name(), new HashMap<String, Object>() {{
+                        put("count", count);
+                        put("colis", colisList.stream()
+                            .map(colisMapper::toDto)
+                            .collect(Collectors.toList()));
+                    }});
+                }
+                result.put("groupBy", "priorite");
+                result.put("data", prioriteData);
+                break;
+                
             default:
                 throw new IllegalArgumentException("Champ de regroupement invalide: " + field);
         }
+        
+        return result;
     }
 
     // ===========================================
@@ -319,7 +368,7 @@ public class ColisService {
                 .orElseThrow(() -> new RuntimeException("Produit non trouvé"));
         
         ColisProduit colisProduit = colisProduitMapper.toEntity(colisProduitDTO, colis, produit);
- colisProduitRepository.save(colisProduit);
+        colisProduitRepository.save(colisProduit);
         return colisMapper.toDto(colis);
     }
 
@@ -330,8 +379,11 @@ public class ColisService {
     /**
      * Obtenir l'historique d'un colis
      */
-    public List<HistoriqueLivraison> getHistoriqueForColis(String colisId) {
-        return historiqueLivraisonRepository.findHistoriqueByColisId(colisId);
+    public List<HistoriqueLivraisonDTO> getHistoriqueForColis(String colisId) {
+        return historiqueLivraisonRepository.findByColisIdOrderByDateChangementDesc(colisId)
+                .stream()
+                .map(HistoriqueLivraisonDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     // Autres méthodes utilitaires...
@@ -347,5 +399,32 @@ public class ColisService {
                                            dateDebut, dateFin, pageable, 
                                            clientId, destinataireId, livreurId)
                 .map(colisMapper::toDto);
+    }
+
+    /**
+     * Mettre à jour un colis
+     */
+    public ColisDTO update(String id, ColisDTO colisDTO) {
+        Colis colis = colisRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Colis non trouvé"));
+
+        // Mise à jour des champs
+        if (colisDTO.getDescription() != null) {
+            colis.setDescription(colisDTO.getDescription());
+        }
+        if (colisDTO.getPoids() != null) {
+            colis.setPoids(colisDTO.getPoids());
+        }
+        if (colisDTO.getPriorite() != null) {
+            colis.setPriorite(colisDTO.getPriorite()); // Pas besoin de valueOf car c'est déjà un PrioriteEnum
+        }
+        if (colisDTO.getVilleDestination() != null) {
+            colis.setVilleDestination(colisDTO.getVilleDestination());
+        }
+        if (colisDTO.getStatut() != null) {
+            colis.setStatut(colisDTO.getStatut()); // Pas besoin de valueOf car c'est déjà un StatutColis
+        }
+
+        return colisMapper.toDto(colisRepository.save(colis));
     }
 }

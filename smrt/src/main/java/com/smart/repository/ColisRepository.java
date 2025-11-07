@@ -2,6 +2,8 @@ package com.smart.repository;
 
 import org.springframework.data.domain.Page;
 import com.smart.entity.Colis;
+import com.smart.entity.Zone;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -19,6 +21,8 @@ public interface ColisRepository extends JpaRepository<Colis, String> {
     List<Colis> findByStatut(StatutColis statut);
     List<Colis> findByVilleDestination(String villeDestination);
     List<Colis> findByPriorite(PrioriteEnum priorite);
+    @Query("SELECT c FROM Colis c WHERE c.zoneLivraison.nom = :zoneNom")
+    List<Colis> findByZoneNom(@Param("zoneNom") String zoneNom);
 
     @Query("SELECT DISTINCT c FROM Colis c LEFT JOIN c.historique h WHERE " +
             "(:statut IS NULL OR c.statut = :statut) AND " +
@@ -58,7 +62,7 @@ public interface ColisRepository extends JpaRepository<Colis, String> {
 
         
 
-            @Query("SELECT z.nom, COUNT(c) FROM Colis c JOIN c.zoneLivraison z GROUP BY z.nom")
+            @Query("SELECT z.nom, COUNT(c) FROM Colis c JOIN c.zoneLivraison z GROUP BY z.id")
 
             List<Object[]> groupByZone();
 
@@ -73,17 +77,10 @@ public interface ColisRepository extends JpaRepository<Colis, String> {
             @Query("SELECT c.priorite, COUNT(c) FROM Colis c GROUP BY c.priorite")
 
             List<Object[]> groupByPriorite();
-
-        
+            
 
             List<Colis> findByClientExpediteurId(String clientId);
-
-        
-
             List<Colis> findByDestinataireId(String destinataireId);
-
-        
-
             List<Colis> findByLivreurId(String livreurId);
 
 

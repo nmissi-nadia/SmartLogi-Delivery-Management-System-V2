@@ -13,4 +13,5 @@ public interface HistoriqueLivraisonRepository extends JpaRepository<HistoriqueL
     List<HistoriqueLivraison> findByColisId(String colisId);
     @Query("SELECT h FROM HistoriqueLivraison h WHERE h.colis.id = :colisId ORDER BY h.dateChangement DESC")
     List<HistoriqueLivraison> findHistoriqueByColisId(@Param("colisId") String colisId);
+    List<HistoriqueLivraison> findByColisIdOrderByDateChangementDesc(String colisId);
 }

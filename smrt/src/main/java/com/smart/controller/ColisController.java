@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +45,12 @@ public class ColisController {
         LocalDateTime endOfDay = dateFin != null ? dateFin.atTime(23, 59, 59) : null;
         return colisService.findAll(statut, ville, priorite, zoneId, startOfDay, endOfDay, pageable, clientId, destinataireId, livreurId);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<ColisDTO> updateColis(
+            @PathVariable String id,
+            @RequestBody ColisDTO colisDTO) {
+        return ResponseEntity.ok(colisService.update(id, colisDTO));
+    }
 
     @GetMapping("/recherche")
     public ResponseEntity<Page<ColisDTO>> searchColis(
@@ -56,8 +64,9 @@ public class ColisController {
 
     // Obtenir l'historique d'un colis
     @GetMapping("/{colisId}/historique")
-    public ResponseEntity<List<HistoriqueLivraison>> getHistoriqueColis(
+    public ResponseEntity<List<HistoriqueLivraisonDTO>> getHistoriqueColis(
             @PathVariable String colisId) {
-        return ResponseEntity.ok(colisService.getHistoriqueForColis(colisId));
+        List<HistoriqueLivraisonDTO> historique = colisService.getHistoriqueForColis(colisId);
+        return ResponseEntity.ok(historique); 
     }
 }

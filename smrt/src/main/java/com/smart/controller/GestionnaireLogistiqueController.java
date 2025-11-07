@@ -54,6 +54,11 @@ public class GestionnaireLogistiqueController {
     }
 
     // gestion des colis 
+    // Lister les colis avec statut CREE et livreur null
+    @GetMapping("/colis")
+    public List<ColisDTO> getAllColis() {
+        return colisService.findAll();
+    }
     // Assigner un livreur
     @PostMapping("/colis/{colisId}/assigner")
     public ResponseEntity<ColisDTO> assignerLivreur(
@@ -72,7 +77,16 @@ public class GestionnaireLogistiqueController {
 
     // Grouper les colis
     @GetMapping("/colis/group-by/{field}")
-    public ResponseEntity<Map<String, Long>> groupColisBy(@PathVariable String field) {
+    public ResponseEntity<Map<String, Object>> groupColisBy(@PathVariable String field) {
         return ResponseEntity.ok(colisService.groupBy(field));
     }
+    // Rechercher des colis
+    @GetMapping("/colis/recherche")
+    public ResponseEntity<List<ColisDTO>> rechercherColis(
+            @RequestParam(required = false) String statut,
+            @RequestParam(required = false) String ville,
+            @RequestParam(required = false) String priorite) {
+        return ResponseEntity.ok(colisService.findByCritere(statut, ville, priorite));
+    }
+    
 }

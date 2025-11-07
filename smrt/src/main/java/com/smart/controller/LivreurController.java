@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/livreurs")
@@ -75,5 +76,20 @@ public class LivreurController {
             @RequestParam(required = false) String statut,
             Pageable pageable) {
         return ResponseEntity.ok(colisService.findByLivreurIdAndStatut(livreurId, statut, pageable));
+    }
+
+    // statistique de livreur 
+    @GetMapping("/{livreurId}/statistiques")
+    public ResponseEntity<Map<String, Object>> getStatistiquesLivreur(
+            @PathVariable String livreurId,
+            @RequestParam(required = false) String zoneId) {
+
+        // Vérification de l'existence du livreur
+        if (!service.findById(livreurId).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Map<String, Object> stats = colisService.getStatistiques(livreurId, zoneId);
+        return ResponseEntity.ok(stats);
     }
 }
