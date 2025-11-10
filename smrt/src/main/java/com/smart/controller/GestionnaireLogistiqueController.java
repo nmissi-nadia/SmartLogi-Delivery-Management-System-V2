@@ -2,6 +2,7 @@ package com.smart.controller;
 
 import com.smart.dto.ColisDTO;
 import com.smart.entity.GestionnaireLogistique;
+import com.smart.entity.Enum.StatutColis;
 import com.smart.service.ColisService;
 import com.smart.service.GestionnaireLogistiqueService;
 import lombok.RequiredArgsConstructor;
@@ -87,6 +88,13 @@ public class GestionnaireLogistiqueController {
             @RequestParam(required = false) String ville,
             @RequestParam(required = false) String priorite) {
         return ResponseEntity.ok(colisService.findByCritere(statut, ville, priorite));
+    }
+    @PutMapping("/colis/{colisId}/traiter")
+    public ResponseEntity<ColisDTO> traiterColis(
+            @PathVariable String colisId,
+            @RequestParam StatutColis statut,
+            @RequestParam(required = false) String commentaire) {
+        return ResponseEntity.ok(colisService.updateStatus(colisId, statut.toString(), commentaire));
     }
     
 }

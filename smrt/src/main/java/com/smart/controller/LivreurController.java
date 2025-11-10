@@ -66,7 +66,7 @@ public class LivreurController {
             @PathVariable String livreurId,
             @PathVariable String colisId,
             @RequestParam String nouveauStatut) {
-        return ResponseEntity.ok(colisService.updateStatus(colisId, nouveauStatut));
+        return ResponseEntity.ok(colisService.updateStatus(colisId, nouveauStatut, null));
     }
 
     // Voir les colis assignés

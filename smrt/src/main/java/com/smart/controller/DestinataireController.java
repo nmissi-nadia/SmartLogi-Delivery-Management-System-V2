@@ -68,6 +68,6 @@ public class DestinataireController {
     public ResponseEntity<ColisDTO> confirmReception(
             @PathVariable String destinataireId,
             @PathVariable String colisId) {
-        return ResponseEntity.ok(colisService.updateStatus(colisId, "LIVRE"));
+        return ResponseEntity.ok(colisService.updateStatus(colisId, "LIVRE", "Livré avec succès"));
     }
 }

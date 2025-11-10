@@ -178,11 +178,30 @@ public class ColisService {
     /**
      * Mettre à jour le statut d'un colis
      */
-    public ColisDTO updateStatus(String colisId, String newStatus) {
+    @Transactional
+    public ColisDTO updateStatus(String colisId, String newStatus, String commentaire) {
+        // 1. Récupérer le colis
         Colis colis = colisRepository.findById(colisId)
                 .orElseThrow(() -> new RuntimeException("Colis non trouvé"));
-        colis.setStatut(StatutColis.valueOf(newStatus));
-        return colisMapper.toDto(colisRepository.save(colis));
+        
+        // 2. Mettre à jour le statut
+        StatutColis statut = StatutColis.valueOf(newStatus);
+        colis.setStatut(statut);
+        
+        // 3. Créer une nouvelle entrée d'historique
+        HistoriqueLivraison historique = new HistoriqueLivraison();
+        historique.setColis(colis);
+        historique.setStatut(statut);
+        historique.setDateChangement(LocalDateTime.now());
+        historique.setCommentaire(commentaire != null ? commentaire : "Statut mis à jour: " + statut);
+        
+        // 4. Sauvegarder l'historique
+        historiqueLivraisonRepository.save(historique);
+        
+        // 5. Mettre à jour le colis
+        Colis updatedColis = colisRepository.save(colis);
+        
+        return colisMapper.toDto(updatedColis);
     }
 
     /**

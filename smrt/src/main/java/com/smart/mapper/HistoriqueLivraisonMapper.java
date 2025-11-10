@@ -20,8 +20,7 @@ public interface HistoriqueLivraisonMapper {
     @Mapping(target = "id", ignore = true)  // Ignore ID as it's generated
     @Mapping(target = "dateChangement", ignore = true)  // Will be set by @PrePersist
     HistoriqueLivraison toEntity(HistoriqueLivraisonDTO dto);
-    
-    // Add this method to help with the mapping
+
     default Colis mapColis(String colisId) {
         if (colisId == null) {
             return null;
