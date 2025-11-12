@@ -100,5 +100,13 @@ public class ClientExpediteurController {
         return ResponseEntity.ok(colisService.findById(colisId)
                 .orElseThrow(() -> new EntityNotFoundException("Colis non trouvé")));
     }
+    //Filtrer les colis d'un client par statut
+    @GetMapping("/{clientId}/colis/{status}")
+    public ResponseEntity<Page<ColisDTO>> getColisByClientAndStatus(
+            @PathVariable String clientId,
+            @PathVariable String status,
+            Pageable pageable) {
+        return ResponseEntity.ok(colisService.findColisByClientExpediteurAndStatut(clientId, status, pageable));
+    }
 
 }
