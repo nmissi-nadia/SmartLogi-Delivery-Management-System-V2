@@ -1,4 +1,5 @@
 package com.smart.service;
+import com.smart.entity.Enum.StatutColis;
 import static com.smart.entity.Enum.StatutColis.CREE;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,6 +19,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,6 +52,9 @@ class ColisServiceTest {
 
     @Mock
     private DestinataireMapper destinataireMapper;
+
+    @Mock
+    private HistoriqueLivraisonMapper historiqueLivraisonMapper;
 
     @BeforeEach
     void setup() {
@@ -219,4 +225,116 @@ class ColisServiceTest {
         verify(colisRepository, never()).deleteById(anyString());
     }
 
+    @Test
+    void testUpdateColis_Success() {
+        // Arrange
+        String colisId = "c1";
+        Colis existingColis = new Colis();
+        existingColis.setId(colisId);
+        existingColis.setDescription("Ancienne description");
+
+        ColisDTO updatedDto = new ColisDTO();
+        updatedDto.setDescription("Nouvelle description");
+
+        when(colisRepository.findById(colisId)).thenReturn(Optional.of(existingColis));
+        when(colisRepository.save(any(Colis.class))).thenAnswer(i -> i.getArgument(0));
+        when(colisMapper.toDto(any(Colis.class))).thenAnswer(i -> {
+            Colis c = i.getArgument(0);
+            ColisDTO dto = new ColisDTO();
+            dto.setId(c.getId());
+            dto.setDescription(c.getDescription());
+            return dto;
+        });
+
+        // Act
+        ColisDTO result = colisService.update(colisId, updatedDto);
+
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result.getDescription()).isEqualTo("Nouvelle description");
+        verify(colisRepository).save(existingColis);
+    }
+
+    @Test
+    void testUpdateColis_NotFound() {
+        // Arrange
+        String colisId = "c1";
+        ColisDTO updatedDto = new ColisDTO();
+        when(colisRepository.findById(colisId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> colisService.update(colisId, updatedDto));
+        verify(colisRepository, never()).save(any());
+    }
+
+    @Test
+    void testFindById_Success() {
+        // Arrange
+        String colisId = "c1";
+        Colis colis = new Colis();
+        colis.setId(colisId);
+        ColisDTO colisDTO = new ColisDTO();
+        colisDTO.setId(colisId);
+
+        when(colisRepository.findById(colisId)).thenReturn(Optional.of(colis));
+        when(colisMapper.toDto(colis)).thenReturn(colisDTO);
+
+        // Act
+        Optional<ColisDTO> result = colisService.findById(colisId);
+
+        // Assert
+        assertThat(result).isPresent();
+        assertThat(result.get().getId()).isEqualTo(colisId);
+    }
+
+    @Test
+    void testFindById_NotFound() {
+        // Arrange
+        String colisId = "c1";
+        when(colisRepository.findById(colisId)).thenReturn(Optional.empty());
+
+        // Act
+        Optional<ColisDTO> result = colisService.findById(colisId);
+
+        // Assert
+        assertThat(result).isNotPresent();
+    }
+
+    @Test
+    void testGetHistoriqueForColis_Success() {
+        // Arrange
+        String colisId = "c1";
+        Colis colis = new Colis();
+        colis.setId(colisId);
+
+        HistoriqueLivraison historique = new HistoriqueLivraison();
+        historique.setId("h1");
+        historique.setColis(colis); // Set the colis object
+        historique.setStatut(StatutColis.CREE); // Set the statut
+        List<HistoriqueLivraison> historiques = Collections.singletonList(historique);
+
+        when(historiqueLivraisonRepository.findByColisIdOrderByDateChangementDesc(colisId)).thenReturn(historiques);
+
+        // Act
+        List<HistoriqueLivraisonDTO> result = colisService.getHistoriqueForColis(colisId);
+
+        // Assert
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getId()).isEqualTo("h1");
+        assertThat(result.get(0).getColisId()).isEqualTo(colisId);
+        assertThat(result.get(0).getStatut()).isEqualTo(StatutColis.CREE.name());
+    }
+
+    @Test
+    void testGetHistoriqueForColis_Empty() {
+        // Arrange
+        String colisId = "c1";
+        when(historiqueLivraisonRepository.findByColisIdOrderByDateChangementDesc(colisId)).thenReturn(Collections.emptyList());
+
+        // Act
+        List<HistoriqueLivraisonDTO> result = colisService.getHistoriqueForColis(colisId);
+
+        // Assert
+        assertThat(result).isEmpty();
+    }
 }
