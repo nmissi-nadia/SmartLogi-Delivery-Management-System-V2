@@ -2,8 +2,11 @@ package com.smart.controller;
 
 import com.smart.dto.ColisDTO;
 import com.smart.dto.LivreurDTO;
+import com.smart.entity.Livreur;
+import com.smart.entity.Zone;
 import com.smart.service.ColisService;
 import com.smart.service.LivreurService;
+import com.smart.service.ZoneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,7 @@ import java.util.Map;
 public class LivreurController {
     private final LivreurService service;
     private final ColisService colisService;
+    private final ZoneService zoneService;
 
     @GetMapping
     public List<LivreurDTO> getAll() {
@@ -38,9 +42,9 @@ public class LivreurController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public LivreurDTO create(@RequestBody LivreurDTO dto) {
-        return service.save(dto);
+   @PostMapping
+    public ResponseEntity<LivreurDTO> createLivreur(@RequestBody LivreurDTO dto) {
+        return ResponseEntity.ok(service.save(dto));
     }
 
     @PutMapping("/{id}")
