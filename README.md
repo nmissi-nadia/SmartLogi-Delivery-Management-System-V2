@@ -318,7 +318,7 @@ La couverture de code est mesurée à l'aide de JaCoCo. Voici un aperçu des mé
 ```
 
 #### 📸 Capture d'écran - Couverture Globale
-![JaCoCo Global Coverage](image.png)
+![JaCoCo Global Coverage](./report/jacoco-global-coverage.png)
 
 
 ### 🔍 Analyse SonarQube
@@ -331,27 +331,11 @@ L'analyse de la qualité du code est effectuée avec SonarQube. Voici les métri
 - **Couverture** : 85% (objectif : 80% minimum)
 
 #### 📸 Tableau de Bord SonarQube
-![Tableau de Bord SonarQube](image-1.png)
+![Tableau de Bord SonarQube](./report/sonarqube-dashboard.png)
 
 #### 🛠️ Problèmes et Corrections
-![Problèmes SonarQube](image-2.png)
+![Problèmes SonarQube](./report/sonarqube-issues.png)
 
-### 📂 Structure du Dossier de Documentation
-```
-docs/
-├── images/
-│   ├── jacoco-coverage.png
-│   ├── jacoco-packages.png
-│   ├── jacoco-methods.png
-│   ├── sonarqube-dashboard.png
-│   ├── sonarqube-metrics.png
-│   └── sonarqube-issues.png
-└── reports/
-    ├── jacoco/
-    │   └── index.html
-    └── sonar/
-        └── analysis-report.html
-```
 
 ### 🔄 Mise à Jour des Rapports
 
@@ -373,7 +357,7 @@ Pour générer et mettre à jour les rapports :
 
 3. **Mettre à jour les captures d'écran** :
    - Prendre les captures depuis les interfaces JaCoCo et SonarQube
-   - Les enregistrer dans le dossier `docs/images/`
+   - Les enregistrer dans le dossier `report/`
    - Mettre à jour les noms des fichiers dans le README si nécessaire
 
 ---
