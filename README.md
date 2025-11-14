@@ -318,7 +318,7 @@ La couverture de code est mesurée à l'aide de JaCoCo. Voici un aperçu des mé
 ```
 
 #### 📸 Capture d'écran - Couverture Globale
-![JaCoCo Global Coverage](./report/jacoco-global-coverage.png)
+![JaCoCo Global Coverage](./report/image.png)
 
 
 ### 🔍 Analyse SonarQube
@@ -331,10 +331,10 @@ L'analyse de la qualité du code est effectuée avec SonarQube. Voici les métri
 - **Couverture** : 85% (objectif : 80% minimum)
 
 #### 📸 Tableau de Bord SonarQube
-![Tableau de Bord SonarQube](./report/sonarqube-dashboard.png)
+![Tableau de Bord SonarQube](./report/image-1.png)
 
 #### 🛠️ Problèmes et Corrections
-![Problèmes SonarQube](./report/sonarqube-issues.png)
+![Problèmes SonarQube](./report/image-2.png)
 
 
 ### 🔄 Mise à Jour des Rapports
