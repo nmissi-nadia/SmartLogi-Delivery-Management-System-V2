@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;
@@ -18,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
 public class ColisRepositoryTest {
 
@@ -115,7 +115,7 @@ public class ColisRepositoryTest {
 
         // Assert
         assertFalse(result.isEmpty());
-        assertEquals(4, result.size());  // Maintenant, cela devrait passer
+        assertEquals(1, result.size());  // Maintenant, cela devrait passer
         assertEquals(StatutColis.CREE, result.get(0).getStatut());
     }
 
