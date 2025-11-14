@@ -92,9 +92,16 @@ public class GestionnaireLogistiqueController {
     @PutMapping("/colis/{colisId}/traiter")
     public ResponseEntity<ColisDTO> traiterColis(
             @PathVariable String colisId,
-            @RequestParam StatutColis statut,
-            @RequestParam(required = false) String commentaire) {
-        return ResponseEntity.ok(colisService.updateStatus(colisId, statut.toString(), commentaire));
+            @RequestBody Map<String, Object> request) {
+        
+        StatutColis statut = StatutColis.valueOf((String) request.get("statut"));
+        String commentaire = (String) request.get("commentaire");
+        
+        return ResponseEntity.ok(colisService.updateStatus(
+            colisId, 
+            statut.toString(), 
+            commentaire
+        ));
     }
     
 }

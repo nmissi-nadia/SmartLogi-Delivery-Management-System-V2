@@ -85,10 +85,14 @@ public class ClientExpediteurController {
     }
 
     // Lister les colis d'un client
-    @GetMapping("/{clientId}/colis")
-    public ResponseEntity<Page<ColisDTO>> getColisByClient(
+   @GetMapping("/{clientId}/colis")
+    public ResponseEntity<Page<ColisDTO>> getColisByClientAndStatus(
             @PathVariable String clientId,
+            @RequestParam(required = false) String status,
             Pageable pageable) {
+        if (status != null) {
+            return ResponseEntity.ok(colisService.findColisByClientExpediteurAndStatut(clientId, status, pageable));
+        }
         return ResponseEntity.ok(colisService.findColisByClientExpediteur(clientId, pageable));
     }
 
@@ -100,13 +104,6 @@ public class ClientExpediteurController {
         return ResponseEntity.ok(colisService.findById(colisId)
                 .orElseThrow(() -> new EntityNotFoundException("Colis non trouvé")));
     }
-    //Filtrer les colis d'un client par statut
-    @GetMapping("/{clientId}/colis/{status}")
-    public ResponseEntity<Page<ColisDTO>> getColisByClientAndStatus(
-            @PathVariable String clientId,
-            @PathVariable String status,
-            Pageable pageable) {
-        return ResponseEntity.ok(colisService.findColisByClientExpediteurAndStatut(clientId, status, pageable));
-    }
+   
 
 }
