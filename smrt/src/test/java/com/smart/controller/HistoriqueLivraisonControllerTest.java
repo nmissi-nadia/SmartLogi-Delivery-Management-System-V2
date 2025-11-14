@@ -1,6 +1,7 @@
 package com.smart.controller;
 
 import com.smart.dto.HistoriqueLivraisonDTO;
+import com.smart.entity.Enum.StatutColis;
 import com.smart.service.HistoriqueLivraisonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class HistoriqueLivraisonControllerTest {
     void setUp() {
         historiqueDTO = new HistoriqueLivraisonDTO();
         historiqueDTO.setId("hist1");
-        historiqueDTO.setStatut("EN_COURS");
+        historiqueDTO.setStatut(StatutColis.EN_STOCK.toString());
         historiqueDTO.setDateChangement(LocalDateTime.now());
         historiqueDTO.setCommentaire("En cours de livraison");
     }

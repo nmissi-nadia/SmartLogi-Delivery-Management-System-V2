@@ -32,6 +32,7 @@ class GestionnaireLogistiqueServiceTest {
         gestionnaire = new GestionnaireLogistique();
         gestionnaire.setId("1");
         gestionnaire.setNom("Test");
+        
     }
 
     @Test

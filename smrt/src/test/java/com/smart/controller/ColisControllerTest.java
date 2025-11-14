@@ -51,7 +51,7 @@ class ColisControllerTest {
 
         historiqueDTO = new HistoriqueLivraisonDTO();
         historiqueDTO.setId("h1");
-        historiqueDTO.setStatut("EN_COURS");
+        historiqueDTO.setStatut(StatutColis.EN_STOCK.toString());
         historiqueDTO.setDateChangement(LocalDateTime.now());
     }
 
@@ -64,7 +64,7 @@ class ColisControllerTest {
 
         // Act
         Page<ColisDTO> result = colisController.getAll(
-                "EN_COURS", "Paris", "HAUTE", "zone1",
+                "EN_STOCK", "Paris", "HAUTE", "zone1",
                 LocalDate.now(), LocalDate.now(), "client1",
                 "dest1", "liv1", pageable);
 
@@ -97,7 +97,7 @@ class ColisControllerTest {
 
         // Act
         ResponseEntity<Page<ColisDTO>> response = colisController.searchColis(
-                "keyword", "EN_COURS", "Paris", "HAUTE", pageable);
+                "keyword", "EN_STOCK", "Paris", "HAUTE", pageable);
 
         // Assert
         assertNotNull(response);
