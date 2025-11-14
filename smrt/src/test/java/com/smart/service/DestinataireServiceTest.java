@@ -11,96 +11,95 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class DestinataireServiceTest {
+public class DestinataireServiceTest {
 
     @Mock
-    private DestinataireRepository repository;
+    private DestinataireRepository destinataireRepository;
 
     @Mock
-    private DestinataireMapper mapper;
+    private DestinataireMapper destinataireMapper;
 
     @InjectMocks
-    private DestinataireService service;
+    private DestinataireService destinataireService;
 
     private Destinataire destinataire;
     private DestinataireDTO destinataireDTO;
-    private final String DESTINATAIRE_ID = "123e4567-e89b-12d3-a456-426614174000";
 
     @BeforeEach
     void setUp() {
         destinataire = new Destinataire();
-        destinataire.setId(DESTINATAIRE_ID);
-        destinataire.setNom("Benali");
-        destinataire.setPrenom("Ahmed");
-        destinataire.setAdresse("123 Rue de Paris");
-        destinataire.setTelephone("0612345678");
+        destinataire.setId("1");
+        destinataire.setNom("Test Nom");
+        destinataire.setAdresse("Test Adresse");
+        destinataire.setTelephone("123456789");
 
         destinataireDTO = new DestinataireDTO();
-        destinataireDTO.setId(DESTINATAIRE_ID);
-        destinataireDTO.setNom("Benali");
-        destinataireDTO.setPrenom("Ahmed");
-        destinataireDTO.setAdresse("123 Rue de Paris");
-        destinataireDTO.setTelephone("0612345678");
+        destinataireDTO.setId("1");
+        destinataireDTO.setNom("Test Nom");
+        destinataireDTO.setAdresse("Test Adresse");
+        destinataireDTO.setTelephone("123456789");
     }
 
     @Test
-    void findAll_ShouldReturnAllDestinataires() {
-        when(repository.findAll()).thenReturn(List.of(destinataire));
-        when(mapper.toDto(any(Destinataire.class))).thenReturn(destinataireDTO);
+    void testFindAll() {
+        when(destinataireRepository.findAll()).thenReturn(Collections.singletonList(destinataire));
+        when(destinataireMapper.toDto(destinataire)).thenReturn(destinataireDTO);
 
-        List<DestinataireDTO> result = service.findAll();
+        List<DestinataireDTO> result = destinataireService.findAll();
 
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getId()).isEqualTo(DESTINATAIRE_ID);
-        verify(repository).findAll();
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(destinataireDTO.getNom(), result.get(0).getNom());
+        verify(destinataireRepository, times(1)).findAll();
     }
 
     @Test
-    void findById_WhenDestinataireExists_ShouldReturnDestinataire() {
-        when(repository.findById(DESTINATAIRE_ID)).thenReturn(Optional.of(destinataire));
-        when(mapper.toDto(any(Destinataire.class))).thenReturn(destinataireDTO);
+    void testFindById_Success() {
+        when(destinataireRepository.findById("1")).thenReturn(Optional.of(destinataire));
+        when(destinataireMapper.toDto(destinataire)).thenReturn(destinataireDTO);
 
-        Optional<DestinataireDTO> result = service.findById(DESTINATAIRE_ID);
+        Optional<DestinataireDTO> result = destinataireService.findById("1");
 
-        assertThat(result).isPresent();
-        assertThat(result.get().getId()).isEqualTo(DESTINATAIRE_ID);
-        verify(repository).findById(DESTINATAIRE_ID);
+        assertTrue(result.isPresent());
+        assertEquals(destinataireDTO.getNom(), result.get().getNom());
+        verify(destinataireRepository, times(1)).findById("1");
     }
 
     @Test
-    void findById_WhenDestinataireNotExists_ShouldReturnEmpty() {
-        when(repository.findById("unknown_id")).thenReturn(Optional.empty());
+    void testFindById_NotFound() {
+        when(destinataireRepository.findById("1")).thenReturn(Optional.empty());
 
-        Optional<DestinataireDTO> result = service.findById("unknown_id");
+        Optional<DestinataireDTO> result = destinataireService.findById("1");
 
-        assertThat(result).isEmpty();
-        verify(repository).findById("unknown_id");
+        assertFalse(result.isPresent());
+        verify(destinataireRepository, times(1)).findById("1");
     }
 
     @Test
-    void save_ShouldSaveAndReturnDestinataire() {
-        when(mapper.toEntity(destinataireDTO)).thenReturn(destinataire);
-        when(repository.save(destinataire)).thenReturn(destinataire);
-        when(mapper.toDto(destinataire)).thenReturn(destinataireDTO);
+    void testSave() {
+        when(destinataireMapper.toEntity(destinataireDTO)).thenReturn(destinataire);
+        when(destinataireRepository.save(destinataire)).thenReturn(destinataire);
+        when(destinataireMapper.toDto(destinataire)).thenReturn(destinataireDTO);
 
-        DestinataireDTO result = service.save(destinataireDTO);
+        DestinataireDTO result = destinataireService.save(destinataireDTO);
 
-        assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(DESTINATAIRE_ID);
-        verify(repository).save(destinataire);
+        assertNotNull(result);
+        assertEquals(destinataireDTO.getNom(), result.getNom());
+        verify(destinataireRepository, times(1)).save(destinataire);
     }
 
     @Test
-    void deleteById_ShouldCallRepositoryDelete() {
-        service.deleteById(DESTINATAIRE_ID);
-        verify(repository).deleteById(DESTINATAIRE_ID);
+    void testDeleteById() {
+        doNothing().when(destinataireRepository).deleteById("1");
+        destinataireService.deleteById("1");
+        verify(destinataireRepository, times(1)).deleteById("1");
     }
 }
