@@ -14,5 +14,9 @@ public class ColisProduitService {
     }
 
     public List<ColisProduit> getAllColisProduits() { return colisProduitRepository.findAll(); }
-    public ColisProduit createColisProduit(ColisProduit cp) { return colisProduitRepository.save(cp); }
+    public ColisProduit createColisProduit(ColisProduit cp) {
+        if (cp == null) {
+            throw new IllegalArgumentException("L'objet ColisProduit ne peut pas être null");
+        }
+        return colisProduitRepository.save(cp); }
 }

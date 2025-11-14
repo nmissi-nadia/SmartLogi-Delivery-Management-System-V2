@@ -9,10 +9,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,63 +26,54 @@ class GestionnaireLogistiqueServiceTest {
     private GestionnaireLogistiqueService service;
 
     private GestionnaireLogistique gestionnaire;
-    private final String GESTIONNAIRE_ID = "123e4567-e89b-12d3-a456-426614174000";
 
     @BeforeEach
     void setUp() {
         gestionnaire = new GestionnaireLogistique();
-        gestionnaire.setId(GESTIONNAIRE_ID);
-        gestionnaire.setNom("Benali");
-        gestionnaire.setPrenom("Ahmed");
-        gestionnaire.setEmail("ahmed.benali@example.com");
+        gestionnaire.setId("1");
+        gestionnaire.setNom("Test");
+        
     }
 
     @Test
-    void findAll_ShouldReturnAllGestionnaires() {
-        when(repository.findAll()).thenReturn(List.of(gestionnaire));
-
+    void testFindAll() {
+        when(repository.findAll()).thenReturn(Collections.singletonList(gestionnaire));
         List<GestionnaireLogistique> result = service.findAll();
-
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getId()).isEqualTo(GESTIONNAIRE_ID);
-        verify(repository).findAll();
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+        verify(repository, times(1)).findAll();
     }
 
     @Test
-    void findById_WhenGestionnaireExists_ShouldReturnGestionnaire() {
-        when(repository.findById(GESTIONNAIRE_ID)).thenReturn(Optional.of(gestionnaire));
-
-        Optional<GestionnaireLogistique> result = service.findById(GESTIONNAIRE_ID);
-
-        assertThat(result).isPresent();
-        assertThat(result.get().getId()).isEqualTo(GESTIONNAIRE_ID);
-        verify(repository).findById(GESTIONNAIRE_ID);
+    void testFindById_Success() {
+        when(repository.findById("1")).thenReturn(Optional.of(gestionnaire));
+        Optional<GestionnaireLogistique> result = service.findById("1");
+        assertTrue(result.isPresent());
+        assertEquals(gestionnaire, result.get());
+        verify(repository, times(1)).findById("1");
     }
 
     @Test
-    void findById_WhenGestionnaireNotExists_ShouldReturnEmpty() {
-        when(repository.findById("unknown_id")).thenReturn(Optional.empty());
-
-        Optional<GestionnaireLogistique> result = service.findById("unknown_id");
-
-        assertThat(result).isEmpty();
-        verify(repository).findById("unknown_id");
+    void testFindById_NotFound() {
+        when(repository.findById("2")).thenReturn(Optional.empty());
+        Optional<GestionnaireLogistique> result = service.findById("2");
+        assertFalse(result.isPresent());
+        verify(repository, times(1)).findById("2");
     }
 
     @Test
-    void save_ShouldSaveAndReturnGestionnaire() {
-        when(repository.save(gestionnaire)).thenReturn(gestionnaire);
-
-        GestionnaireLogistique result = service.save(gestionnaire);
-
-        assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(GESTIONNAIRE_ID);
-        verify(repository).save(gestionnaire);
+    void testSave() {
+        when(repository.save(any(GestionnaireLogistique.class))).thenReturn(gestionnaire);
+        GestionnaireLogistique result = service.save(new GestionnaireLogistique());
+        assertNotNull(result);
+        assertEquals("1", result.getId());
+        verify(repository, times(1)).save(any(GestionnaireLogistique.class));
     }
 
     @Test
-    void deleteById_ShouldCallRepositoryDelete() {
-        service.deleteById(GESTIONNAIRE_ID);
-        verify(repository).deleteById(GESTIONNAIRE_ID);
+    void testDeleteById() {
+        doNothing().when(repository).deleteById("1");
+        service.deleteById("1");
+        verify(repository, times(1)).deleteById("1");
     }
 }

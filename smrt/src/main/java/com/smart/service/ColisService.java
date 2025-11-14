@@ -5,6 +5,7 @@ import com.smart.dto.ColisProduitDTO;
 import com.smart.dto.ColisRequestDTO;
 import com.smart.dto.HistoriqueLivraisonDTO;
 import com.smart.entity.*;
+import com.smart.entity.Colis;
 import com.smart.entity.Enum.PrioriteEnum;
 import com.smart.entity.Enum.StatutColis;
 import com.smart.mapper.*;
@@ -253,8 +254,13 @@ public class ColisService {
     /**
      * Supprimer un colis
      */
+    @Transactional
+
     public void deleteById(String id) {
         log.info("Suppression du colis avec l'ID: {}", id);
+        if (!colisRepository.existsById(id)) {
+            throw new RuntimeException("Colis non trouvé avec l'ID : " + id);
+        }
         colisRepository.deleteById(id);
         log.info("Colis supprimé avec succès, ID: {}", id);
     }
