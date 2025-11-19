@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 04-add-user-relation
+      author: youco
+      changes:
+        - addColumn:
+            tableName: livreur
+            columns:
+              - column:
+                  name: user_id
+                  type: varchar(255)
+                  constraints:
+                    foreignKeyName: fk_livreur_user
+                    references: app_user(id)
+        - addColumn:
+            tableName: client_expediteur
+            columns:
+              - column:
+                  name: user_id
+                  type: varchar(255)
+                  constraints:
+                    foreignKeyName: fk_client_expediteur_user
+                    references: app_user(id)

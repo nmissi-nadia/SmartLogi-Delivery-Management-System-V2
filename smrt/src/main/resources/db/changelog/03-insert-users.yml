@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-insert-manager-user
+      author: gemini
+      changes:
+        - insert:
+            tableName: utilisateur
+            columns:
+              - column:
+                  name: id
+                  value: "user-manager-1"
+              - column:
+                  name: email
+                  value: "manager@smartlogi.com"
+              - column:
+                  name: password
+                  # Le mot de passe 'password' sera haché par l'application au premier démarrage
+                  # ou via un script dédié. Pour l'exemple, on met une valeur qui sera remplacée.
+                  # Le hash pour 'password' est : $2a$10$GRLdNijSQe8WqU5fM3.21e8lI9VWy632P/0S2q.g324/b0sclVvFe
+                  value: "$2a$10$GRLdNijSQe8WqU5fM3.21e8lI9VWy632P/0S2q.g324/b0sclVvFe"
+              - column:
+                  name: role
+                  value: "MANAGER"
