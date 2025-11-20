@@ -1,7 +1,8 @@
 package com.smart.controller;
 
-import com.smart.dto.ProduitDTO;
-import com.smart.service.ProduitService;
+import com.smart.colis.src.main.java.com.smart.colis.dto.ProduitDTO;
+import com.smart.colis.src.main.java.com.smart.colis.controller.ProduitController;
+import com.smart.colis.src.main.java.com.smart.colis.service.ProduitService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

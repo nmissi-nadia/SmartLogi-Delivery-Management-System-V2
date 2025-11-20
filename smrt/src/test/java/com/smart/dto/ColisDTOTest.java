@@ -1,11 +1,11 @@
 package com.smart.dto;
 
-import com.smart.entity.Enum.PrioriteEnum;
-import com.smart.entity.Enum.StatutColis;
+
+import com.smart.colis.src.main.java.com.smart.colis.dto.ColisDTO;
+import com.smart.livraison.src.main.java.com.smart.livraison.dto.HistoriqueLivraisonDTO;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

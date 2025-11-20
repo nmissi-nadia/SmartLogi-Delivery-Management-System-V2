@@ -1,8 +1,10 @@
 package com.smart.controller;
 
-import com.smart.entity.Enum.Role;
-import com.smart.entity.User;
-import com.smart.service.UserService;
+
+import com.smart.common.src.main.java.com.smart.Enum.Role;
+import com.smart.common.src.main.java.com.smart.entity.User;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.controller.UserController;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

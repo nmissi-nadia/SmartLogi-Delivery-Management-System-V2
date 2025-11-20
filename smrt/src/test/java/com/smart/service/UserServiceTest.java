@@ -1,7 +1,9 @@
 package com.smart.service;
 
-import com.smart.entity.User;
-import com.smart.repository.UserRepository;
+
+import com.smart.common.src.main.java.com.smart.entity.User;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.repository.UserRepository;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

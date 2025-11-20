@@ -1,6 +1,7 @@
 package com.smart;
 
-import com.smart.service.ColisService;
+
+import com.smart.colis.src.main.java.com.smart.colis.service.ColisService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

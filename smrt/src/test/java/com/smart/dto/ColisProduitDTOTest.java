@@ -1,6 +1,9 @@
 package com.smart.dto;
 
+import com.smart.colis.src.main.java.com.smart.colis.dto.ColisProduitDTO;
+import com.smart.colis.src.main.java.com.smart.colis.dto.ProduitDTO;
 import org.junit.jupiter.api.Test;
+
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;

@@ -1,9 +1,11 @@
 package com.smart.service;
 
-import com.smart.dto.ZoneDTO;
-import com.smart.entity.Zone;
-import com.smart.mapper.ZoneMapper;
-import com.smart.repository.ZoneRepository;
+
+import com.smart.common.src.main.java.com.smart.entity.Zone;
+import com.smart.zone.src.main.java.com.smart.zone.dto.ZoneDTO;
+import com.smart.zone.src.main.java.com.smart.zone.mapper.ZoneMapper;
+import com.smart.zone.src.main.java.com.smart.zone.repository.ZoneRepository;
+import com.smart.zone.src.main.java.com.smart.zone.service.ZoneService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

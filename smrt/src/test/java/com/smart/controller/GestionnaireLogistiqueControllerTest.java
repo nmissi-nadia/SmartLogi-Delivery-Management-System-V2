@@ -1,10 +1,12 @@
 package com.smart.controller;
 
-import com.smart.dto.ColisDTO;
-import com.smart.entity.Enum.StatutColis;
-import com.smart.entity.GestionnaireLogistique;
-import com.smart.service.ColisService;
-import com.smart.service.GestionnaireLogistiqueService;
+
+import com.smart.colis.src.main.java.com.smart.colis.dto.ColisDTO;
+import com.smart.colis.src.main.java.com.smart.colis.service.ColisService;
+import com.smart.common.src.main.java.com.smart.Enum.StatutColis;
+import com.smart.common.src.main.java.com.smart.entity.GestionnaireLogistique;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.controller.GestionnaireLogistiqueController;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.service.GestionnaireLogistiqueService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

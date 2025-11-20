@@ -1,12 +1,11 @@
 package com.smart.integration;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smart.dto.ColisDTO;
-import com.smart.entity.*;
-import com.smart.entity.Enum.PrioriteEnum;
-import com.smart.entity.Enum.StatutColis;
-import com.smart.repository.*;
+
+import com.smart.colis.src.main.java.com.smart.colis.dto.ColisDTO;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.repository.ClientExpediteurRepository;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.repository.DestinataireRepository;
+import com.smart.zone.src.main.java.com.smart.zone.repository.ZoneRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

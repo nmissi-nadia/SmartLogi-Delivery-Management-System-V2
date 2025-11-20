@@ -1,7 +1,9 @@
 package com.smart.mapper;
 
-import com.smart.dto.ZoneDTO;
-import com.smart.entity.Zone;
+
+import com.smart.common.src.main.java.com.smart.entity.Zone;
+import com.smart.zone.src.main.java.com.smart.zone.dto.ZoneDTO;
+import com.smart.zone.src.main.java.com.smart.zone.mapper.ZoneMapper;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 

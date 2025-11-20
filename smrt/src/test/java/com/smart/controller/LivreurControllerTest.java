@@ -1,10 +1,13 @@
 package com.smart.controller;
 
-import com.smart.dto.ColisDTO;
-import com.smart.dto.LivreurDTO;
-import com.smart.entity.Enum.StatutColis;
-import com.smart.service.ColisService;
-import com.smart.service.LivreurService;
+
+import com.smart.colis.src.main.java.com.smart.colis.dto.ColisDTO;
+import com.smart.colis.src.main.java.com.smart.colis.service.ColisService;
+import com.smart.common.src.main.java.com.smart.Enum.StatutColis;
+import com.smart.livraison.src.main.java.com.smart.livraison.controller.LivreurController;
+
+import com.smart.livraison.src.main.java.com.smart.livraison.dto.LivreurDTO;
+import com.smart.livraison.src.main.java.com.smart.livraison.service.LivreurService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +28,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

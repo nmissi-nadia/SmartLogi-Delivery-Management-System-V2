@@ -1,13 +1,8 @@
 package com.smart.mapper;
 
-import com.smart.dto.ColisDTO;
-import com.smart.entity.ClientExpediteur;
-import com.smart.entity.Colis;
-import com.smart.entity.Destinataire;
-import com.smart.entity.Livreur;
-import com.smart.entity.Zone;
-import com.smart.entity.Enum.PrioriteEnum;
-import com.smart.entity.Enum.StatutColis;
+import com.smart.colis.src.main.java.com.smart.colis.dto.ColisDTO;
+import com.smart.colis.src.main.java.com.smart.colis.mapper.ColisMapper;
+
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 

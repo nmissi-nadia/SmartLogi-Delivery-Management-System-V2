@@ -1,11 +1,17 @@
 package com.smart.service;
 
-import com.smart.dto.*;
-import com.smart.entity.*;
-import com.smart.entity.Enum.PrioriteEnum;
-import com.smart.entity.Enum.StatutColis;
-import com.smart.mapper.*;
-import com.smart.repository.*;
+import com.smart.colis.src.main.java.com.smart.colis.dto.ColisDTO;
+import com.smart.colis.src.main.java.com.smart.colis.dto.ColisProduitDTO;
+import com.smart.colis.src.main.java.com.smart.colis.dto.ColisRequestDTO;
+import com.smart.colis.src.main.java.com.smart.colis.dto.ProduitDTO;
+import com.smart.colis.src.main.java.com.smart.colis.service.ColisService;
+import com.smart.livraison.src.main.java.com.smart.livraison.mapper.HistoriqueLivraisonMapper;
+import com.smart.livraison.src.main.java.com.smart.livraison.repository.HistoriqueLivraisonRepository;
+import com.smart.livraison.src.main.java.com.smart.livraison.repository.LivreurRepository;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.dto.DestinataireDTO;
+import com.smart.zone.src.main.java.com.smart.zone.dto.ZoneDTO;
+import com.smart.zone.src.main.java.com.smart.zone.mapper.ZoneMapper;
+import com.smart.zone.src.main.java.com.smart.zone.repository.ZoneRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

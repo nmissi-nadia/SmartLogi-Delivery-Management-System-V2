@@ -1,7 +1,9 @@
 package com.smart.service;
 
-import com.smart.entity.GestionnaireLogistique;
-import com.smart.repository.GestionnaireLogistiqueRepository;
+
+import com.smart.common.src.main.java.com.smart.entity.GestionnaireLogistique;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.repository.GestionnaireLogistiqueRepository;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.service.GestionnaireLogistiqueService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

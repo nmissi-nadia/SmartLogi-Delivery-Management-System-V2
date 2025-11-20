@@ -1,15 +1,16 @@
 package com.smart.repository;
 
-import com.smart.entity.*;
-import com.smart.entity.Enum.*;
+
+import com.smart.colis.src.main.java.com.smart.colis.repository.ColisRepository;
+import com.smart.livraison.src.main.java.com.smart.livraison.repository.LivreurRepository;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.repository.ClientExpediteurRepository;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.repository.DestinataireRepository;
+import com.smart.zone.src.main.java.com.smart.zone.repository.ZoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;

@@ -1,7 +1,9 @@
 package com.smart.mapper;
 
-import com.smart.dto.ClientExpediteurDTO;
-import com.smart.entity.ClientExpediteur;
+
+import com.smart.common.src.main.java.com.smart.entity.ClientExpediteur;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.dto.ClientExpediteurDTO;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.mapper.ClientExpediteurMapper;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 

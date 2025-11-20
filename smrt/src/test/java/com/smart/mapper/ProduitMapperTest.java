@@ -1,7 +1,9 @@
 package com.smart.mapper;
 
-import com.smart.dto.ProduitDTO;
-import com.smart.entity.Produit;
+
+import com.smart.colis.src.main.java.com.smart.colis.dto.ProduitDTO;
+import com.smart.colis.src.main.java.com.smart.colis.mapper.ProduitMapper;
+import com.smart.common.src.main.java.com.smart.entity.Produit;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 

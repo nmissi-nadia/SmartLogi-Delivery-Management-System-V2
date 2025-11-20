@@ -1,10 +1,12 @@
 package com.smart.controller;
 
-import com.smart.dto.ColisDTO;
-import com.smart.dto.HistoriqueLivraisonDTO;
-import com.smart.entity.Enum.StatutColis;
-import com.smart.entity.Enum.PrioriteEnum;
-import com.smart.service.ColisService;
+
+import com.smart.colis.src.main.java.com.smart.colis.controller.ColisController;
+import com.smart.colis.src.main.java.com.smart.colis.dto.ColisDTO;
+import com.smart.colis.src.main.java.com.smart.colis.service.ColisService;
+import com.smart.common.src.main.java.com.smart.Enum.PrioriteEnum;
+import com.smart.common.src.main.java.com.smart.Enum.StatutColis;
+import com.smart.livraison.src.main.java.com.smart.livraison.dto.HistoriqueLivraisonDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

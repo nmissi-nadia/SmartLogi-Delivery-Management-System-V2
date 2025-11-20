@@ -1,8 +1,10 @@
 package com.smart.controller;
 
-import com.smart.dto.HistoriqueLivraisonDTO;
-import com.smart.entity.Enum.StatutColis;
-import com.smart.service.HistoriqueLivraisonService;
+
+import com.smart.common.src.main.java.com.smart.Enum.StatutColis;
+import com.smart.livraison.src.main.java.com.smart.livraison.controller.HistoriqueLivraisonController;
+import com.smart.livraison.src.main.java.com.smart.livraison.dto.HistoriqueLivraisonDTO;
+import com.smart.livraison.src.main.java.com.smart.livraison.service.HistoriqueLivraisonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

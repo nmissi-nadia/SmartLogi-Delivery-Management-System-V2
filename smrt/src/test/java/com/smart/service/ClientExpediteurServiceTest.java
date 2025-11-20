@@ -1,9 +1,11 @@
 package com.smart.service;
 
-import com.smart.dto.ClientExpediteurDTO;
-import com.smart.entity.ClientExpediteur;
-import com.smart.mapper.ClientExpediteurMapper;
-import com.smart.repository.ClientExpediteurRepository;
+
+import com.smart.common.src.main.java.com.smart.entity.ClientExpediteur;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.dto.ClientExpediteurDTO;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.mapper.ClientExpediteurMapper;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.repository.ClientExpediteurRepository;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.service.ClientExpediteurService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

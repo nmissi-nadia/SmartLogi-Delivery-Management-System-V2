@@ -1,8 +1,8 @@
 package com.smart.mapper;
 
-import com.smart.dto.LivreurDTO;
-import com.smart.entity.Livreur;
-import com.smart.entity.Zone;
+
+import com.smart.livraison.src.main.java.com.smart.livraison.dto.LivreurDTO;
+import com.smart.livraison.src.main.java.com.smart.livraison.mapper.LivreurMapper;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 

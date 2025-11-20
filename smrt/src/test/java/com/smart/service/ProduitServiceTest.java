@@ -1,9 +1,9 @@
 package com.smart.service;
 
-import com.smart.dto.ProduitDTO;
-import com.smart.entity.Produit;
-import com.smart.mapper.ProduitMapper;
-import com.smart.repository.ProduitRepository;
+import com.smart.colis.src.main.java.com.smart.colis.dto.ProduitDTO;
+import com.smart.colis.src.main.java.com.smart.colis.mapper.ProduitMapper;
+import com.smart.colis.src.main.java.com.smart.colis.repository.ProduitRepository;
+import com.smart.colis.src.main.java.com.smart.colis.service.ProduitService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

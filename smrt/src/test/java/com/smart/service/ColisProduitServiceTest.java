@@ -1,10 +1,8 @@
 package com.smart.service;
 
-import com.smart.entity.ColisProduit;
-import com.smart.entity.ColisProduitKey;
-import com.smart.entity.Colis;
-import com.smart.entity.Produit;
-import com.smart.repository.ColisProduitRepository;
+
+import com.smart.colis.src.main.java.com.smart.colis.repository.ColisProduitRepository;
+import com.smart.colis.src.main.java.com.smart.colis.service.ColisProduitService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,8 +1,8 @@
 package com.smart.dto;
 
-import com.smart.entity.Colis;
-import com.smart.entity.HistoriqueLivraison;
-import com.smart.entity.Enum.StatutColis;
+
+import com.smart.common.src.main.java.com.smart.Enum.StatutColis;
+import com.smart.livraison.src.main.java.com.smart.livraison.dto.HistoriqueLivraisonDTO;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;

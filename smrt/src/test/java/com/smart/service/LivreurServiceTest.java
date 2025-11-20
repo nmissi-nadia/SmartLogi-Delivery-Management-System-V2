@@ -1,9 +1,11 @@
 package com.smart.service;
 
-import com.smart.dto.LivreurDTO;
-import com.smart.entity.Livreur;
-import com.smart.mapper.LivreurMapper;
-import com.smart.repository.LivreurRepository;
+
+import com.smart.common.src.main.java.com.smart.entity.Livreur;
+import com.smart.livraison.src.main.java.com.smart.livraison.dto.LivreurDTO;
+import com.smart.livraison.src.main.java.com.smart.livraison.mapper.LivreurMapper;
+import com.smart.livraison.src.main.java.com.smart.livraison.repository.LivreurRepository;
+import com.smart.livraison.src.main.java.com.smart.livraison.service.LivreurService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

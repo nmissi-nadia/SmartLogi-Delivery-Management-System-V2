@@ -1,12 +1,13 @@
 package com.smart.controller;
 
-import com.smart.dto.ClientExpediteurDTO;
-import com.smart.dto.ColisDTO;
-import com.smart.dto.ColisRequestDTO;
-import com.smart.entity.Enum.StatutColis;
-import com.smart.service.ClientExpediteurService;
-import com.smart.service.ColisService;
-import com.smart.repository.ClientExpediteurRepository;
+
+import com.smart.colis.src.main.java.com.smart.colis.dto.ColisDTO;
+import com.smart.colis.src.main.java.com.smart.colis.dto.ColisRequestDTO;
+import com.smart.colis.src.main.java.com.smart.colis.service.ColisService;
+import com.smart.common.src.main.java.com.smart.Enum.StatutColis;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.controller.ClientExpediteurController;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.dto.ClientExpediteurDTO;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.repository.ClientExpediteurRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import jakarta.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

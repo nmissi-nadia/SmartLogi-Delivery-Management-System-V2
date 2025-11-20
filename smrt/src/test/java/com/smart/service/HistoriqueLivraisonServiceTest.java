@@ -1,11 +1,13 @@
 package com.smart.service;
 
-import com.smart.dto.HistoriqueLivraisonDTO;
-import com.smart.entity.Colis;
-import com.smart.entity.HistoriqueLivraison;
-import com.smart.entity.Enum.StatutColis;
-import com.smart.mapper.HistoriqueLivraisonMapper;
-import com.smart.repository.HistoriqueLivraisonRepository;
+
+import com.smart.common.src.main.java.com.smart.Enum.StatutColis;
+import com.smart.common.src.main.java.com.smart.entity.Colis;
+import com.smart.common.src.main.java.com.smart.entity.HistoriqueLivraison;
+import com.smart.livraison.src.main.java.com.smart.livraison.dto.HistoriqueLivraisonDTO;
+import com.smart.livraison.src.main.java.com.smart.livraison.mapper.HistoriqueLivraisonMapper;
+import com.smart.livraison.src.main.java.com.smart.livraison.repository.HistoriqueLivraisonRepository;
+import com.smart.livraison.src.main.java.com.smart.livraison.service.HistoriqueLivraisonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;

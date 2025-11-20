@@ -1,8 +1,7 @@
 package com.smart.security;
 
-import com.smart.common.src.main.java.com.smart.entity.User;
-import com.smart.utilisateur.*;
-import com.smart.utilisateur.src.main.java.com.smart.utilisateur.repository.UserRepository;
+
+import com.smart.utilisateur.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,8 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User utilisateur = utilisateurRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé avec l'email: " + email));
         
-        // On crée la liste des rôles (authorities) pour Spring Security
-        // Spring Security ajoute automatiquement le préfixe "ROLE_"
+
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + utilisateur.getRole().name()));
         

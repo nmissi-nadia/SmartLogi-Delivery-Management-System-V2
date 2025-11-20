@@ -1,9 +1,11 @@
 package com.smart.mapper;
 
-import com.smart.dto.HistoriqueLivraisonDTO;
-import com.smart.entity.Colis;
-import com.smart.entity.HistoriqueLivraison;
-import com.smart.entity.Enum.StatutColis;
+
+import com.smart.common.src.main.java.com.smart.Enum.StatutColis;
+import com.smart.common.src.main.java.com.smart.entity.Colis;
+import com.smart.common.src.main.java.com.smart.entity.HistoriqueLivraison;
+import com.smart.livraison.src.main.java.com.smart.livraison.dto.HistoriqueLivraisonDTO;
+import com.smart.livraison.src.main.java.com.smart.livraison.mapper.HistoriqueLivraisonMapper;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 

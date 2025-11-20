@@ -1,9 +1,11 @@
 package com.smart.service;
 
-import com.smart.dto.DestinataireDTO;
-import com.smart.entity.Destinataire;
-import com.smart.mapper.DestinataireMapper;
-import com.smart.repository.DestinataireRepository;
+
+import com.smart.common.src.main.java.com.smart.entity.Destinataire;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.dto.DestinataireDTO;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.mapper.DestinataireMapper;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.repository.DestinataireRepository;
+import com.smart.utilisateur.src.main.java.com.smart.utilisateur.service.DestinataireService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
