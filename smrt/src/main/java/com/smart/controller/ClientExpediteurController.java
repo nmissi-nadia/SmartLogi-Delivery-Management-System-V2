@@ -36,14 +36,14 @@ public class ClientExpediteurController {
     private final ClientExpediteurRepository clientExpediteurRepository;
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
     @Operation(summary = "Get all client expediteurs")
     public List<ClientExpediteurDTO> getAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_MANAGER') or #id == authentication.principal.id")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE') or #id == authentication.principal.id")
     @Operation(summary = "Get a client expediteur by ID")
     public ResponseEntity<ClientExpediteurDTO> getById(@PathVariable String id) {
         return service.findById(id)
@@ -58,7 +58,7 @@ public class ClientExpediteurController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_MANAGER') or #id == authentication.principal.id")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE') or #id == authentication.principal.id")
     @Operation(summary = "Update an existing client expediteur")
     public ResponseEntity<ClientExpediteurDTO> update(@PathVariable String id, @RequestBody ClientExpediteurDTO dto) {
         if (!service.findById(id).isPresent()) {
@@ -69,7 +69,7 @@ public class ClientExpediteurController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
     @Operation(summary = "Delete a client expediteur")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         if (!service.findById(id).isPresent()) {
@@ -79,7 +79,7 @@ public class ClientExpediteurController {
         return ResponseEntity.noContent().build();
     }
      @GetMapping("/search")
-     @PreAuthorize("hasRole('ROLE_MANAGER')")
+     @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
      @Operation(summary = "Search for client expediteurs by keyword")
     public Page<ClientExpediteurDTO> searchByKeyword(@RequestParam String keyword, Pageable pageable) {
         return service.searchByKeyword(keyword, pageable);
@@ -87,7 +87,7 @@ public class ClientExpediteurController {
     //partie pour gestion des colis
     // Créer un nouveau colis
     @PostMapping("/{clientId}/colis")
-    @PreAuthorize("hasRole('ROLE_MANAGER') or #clientId == authentication.principal.id")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE') or #clientId == authentication.principal.id")
     @Operation(summary = "Create a new colis for a client")
     public ResponseEntity<ColisDTO> createColis(
             @PathVariable String clientId,
@@ -106,7 +106,7 @@ public class ClientExpediteurController {
 
     // Lister les colis d'un client
    @GetMapping("/{clientId}/colis")
-   @PreAuthorize("hasRole('ROLE_MANAGER') or #clientId == authentication.principal.id")
+   @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE') or #clientId == authentication.principal.id")
    @Operation(summary = "Get all colis for a client")
     public ResponseEntity<Page<ColisDTO>> getColisByClient(
             @PathVariable String clientId,
@@ -118,7 +118,7 @@ public class ClientExpediteurController {
         return ResponseEntity.ok(colisService.findColisByClientExpediteur(clientId, pageable));
     }
     @GetMapping("/{clientId}/track/{colisId}")
-    @PreAuthorize("hasRole('ROLE_MANAGER') or #clientId == authentication.principal.id")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE') or #clientId == authentication.principal.id")
     @Operation(summary = "Track a colis for a client")
     public ResponseEntity<ColisDTO> trackColis(
             @PathVariable String clientId,

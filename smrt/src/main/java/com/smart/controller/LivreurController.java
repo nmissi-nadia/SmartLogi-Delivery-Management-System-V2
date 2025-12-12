@@ -31,7 +31,7 @@ public class LivreurController {
     private final ZoneService zoneService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
     @Operation(summary = "Get all livreurs")
     public List<LivreurDTO> getAll() {
         return service.findAll();
@@ -39,14 +39,14 @@ public class LivreurController {
 
 
     @GetMapping("/search")
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
     @Operation(summary = "Search for livreurs by keyword")
     public Page<LivreurDTO> searchByKeyword(@RequestParam String keyword, Pageable pageable) {
         return service.searchByKeyword(keyword, pageable);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
     @Operation(summary = "Get a livreur by ID")
     public ResponseEntity<LivreurDTO> getById(@PathVariable String id) {
         return service.findById(id)
@@ -55,14 +55,14 @@ public class LivreurController {
     }
 
    @PostMapping
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
     @Operation(summary = "Create a new livreur")
     public ResponseEntity<LivreurDTO> createLivreur(@RequestBody LivreurDTO dto) {
         return ResponseEntity.ok(service.save(dto));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
     @Operation(summary = "Update an existing livreur")
     public ResponseEntity<LivreurDTO> update(@PathVariable String id, @RequestBody LivreurDTO dto) {
         if (!service.findById(id).isPresent()) {
@@ -73,7 +73,7 @@ public class LivreurController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
     @Operation(summary = "Delete a livreur")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         if (!service.findById(id).isPresent()) {
@@ -84,7 +84,7 @@ public class LivreurController {
     }
     // Colis
     @PutMapping("/{livreurId}/colis/{colisId}/statut")
-    @PreAuthorize("hasRole('ROLE_LIVREUR') or hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('LIVREUR') or hasRole('GESTIONNAIRE_LOGISTIQUE')")
     @Operation(summary = "Update the status of a colis")
     public ResponseEntity<ColisDTO> updateColisStatus(
             @PathVariable String livreurId,
@@ -95,7 +95,7 @@ public class LivreurController {
 
     // Voir les colis assignés
     @GetMapping("/{livreurId}/colis")
-    @PreAuthorize("hasRole('ROLE_LIVREUR') or hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('LIVREUR') or hasRole('GESTIONNAIRE_LOGISTIQUE')")
     @Operation(summary = "Get the colis assigned to a livreur")
     public ResponseEntity<Page<ColisDTO>> getColisAssignes(
             @PathVariable String livreurId,
@@ -106,7 +106,7 @@ public class LivreurController {
 
     // statistique de livreur 
     @GetMapping("/{livreurId}/statistiques")
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
     @Operation(summary = "Get the statistics of a livreur")
     public ResponseEntity<Map<String, Object>> getStatistiquesLivreur(
             @PathVariable String livreurId,
