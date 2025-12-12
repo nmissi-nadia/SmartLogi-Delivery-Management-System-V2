@@ -60,12 +60,12 @@ public class GestionnaireLogistiqueController {
     public List<ColisDTO> getAllColis() {
         return colisService.findAll();
     }
-    // Assigner un livreur
     @PostMapping("/colis/{colisId}/assigner")
-    public ResponseEntity<ColisDTO> assignerLivreur(
+    public ResponseEntity<Void> assignerLivreur(
             @PathVariable String colisId,
             @RequestParam String livreurId) {
-        return ResponseEntity.ok(colisService.assignLivreur(colisId, livreurId));
+        colisService.assignLivreurToColis(colisId, livreurId);
+        return ResponseEntity.ok().build();
     }
 
     // Obtenir des statistiques

@@ -6,6 +6,10 @@ import com.smart.entity.HistoriqueLivraison;
 import com.smart.service.ColisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,11 +29,22 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/api/colis")
 @RequiredArgsConstructor
+@Tag(name = "Colis", description = "API for Colis management")
+@SecurityRequirement(name = "bearerAuth")
 public class ColisController {
     private final ColisService colisService;
     private static final Logger log = LoggerFactory.getLogger(ColisController.class);
 
+    @PostMapping
+    @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_MANAGER')")
+    @Operation(summary = "Create a new colis")
+    public ColisDTO createColis(@RequestBody ColisDTO colisDTO) {
+        return colisService.save(colisDTO);
+    }
+
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @Operation(summary = "Get all colis")
     public Page<ColisDTO> getAll(@RequestParam(required = false) String statut,
                                 @RequestParam(required = false) String ville,
                                 @RequestParam(required = false) String priorite,
@@ -45,14 +60,36 @@ public class ColisController {
         LocalDateTime endOfDay = dateFin != null ? dateFin.atTime(23, 59, 59) : null;
         return colisService.findAll(statut, ville, priorite, zoneId, startOfDay, endOfDay, pageable, clientId, destinataireId, livreurId);
     }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_MANAGER') or hasRole('ROLE_LIVREUR')")
+    @Operation(summary = "Get a colis by ID")
+    public ResponseEntity<ColisDTO> getColisById(@PathVariable String id) {
+        return colisService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @Operation(summary = "Update an existing colis")
     public ResponseEntity<ColisDTO> updateColis(
             @PathVariable String id,
             @RequestBody ColisDTO colisDTO) {
         return ResponseEntity.ok(colisService.update(id, colisDTO));
     }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @Operation(summary = "Delete a colis")
+    public ResponseEntity<Void> deleteColis(@PathVariable String id) {
+        colisService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/recherche")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @Operation(summary = "Search for colis")
     public ResponseEntity<Page<ColisDTO>> searchColis(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String statut,
@@ -62,8 +99,32 @@ public class ColisController {
         return ResponseEntity.ok(colisService.searchByKeyword(keyword, pageable));
     }
 
+    @GetMapping("/statistiques/overview")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @Operation(summary = "Get an overview of the colis statistics")
+    public ResponseEntity<Map<String, Long>> getStatistiquesOverview() {
+        return ResponseEntity.ok(colisService.getStatistiquesOverview());
+    }
+
+    @PostMapping("/assign")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @Operation(summary = "Assign a livreur to a colis")
+    public ResponseEntity<Void> assignColis(@RequestBody Map<String, String> assignment) {
+        colisService.assignLivreurToColis(assignment.get("colisId"), assignment.get("livreurId"));
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/non-assignes")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @Operation(summary = "Get all non-assigned colis")
+    public ResponseEntity<List<ColisDTO>> getNonAssignedColis() {
+        return ResponseEntity.ok(colisService.findAllNonAssigned());
+    }
+
     // Obtenir l'historique d'un colis
     @GetMapping("/{colisId}/historique")
+    @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_MANAGER') or hasRole('ROLE_LIVREUR')")
+    @Operation(summary = "Get the history of a colis")
     public ResponseEntity<List<HistoriqueLivraisonDTO>> getHistoriqueColis(
             @PathVariable String colisId) {
         List<HistoriqueLivraisonDTO> historique = colisService.getHistoriqueForColis(colisId);

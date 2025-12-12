@@ -115,7 +115,7 @@ public class ColisService {
                     colisProduit.setProduit(produit);
                     colisProduit.setQuantite(produitDTO.getQuantite());
                     colisProduit.setPrix(produit.getPrix() * produitDTO.getQuantite());
-                    colisProduit.setDateAjout(LocalDate.now());
+                    colisProduit.setDateAjout(LocalDateTime.now());
                     colisProduitRepository.save(colisProduit);
                 }
             }
@@ -208,13 +208,34 @@ public class ColisService {
     /**
      * Assigner un livreur à un colis
      */
-    public ColisDTO assignLivreur(String colisId, String livreurId) {
+    public void assignLivreurToColis(String colisId, String livreurId) {
         Colis colis = colisRepository.findById(colisId)
                 .orElseThrow(() -> new RuntimeException("Colis non trouvé"));
         Livreur livreur = livreurRepository.findById(livreurId)
                 .orElseThrow(() -> new RuntimeException("Livreur non trouvé"));
         colis.setLivreur(livreur);
+        colisRepository.save(colis);
+    }
+
+    public ColisDTO save(ColisDTO colisDTO) {
+        Colis colis = colisMapper.toEntity(colisDTO);
+        // You might need to handle related entities like client, destinataire, etc.
         return colisMapper.toDto(colisRepository.save(colis));
+    }
+
+    public Map<String, Long> getStatistiquesOverview() {
+        Map<String, Long> stats = new HashMap<>();
+        stats.put("totalColis", colisRepository.count());
+        stats.put("colisEnAttente", colisRepository.countByStatut(StatutColis.CREE));
+        stats.put("colisEnCours", colisRepository.countByStatut(StatutColis.EN_TRANSIT));
+        stats.put("colisLivres", colisRepository.countByStatut(StatutColis.LIVRE));
+        return stats;
+    }
+
+    public List<ColisDTO> findAllNonAssigned() {
+        return colisRepository.findByLivreurIsNull().stream()
+                .map(colisMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -451,5 +472,22 @@ public class ColisService {
         }
 
         return colisMapper.toDto(colisRepository.save(colis));
+    }
+
+    @Transactional(readOnly = true)
+    public ColisDTO trackColis(String clientId, String colisId) {
+        // Vérifier que le client existe
+        ClientExpediteur client = clientExpediteurRepository.findById(clientId)
+                .orElseThrow(() -> new EntityNotFoundException("Client non trouvé avec l'ID : " + clientId));
+
+        Colis colis = colisRepository.findById(colisId)
+                .orElseThrow(() -> new EntityNotFoundException("Colis non trouvé avec l'ID : " + colisId));
+
+        if (!colis.getClientExpediteur().getId().equals(clientId)) {
+            throw new RuntimeException("Vous n'êtes pas autorisé à accéder à ce colis");
+        }
+
+        // Convertir en DTO et retourner
+        return colisMapper.toDto(colis);
     }
 }

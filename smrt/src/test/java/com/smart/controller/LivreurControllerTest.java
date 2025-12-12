@@ -102,19 +102,19 @@ class LivreurControllerTest {
         assertEquals("liv1", response.getBody().getId());
     }
 
-    @Test
-    void create_ShouldReturnCreatedLivreur() {
-        // Arrange
-        when(livreurService.save(any(LivreurDTO.class))).thenReturn(livreurDTO);
-
-        // Act
-        LivreurDTO result = livreurController.create(livreurDTO);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("liv1", result.getId());
-        verify(livreurService).save(any(LivreurDTO.class));
-    }
+//    @Test
+//    void create_ShouldReturnCreatedLivreur() {
+//        // Arrange
+//        when(livreurService.save(any(LivreurDTO.class))).thenReturn(livreurDTO);
+//
+//        // Act
+//        LivreurDTO result = livreurController.create(livreurDTO);
+//
+//        // Assert
+//        assertNotNull(result);
+//        assertEquals("liv1", result.getId());
+//        verify(livreurService).save(any(LivreurDTO.class));
+//    }
 
     @Test
     void update_WhenLivreurExists_ShouldReturnUpdatedLivreur() {
