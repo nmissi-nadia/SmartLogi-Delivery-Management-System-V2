@@ -108,9 +108,20 @@ public interface ColisRepository extends JpaRepository<Colis, String> {
                  */
                 Page<Colis> findByLivreurIdAndStatut(String livreurId, StatutColis statut, Pageable pageable);
 
-                /**
-                 * Trouver tous les colis d'un livreur (sans filtre de statut)
-                 */
-                Page<Colis> findByLivreurId(String livreurId, Pageable pageable);
+                    /**
 
-        }
+                     * Trouver tous les colis d'un livreur (sans filtre de statut)
+
+                     */
+
+                    Page<Colis> findByLivreurId(String livreurId, Pageable pageable);
+
+                
+
+                    Long countByStatut(StatutColis statut);
+
+                
+
+                    List<Colis> findByLivreurIsNull();
+
+                }

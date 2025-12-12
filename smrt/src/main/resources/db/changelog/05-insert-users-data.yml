@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5-insert-users
+      author: nadia
+      changes:
+        - insert:
+            tableName: app_user
+            columns:
+              - column:
+                  name: id
+                  value: "user-1"
+              - column:
+                  name: username
+                  value: "client1"
+              - column:
+                  name: password
+                  value: "$2a$10$e.xV.Mms8sP1GIM4s/n/8uQ4uVd2wA9p.b0/F8.7A.6G5f.1Q.9eG" # password
+              - column:
+                  name: email
+                  value: "client1@smartlogi.com"
+              - column:
+                  name: role
+                  value: "CLIENT_EXPEDITEUR"
+        - insert:
+            tableName: app_user
+            columns:
+              - column:
+                  name: id
+                  value: "user-2"
+              - column:
+                  name: username
+                  value: "livreur1"
+              - column:
+                  name: password
+                  value: "$2a$10$e.xV.Mms8sP1GIM4s/n/8uQ4uVd2wA9p.b0/F8.7A.6G5f.1Q.9eG" # password
+              - column:
+                  name: email
+                  value: "livreur1@smartlogi.com"
+              - column:
+                  name: role
+                  value: "LIVREUR"
+        - insert:
+            tableName: app_user
+            columns:
+              - column:
+                  name: id
+                  value: "user-3"
+              - column:
+                  name: username
+                  value: "gestionnaire1"
+              - column:
+                  name: password
+                  value: "$2a$10$e.xV.Mms8sP1GIM4s/n/8uQ4uVd2wA9p.b0/F8.7A.6G5f.1Q.9eG" # password
+              - column:
+                  name: email
+                  value: "gestionnaire1@smartlogi.com"
+              - column:
+                  name: role
+                  value: "GESTIONNAIRE_LOGISTIQUE"

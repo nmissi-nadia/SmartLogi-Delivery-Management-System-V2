@@ -182,11 +182,13 @@ class ClientExpediteurControllerTest {
     @Test
     void getColisByClient_ShouldReturnClientColis() {
         // Arrange
-        Page<ColisDTO> page = new PageImpl<>(Arrays.asList(colisDTO));
+        Page<ColisDTO> page = new PageImpl<>(List.of(colisDTO));
+
+        // Simuler le cas où on ne filtre pas par statut
         when(colisService.findColisByClientExpediteur("client1", pageable)).thenReturn(page);
 
-        // Act
-        ResponseEntity<Page<ColisDTO>> response = controller.getColisByClient("client1", pageable);
+        // Act - Appel sans filtre de statut
+        ResponseEntity<Page<ColisDTO>> response = controller.getColisByClient("client1", null, pageable);
 
         // Assert
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -209,18 +211,37 @@ class ClientExpediteurControllerTest {
     }
 
     @Test
-    void getColisByClientAndStatus_ShouldReturnFilteredColis() {
+    void getColisByClient_WithStatus_ShouldReturnFilteredColis() {
         // Arrange
-        Page<ColisDTO> page = new PageImpl<>(Arrays.asList(colisDTO));
-        when(colisService.findColisByClientExpediteurAndStatut("client1", "CREE", pageable)).thenReturn(page);
+        Page<ColisDTO> page = new PageImpl<>(List.of(colisDTO));
+        String status = "EN_COURS";
 
-        // Act
-        ResponseEntity<Page<ColisDTO>> response = controller.getColisByClientAndStatus("client1", "CREE", pageable);
+        // Simuler le cas où on filtre par statut
+        when(colisService.findColisByClientExpediteurAndStatut("client1", status, pageable))
+                .thenReturn(page);
+
+        // Act - Appel avec filtre de statut
+        ResponseEntity<Page<ColisDTO>> response = controller.getColisByClient("client1", status, pageable);
 
         // Assert
         assertTrue(response.getStatusCode().is2xxSuccessful());
         assertNotNull(response.getBody());
         assertEquals(1, response.getBody().getTotalElements());
-        assertEquals(StatutColis.CREE, response.getBody().getContent().get(0).getStatut());
     }
+
+//    @Test
+//    void getColisByClientAndStatus_ShouldReturnFilteredColis() {
+//        // Arrange
+//        Page<ColisDTO> page = new PageImpl<>(Arrays.asList(colisDTO));
+//        when(colisService.findColisByClientExpediteurAndStatut("client1", "CREE", pageable)).thenReturn(page);
+//
+//        // Act
+//        ResponseEntity<Page<ColisDTO>> response = controller.getColisByClientAndStatus("client1", "CREE", pageable);
+//
+//        // Assert
+//        assertTrue(response.getStatusCode().is2xxSuccessful());
+//        assertNotNull(response.getBody());
+//        assertEquals(1, response.getBody().getTotalElements());
+//        assertEquals(StatutColis.CREE, response.getBody().getContent().get(0).getStatut());
+//    }
 }

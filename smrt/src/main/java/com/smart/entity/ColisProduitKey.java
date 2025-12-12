@@ -14,9 +14,9 @@ import java.io.Serializable;
 @Embeddable
 public class ColisProduitKey implements Serializable {
 
-    @Column(name = "colis_id")
+    @Column(name = "id_colis")
     private String colisId;
 
-    @Column(name = "produit_id")
+    @Column(name = "id_produit")
     private String produitId;
 }
