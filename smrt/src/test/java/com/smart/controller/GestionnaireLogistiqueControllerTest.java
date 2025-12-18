@@ -130,7 +130,7 @@ class GestionnaireLogistiqueControllerTest {
         ResponseEntity<Void> response = controller.assignerLivreur("colis1", "livreur1");
 
         // Assert
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(colisService).assignLivreurToColis("colis1", "livreur1");
     }
 

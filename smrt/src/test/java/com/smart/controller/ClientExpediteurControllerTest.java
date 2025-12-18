@@ -199,7 +199,7 @@ class ClientExpediteurControllerTest {
     @Test
     void trackColis_WhenColisExists_ShouldReturnColis() {
         // Arrange
-        when(colisService.findById("colis1")).thenReturn(Optional.of(colisDTO));
+        when(colisService.trackColis("client1", "colis1")).thenReturn(colisDTO);
 
         // Act
         ResponseEntity<ColisDTO> response = controller.trackColis("client1", "colis1");

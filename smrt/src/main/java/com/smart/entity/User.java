@@ -23,9 +23,8 @@ public class User {
 
     // Modification pour utiliser l'Enum :
     @Enumerated(EnumType.STRING)
-    @Column(name = "role") // Le nom de la colonne dans la base de données
+    @Column(name = "role")
     private Role role;
-    // IMPORTANT : EnumType.STRING stocke la valeur exacte de l'enum (ex: "LIVREUR") en TEXT/VARCHAR, ce qui est simple et compatible avec PostgreSQL.
 
     @PrePersist
     public void prePersist() {

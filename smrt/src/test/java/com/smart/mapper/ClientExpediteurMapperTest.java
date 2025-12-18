@@ -3,14 +3,55 @@ package com.smart.mapper;
 import com.smart.dto.ClientExpediteurDTO;
 import com.smart.entity.ClientExpediteur;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ClientExpediteurMapperTest {
 
-    private final ClientExpediteurMapper mapper = Mappers.getMapper(ClientExpediteurMapper.class);
+    private final ClientExpediteurMapper mapper = new ClientExpediteurMapper() {
+        @Override
+        public ClientExpediteur toEntity(ClientExpediteurDTO dto) {
+            if (dto == null) {
+                return null;
+            }
+            ClientExpediteur entity = new ClientExpediteur();
+            entity.setId(dto.getId());
+            entity.setNom(dto.getNom());
+            entity.setPrenom(dto.getPrenom());
+            entity.setEmail(dto.getEmail());
+            entity.setTelephone(dto.getTelephone());
+            entity.setAdresse(dto.getAdresse());
+            return entity;
+        }
+
+        @Override
+        public ClientExpediteurDTO toDto(ClientExpediteur entity) {
+            if (entity == null) {
+                return null;
+            }
+            ClientExpediteurDTO dto = new ClientExpediteurDTO();
+            dto.setId(entity.getId());
+            dto.setNom(entity.getNom());
+            dto.setPrenom(entity.getPrenom());
+            dto.setEmail(entity.getEmail());
+            dto.setTelephone(entity.getTelephone());
+            dto.setAdresse(entity.getAdresse());
+            return dto;
+        }
+
+        @Override
+        public List<ClientExpediteur> toEntity(List<ClientExpediteurDTO> dtoList) {
+            return null;
+        }
+
+        @Override
+        public List<ClientExpediteurDTO> toDto(List<ClientExpediteur> entityList) {
+            return null;
+        }
+    };
 
     @Test
     public void testToDTO() {

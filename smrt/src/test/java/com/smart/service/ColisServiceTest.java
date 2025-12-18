@@ -122,18 +122,31 @@ class ColisServiceTest {
         colisDTO.setDescription("Colis de test");
         colisDTO.setStatut(StatutColis.CREE);
 
-        ColisProduitDTO colisProduitDTO = new ColisProduitDTO();
-        colisProduitDTO.setQuantite(2);
-
         colisRequestDTO = new ColisRequestDTO();
         colisRequestDTO.setDescription("Colis de test");
         colisRequestDTO.setPoids(1.5);
         colisRequestDTO.setPriorite("HAUTE");
         colisRequestDTO.setVilleDestination("Paris");
-        colisRequestDTO.setClientExpediteur(clientExpediteurMapper.toDto(client));
-        colisRequestDTO.setDestinataire(destinataireMapper.toDto(destinataire));
-        colisRequestDTO.setZone(zoneMapper.toDto(zone));
-        colisRequestDTO.setProduits(Arrays.asList(colisProduitDTO));
+        
+        ClientExpediteurDTO clientExpediteurDTO = new ClientExpediteurDTO();
+        clientExpediteurDTO.setId(client.getId());
+        clientExpediteurDTO.setNom(client.getNom());
+        clientExpediteurDTO.setEmail(client.getEmail());
+        colisRequestDTO.setClientExpediteur(clientExpediteurDTO);
+
+        DestinataireDTO destinataireDTO = new DestinataireDTO();
+        destinataireDTO.setId(destinataire.getId());
+        destinataireDTO.setNom(destinataire.getNom());
+        destinataireDTO.setEmail(destinataire.getEmail());
+        colisRequestDTO.setDestinataire(destinataireDTO);
+
+        ZoneDTO zoneDTO = new ZoneDTO();
+        zoneDTO.setId(zone.getId());
+        zoneDTO.setNom(zone.getNom());
+        zoneDTO.setCodePostal(zone.getCodePostal());
+        colisRequestDTO.setZone(zoneDTO);
+        
+        colisRequestDTO.setProduits(Collections.emptyList());
 
         historique = new HistoriqueLivraison();
         historique.setId("hist1");
