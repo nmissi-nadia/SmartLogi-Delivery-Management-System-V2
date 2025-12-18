@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
+@WithMockUser(roles = "GESTIONNAIRE_LOGISTIQUE")
 public class ColisControllerIntegrationTest {
 
     @Autowired
@@ -94,8 +96,8 @@ public class ColisControllerIntegrationTest {
         savedZone = zoneRepository.save(savedZone);
 
         // Créer et sauvegarder un colis de test
-        savedColis = createTestColis("Colis de test", 1.5, 
-                                   savedClient, savedDestinataire, 
+        savedColis = createTestColis("Colis de test", 1.5,
+                                   savedClient, savedDestinataire,
                                    savedLivreur, savedZone);
         savedColis = colisRepository.save(savedColis);
     }
@@ -181,7 +183,7 @@ public class ColisControllerIntegrationTest {
                 .andExpect(jsonPath("$", is(empty())));
     }
 
-    private Colis createTestColis(String description, double poids, 
+    private Colis createTestColis(String description, double poids,
                                  ClientExpediteur client, Destinataire destinataire,
                                  Livreur livreur, Zone zone) {
         Colis colis = new Colis();

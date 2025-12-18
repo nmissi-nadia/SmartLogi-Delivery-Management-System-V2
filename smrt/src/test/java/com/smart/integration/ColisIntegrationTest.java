@@ -9,29 +9,28 @@ import com.smart.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
+@WithMockUser(roles = "GESTIONNAIRE_LOGISTIQUE")
 public class ColisIntegrationTest {
 
-    @LocalServerPort
-    private int port;
-
     @Autowired
-    private TestRestTemplate restTemplate;
+    private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -112,19 +111,11 @@ public class ColisIntegrationTest {
 
     @Test
     public void testGetAllColis() throws Exception {
-        // When
-        ResponseEntity<String> response = restTemplate.getForEntity(
-            "http://localhost:" + port + "/api/colis",
-            String.class
-        );
-
-        // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        
-        // Parse the JSON response to verify content
-        JsonNode root = objectMapper.readTree(response.getBody());
-        JsonNode content = root.path("content");
-        assertTrue(content.isArray());
+        // When & Then
+        mockMvc.perform(get("/api/colis")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(1)));
     }
 
     @Test
@@ -142,21 +133,12 @@ public class ColisIntegrationTest {
         colisRecherche.setZoneLivraison(savedZone);
         colisRepository.save(colisRecherche);
 
-        // When
-        ResponseEntity<String> response = restTemplate.getForEntity(
-            "http://localhost:" + port + "/api/colis/recherche?statut=CREE",
-            String.class
-        );
-
-        // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        
-        // Parse the JSON response to verify content
-        JsonNode root = objectMapper.readTree(response.getBody());
-        JsonNode content = root.path("content");
-        
-        // Vérifier que le contenu est un tableau non vide
-        assertTrue(content.isArray());
+        // When & Then
+        mockMvc.perform(get("/api/colis")
+                        .param("statut", "CREE")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(2)));
 
     }
 }

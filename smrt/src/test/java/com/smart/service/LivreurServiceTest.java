@@ -2,8 +2,10 @@ package com.smart.service;
 
 import com.smart.dto.LivreurDTO;
 import com.smart.entity.Livreur;
+import com.smart.entity.Zone;
 import com.smart.mapper.LivreurMapper;
 import com.smart.repository.LivreurRepository;
+import com.smart.repository.ZoneRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,21 +32,30 @@ class LivreurServiceTest {
     @Mock
     private LivreurMapper mapper;
 
+    @Mock
+    private ZoneRepository zoneRepository;
+
     @InjectMocks
     private LivreurService livreurService;
 
     private Livreur livreur;
     private LivreurDTO livreurDTO;
+    private Zone zone;
     private final String LIVREUR_ID = "123e4567-e89b-12d3-a456-426614174000";
+    private final String ZONE_ID = UUID.randomUUID().toString();
 
     @BeforeEach
     void setUp() {
+        zone = new Zone();
+        zone.setId(ZONE_ID);
+
         livreur = new Livreur();
         livreur.setId(LIVREUR_ID);
         livreur.setNom("nmissi");
         livreur.setPrenom("nadia");
         livreur.setTelephone("0612345678");
         livreur.setVehicule("vehicule");
+        livreur.setZoneAssignee(zone);
 
         livreurDTO = new LivreurDTO();
         livreurDTO.setId(LIVREUR_ID);
@@ -51,6 +63,7 @@ class LivreurServiceTest {
         livreurDTO.setPrenom("nadia");
         livreurDTO.setTelephone("0612345678");
         livreurDTO.setVehicule("vehicule");
+        livreurDTO.setZoneAssigneeId(ZONE_ID);
         
     }
 
@@ -101,6 +114,7 @@ class LivreurServiceTest {
     @Test
     void save_ShouldSaveAndReturnLivreur() {
         // Arrange
+        when(zoneRepository.findById(ZONE_ID)).thenReturn(Optional.of(zone));
         when(mapper.toEntity(livreurDTO)).thenReturn(livreur);
         when(repository.save(livreur)).thenReturn(livreur);
         when(mapper.toDto(livreur)).thenReturn(livreurDTO);
