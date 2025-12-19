@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import com.smart.entity.CustomUserDetails;
 
 import java.security.Key;
 import java.util.Date;
@@ -20,16 +21,17 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(String username) {
-
+    public String generateToken(CustomUserDetails userDetails) {
+        String username = userDetails.getUsername();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()
-                .setSubject(username)            // OK pour jjwt 0.11.5
+                .setSubject(username)
+                .claim("roles", userDetails.getAuthorities())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(key, SignatureAlgorithm.HS256)  // syntaxe correcte 0.11.x
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 

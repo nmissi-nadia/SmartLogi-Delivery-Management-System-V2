@@ -1,6 +1,6 @@
 package com.smart.controller;
 
-import com.smart.entity.Enum.Role;
+import com.smart.entity.Role;
 import com.smart.entity.User;
 import com.smart.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,7 +41,14 @@ class UserControllerTest {
         user.setUsername("johndoe");
         user.setEmail("john.doe@example.com");
         user.setPassword("password123");
-        user.setRole(Role.DESTINATAIRE);
+        
+        Role role = new Role();
+        role.setId("role-dest");
+        role.setName("DESTINATAIRE");
+        
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
     }
 
     @Test

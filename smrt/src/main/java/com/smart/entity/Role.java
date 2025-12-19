@@ -8,28 +8,26 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 import java.util.UUID;
 
+@Entity
+@Table(name = "role")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "users")
-// A comment to trigger recompilation
-public class User {
+public class Role {
 
     @Id
     private String id;
 
-    private String username;
-    private String password;
-    private String email;
+    @Column(unique = true, nullable = false)
+    private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+            name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
-    private Set<Role> roles;
+    private Set<Permission> permissions;
 
     @PrePersist
     public void prePersist() {

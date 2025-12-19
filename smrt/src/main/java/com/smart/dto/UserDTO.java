@@ -1,6 +1,6 @@
 package com.smart.dto;
 
-import com.smart.entity.Enum.Role;
+import com.smart.entity.Role;
 import lombok.Data;
 
 @Data

@@ -2,6 +2,7 @@ package com.smart.controller.auth;
 
 import com.smart.dto.LoginRequest;
 import com.smart.dto.LoginResponse;
+import com.smart.entity.CustomUserDetails;
 import com.smart.security.JwtTokenProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,8 +42,8 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // ⚡ Correction : passer le username et non l'Authentication
-        String jwt = tokenProvider.generateToken(authentication.getName());
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String jwt = tokenProvider.generateToken(userDetails);
 
         return ResponseEntity.ok(new LoginResponse(jwt));
     }

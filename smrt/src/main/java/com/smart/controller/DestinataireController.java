@@ -8,6 +8,7 @@ import com.smart.service.DestinataireService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -20,11 +21,13 @@ public class DestinataireController {
 
 
     @GetMapping
+    @PreAuthorize("hasAuthority('VIEW_USERS')")
     public List<DestinataireDTO> getAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('VIEW_USERS')")
     public ResponseEntity<DestinataireDTO> getById(@PathVariable String id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
@@ -32,11 +35,13 @@ public class DestinataireController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('MANAGE_USERS')")
     public DestinataireDTO create(@RequestBody DestinataireDTO dto) {
         return service.save(dto);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('MANAGE_USERS')")
     public ResponseEntity<DestinataireDTO> update(@PathVariable String id, @RequestBody DestinataireDTO dto) {
         if (!service.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
@@ -46,6 +51,7 @@ public class DestinataireController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('MANAGE_USERS')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         if (!service.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
@@ -56,6 +62,7 @@ public class DestinataireController {
     // colis
     // Voir les détails d'un colis
     @GetMapping("/{destinataireId}/colis/{colisId}")
+    @PreAuthorize("hasAuthority('VIEW_COLIS_DESTINATAIRE')")
     public ResponseEntity<ColisDTO> viewColis(
             @PathVariable String destinataireId,
             @PathVariable String colisId) {
@@ -65,6 +72,7 @@ public class DestinataireController {
 
     // Confirmer réception
     @PostMapping("/{destinataireId}/colis/{colisId}/confirmation")
+    @PreAuthorize("hasAuthority('MANAGE_COLIS_DESTINATAIRE')")
     public ResponseEntity<ColisDTO> confirmReception(
             @PathVariable String destinataireId,
             @PathVariable String colisId) {
