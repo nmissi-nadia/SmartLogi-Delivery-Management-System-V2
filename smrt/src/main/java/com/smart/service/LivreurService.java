@@ -82,4 +82,8 @@ public class LivreurService {
     public Page<LivreurDTO> searchByKeyword(String keyword, Pageable pageable) {
         return repository.searchByKeyword(keyword, pageable).map(mapper::toDto);
     }
+
+    public Optional<Livreur> findByUsername(String username) {
+        return repository.findByUsername(username);
+    }
 }

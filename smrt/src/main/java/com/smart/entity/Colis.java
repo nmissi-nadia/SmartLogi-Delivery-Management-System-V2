@@ -45,21 +45,21 @@ public class Colis {
     private StatutColis statut;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_livreur")
+    @JoinColumn(name = "livreur_id")
     private Livreur livreur;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_client_expediteur", nullable = false)
+    @JoinColumn(name = "client_expediteur_id", nullable = false)
     private ClientExpediteur clientExpediteur;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_destinataire", nullable = false)
+    @JoinColumn(name = "destinataire_id", nullable = false)
     private Destinataire destinataire;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_zone")
-    private Zone zoneLivraison;
+    @JoinColumn(name = "zone_id")
+    private Zone zone;
 
 
     @OneToMany(mappedBy = "colis", cascade = CascadeType.ALL, orphanRemoval = true)

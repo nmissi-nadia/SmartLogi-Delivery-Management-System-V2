@@ -14,11 +14,13 @@ public class HistoriqueLivraisonController {
     private final HistoriqueLivraisonService service;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('VIEW_COLIS')")
     public List<HistoriqueLivraisonDTO> getAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('VIEW_COLIS')")
     public ResponseEntity<HistoriqueLivraisonDTO> getById(@PathVariable String id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
@@ -26,11 +28,13 @@ public class HistoriqueLivraisonController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('MANAGE_COLIS')")
     public HistoriqueLivraisonDTO create(@RequestBody HistoriqueLivraisonDTO dto) {
         return service.save(dto);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('MANAGE_COLIS')")
     public ResponseEntity<HistoriqueLivraisonDTO> update(@PathVariable String id, @RequestBody HistoriqueLivraisonDTO dto) {
         if (!service.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
@@ -40,6 +44,7 @@ public class HistoriqueLivraisonController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('MANAGE_COLIS')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         if (!service.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();

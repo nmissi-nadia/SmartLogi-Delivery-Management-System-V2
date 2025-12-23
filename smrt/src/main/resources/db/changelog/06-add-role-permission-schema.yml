@@ -4,7 +4,7 @@ databaseChangeLog:
       author: nadia
       changes:
         - createTable:
-            tableName: role
+            tableName: roles # Corrected: entity table name is "roles"
             columns:
               - column:
                   name: id
@@ -42,7 +42,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_role_permission_role
-                    references: role(id)
+                    references: roles(id) # Corrected: references "roles"
               - column:
                   name: permission_id
                   type: VARCHAR(36)
@@ -70,7 +70,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_user_roles_role
-                    references: role(id)
+                    references: roles(id) # Corrected: references "roles"
         - addPrimaryKey:
             tableName: user_roles
             columnNames: user_id, role_id

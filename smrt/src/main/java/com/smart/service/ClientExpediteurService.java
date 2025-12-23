@@ -40,4 +40,8 @@ public class ClientExpediteurService {
     public Page<ClientExpediteurDTO> searchByKeyword(String keyword, Pageable pageable) {
         return repository.searchByKeyword(keyword, pageable).map(mapper::toDto);
     }
+
+    public Optional<ClientExpediteur> findByUsername(String username) {
+        return repository.findByUsername(username);
+    }
 }

@@ -5,12 +5,12 @@ import com.smart.entity.Livreur;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
-public interface LivreurMapper {
+@Mapper(componentModel = "spring", uses = {ZoneMapper.class})
+public interface LivreurMapper extends EntityMapper<LivreurDTO, Livreur> {
 
-    @Mapping(source = "zoneAssignee.id", target = "zoneAssigneeId")
+    @Mapping(source = "zone.id", target = "zoneId")
     LivreurDTO toDto(Livreur entity);
 
-    @Mapping(source = "zoneAssigneeId", target = "zoneAssignee.id")
+    @Mapping(source = "zoneId", target = "zone")
     Livreur toEntity(LivreurDTO dto);
 }

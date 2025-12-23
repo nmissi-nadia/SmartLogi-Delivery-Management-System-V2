@@ -36,14 +36,14 @@ public class ClientExpediteurController {
     private final ClientExpediteurRepository clientExpediteurRepository;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('VIEW_USERS')")
+    @PreAuthorize("hasAuthority('MANAGE_CLIENTS')")
     @Operation(summary = "Get all client expediteurs")
     public List<ClientExpediteurDTO> getAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('VIEW_USERS') or #id == authentication.principal.id")
+    @PreAuthorize("hasAuthority('MANAGE_CLIENTS') or #id == @clientExpediteurService.findByUsername(authentication.principal.username).get().id")
     @Operation(summary = "Get a client expediteur by ID")
     public ResponseEntity<ClientExpediteurDTO> getById(@PathVariable String id) {
         return service.findById(id)
@@ -52,14 +52,14 @@ public class ClientExpediteurController {
     }
 
     @PostMapping
-
+    @PreAuthorize("hasAuthority('MANAGE_CLIENTS')")
     @Operation(summary = "Create a new client expediteur")
     public ClientExpediteurDTO create(@RequestBody ClientExpediteurDTO dto) {
         return service.save(dto);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('MANAGE_USERS') or #id == authentication.principal.id")
+    @PreAuthorize("hasAuthority('MANAGE_CLIENTS') or #id == @clientExpediteurService.findByUsername(authentication.principal.username).get().id")
     @Operation(summary = "Update an existing client expediteur")
     public ResponseEntity<ClientExpediteurDTO> update(@PathVariable String id, @RequestBody ClientExpediteurDTO dto) {
         if (!service.findById(id).isPresent()) {
@@ -70,7 +70,7 @@ public class ClientExpediteurController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('MANAGE_USERS')")
+    @PreAuthorize("hasAuthority('MANAGE_CLIENTS')")
     @Operation(summary = "Delete a client expediteur")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         if (!service.findById(id).isPresent()) {
@@ -80,20 +80,21 @@ public class ClientExpediteurController {
         return ResponseEntity.noContent().build();
     }
      @GetMapping("/search")
-     @PreAuthorize("hasAuthority('VIEW_USERS')")
+     @PreAuthorize("hasAuthority('MANAGE_CLIENTS')")
      @Operation(summary = "Search for client expediteurs by keyword")
     public Page<ClientExpediteurDTO> searchByKeyword(@RequestParam String keyword, Pageable pageable) {
         return service.searchByKeyword(keyword, pageable);
     }
     //partie pour gestion des colis
     // Créer un nouveau colis
-    @PostMapping("/{clientId}/colis")
-    @PreAuthorize("hasAuthority('MANAGE_COLIS') or #clientId == authentication.principal.id")
+    @PostMapping("/colis")
+    @PreAuthorize("hasAuthority('CREATE_COLIS_CLIENT')")
     @Operation(summary = "Create a new colis for a client")
     public ResponseEntity<ColisDTO> createColis(
-            @PathVariable String clientId,
             @Valid @RequestBody ColisRequestDTO colisRequest) {
-        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        String clientId = service.findByUsername(username).get().getId();
         // Vérifier que le client expéditeur existe
         if (!clientExpediteurRepository.existsById(clientId)) {
             throw new EntityNotFoundException("Client expéditeur non trouvé avec l'ID: " + clientId);
@@ -106,24 +107,28 @@ public class ClientExpediteurController {
     }
 
     // Lister les colis d'un client
-   @GetMapping("/{clientId}/colis")
-   @PreAuthorize("hasAuthority('VIEW_COLIS') or #clientId == authentication.principal.id")
+   @GetMapping("/colis")
+   @PreAuthorize("hasAuthority('VIEW_OWN_COLIS')")
    @Operation(summary = "Get all colis for a client")
     public ResponseEntity<Page<ColisDTO>> getColisByClient(
-            @PathVariable String clientId,
             @RequestParam(required = false) String status,
             Pageable pageable) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        String clientId = service.findByUsername(username).get().getId();
         if (status != null) {
             return ResponseEntity.ok(colisService.findColisByClientExpediteurAndStatut(clientId, status, pageable));
         }
         return ResponseEntity.ok(colisService.findColisByClientExpediteur(clientId, pageable));
     }
-    @GetMapping("/{clientId}/track/{colisId}")
-    @PreAuthorize("hasAuthority('VIEW_COLIS') or #clientId == authentication.principal.id")
+    @GetMapping("/track/{colisId}")
+    @PreAuthorize("hasAuthority('VIEW_OWN_COLIS')")
     @Operation(summary = "Track a colis for a client")
     public ResponseEntity<ColisDTO> trackColis(
-            @PathVariable String clientId,
             @PathVariable String colisId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        String clientId = service.findByUsername(username).get().getId();
         // Vérifier que le colis appartient bien au client
         ColisDTO colis = colisService.trackColis(clientId, colisId);
         return ResponseEntity.ok(colis);

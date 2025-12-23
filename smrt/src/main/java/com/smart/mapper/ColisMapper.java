@@ -11,13 +11,13 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {ZoneMapper.class}, imports = {PrioriteEnum.class, StatutColis.class})
 public interface ColisMapper extends EntityMapper<ColisDTO, Colis> {
 
-    @Mapping(source = "zoneLivraison.id", target = "zoneId")
+    @Mapping(source = "zone.id", target = "zoneId")
     @Mapping(source = "livreur.id", target = "livreurId")
     @Mapping(source = "clientExpediteur.id", target = "clientExpediteurId")
     @Mapping(source = "destinataire.id", target = "destinataireId")
     ColisDTO toDto(Colis colis);
 
-    @Mapping(source = "zoneId", target = "zoneLivraison.id")
+    @Mapping(source = "zoneId", target = "zone")
     @Mapping(source = "livreurId", target = "livreur.id")
     @Mapping(source = "clientExpediteurId", target = "clientExpediteur.id")
     @Mapping(source = "destinataireId", target = "destinataire.id")

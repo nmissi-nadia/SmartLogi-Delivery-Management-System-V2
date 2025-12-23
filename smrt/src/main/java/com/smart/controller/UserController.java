@@ -4,6 +4,7 @@ import com.smart.entity.User;
 import com.smart.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -14,11 +15,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('VIEW_USERS')")
     public List<User> getAll() {
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('VIEW_USERS')")
     public ResponseEntity<User> getById(@PathVariable String id) {
         return userService.findById(id)
                 .map(ResponseEntity::ok)
@@ -26,11 +29,13 @@ public class UserController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('MANAGE_USERS')")
     public User create(@RequestBody User user) {
         return userService.save(user);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('MANAGE_USERS')")
     public ResponseEntity<User> update(@PathVariable String id, @RequestBody User user) {
         if (!userService.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
@@ -40,6 +45,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('MANAGE_USERS')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         if (!userService.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();

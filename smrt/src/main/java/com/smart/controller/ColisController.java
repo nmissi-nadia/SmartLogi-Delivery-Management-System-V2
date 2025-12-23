@@ -43,7 +43,7 @@ public class ColisController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('VIEW_COLIS')")
+    @PreAuthorize("hasAuthority('VIEW_COLIS') or hasAuthority('VIEW_COLIS_LIVREUR') or hasAuthority('VIEW_COLIS_CLIENT')")
     @Operation(summary = "Get all colis")
     public Page<ColisDTO> getAll(@RequestParam(required = false) String statut,
                                 @RequestParam(required = false) String ville,
@@ -51,14 +51,12 @@ public class ColisController {
                                 @RequestParam(required = false) String zoneId,
                                 @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateDebut,
                                 @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFin,
-                                @RequestParam(required = false) String clientId,
                                 @RequestParam(required = false) String destinataireId,
-                                @RequestParam(required = false) String livreurId,
                                 Pageable pageable) {
         log.debug("Récupération de tous les colis");
         LocalDateTime startOfDay = dateDebut != null ? dateDebut.atStartOfDay() : null;
         LocalDateTime endOfDay = dateFin != null ? dateFin.atTime(23, 59, 59) : null;
-        return colisService.findAll(statut, ville, priorite, zoneId, startOfDay, endOfDay, pageable, clientId, destinataireId, livreurId);
+        return colisService.findAll(statut, ville, priorite, zoneId, startOfDay, endOfDay, pageable, destinataireId);
     }
 
     @GetMapping("/{id}")

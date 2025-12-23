@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/zones")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
+@PreAuthorize("hasAuthority('MANAGE_ZONES')")
 @Tag(name = "Zone", description = "API for Zone management")
 @SecurityRequirement(name = "bearerAuth")
 public class ZoneController {

@@ -1,7 +1,5 @@
 package com.smart.service;
 
-import com.smart.entity.User;
-import com.smart.entity.CustomUserDetails;
 import com.smart.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,10 +17,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
+        return userRepository.findByUsername(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with username: " + username));
-
-        return new CustomUserDetails(user);
     }
 }

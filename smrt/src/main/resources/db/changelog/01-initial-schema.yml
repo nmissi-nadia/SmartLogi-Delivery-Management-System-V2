@@ -300,3 +300,48 @@ databaseChangeLog:
                   name: date_ajout
                   type: TIMESTAMP
                   defaultValueComputed: "CURRENT_TIMESTAMP"
+
+  - changeSet:
+      id: 3-update-livreur-table
+      author: gemini
+      changes:
+        - renameColumn:
+            tableName: livreur
+            oldColumnName: zone_assignee_id
+            newColumnName: zone_id
+            columnDataType: VARCHAR(36)
+        - addColumn:
+            tableName: livreur
+            columns:
+              - column:
+                  name: user_id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - addForeignKeyConstraint:
+            constraintName: fk_livreur_user
+            baseTableName: livreur
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 4-add-user-id-to-client-expediteur
+      author: gemini
+      changes:
+        - addColumn:
+            tableName: client_expediteur
+            columns:
+              - column:
+                  name: user_id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - addForeignKeyConstraint:
+            constraintName: fk_client_expediteur_user
+            baseTableName: client_expediteur
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
