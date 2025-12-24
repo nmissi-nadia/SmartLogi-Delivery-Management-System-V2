@@ -31,7 +31,7 @@ public class PermissionControllerTest {
     @BeforeEach
     void setUp() {
         permissionDTO = new PermissionDTO();
-        permissionDTO.setId(1L);
+        permissionDTO.setId("1");
         permissionDTO.setName("TEST_PERMISSION");
     }
 
@@ -60,11 +60,11 @@ public class PermissionControllerTest {
 
     @Test
     void testDeletePermission() {
-        doNothing().when(permissionService).deletePermission("1L");
+        doNothing().when(permissionService).deletePermission("1");
 
-        ResponseEntity<Void> response = permissionController.deletePermission("1L");
+        ResponseEntity<Void> response = permissionController.deletePermission("1");
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(permissionService, times(1)).deletePermission("1L");
+        verify(permissionService, times(1)).deletePermission("1");
     }
 }

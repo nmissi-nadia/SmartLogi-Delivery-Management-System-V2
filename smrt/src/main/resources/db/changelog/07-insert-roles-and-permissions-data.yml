@@ -52,22 +52,22 @@ databaseChangeLog:
 
         # Insert Roles
         - insert:
-            tableName: role
+            tableName: roles
             columns:
               - column: { name: id, value: 'role-gestio' }
               - column: { name: name, value: 'GESTIONNAIRE_LOGISTIQUE' }
         - insert:
-            tableName: role
+            tableName: roles
             columns:
               - column: { name: id, value: 'role-client' }
               - column: { name: name, value: 'CLIENT_EXPEDITEUR' }
         - insert:
-            tableName: role
+            tableName: roles
             columns:
               - column: { name: id, value: 'role-livreur' }
               - column: { name: name, value: 'LIVREUR' }
         - insert:
-            tableName: role
+            tableName: roles
             columns:
               - column: { name: id, value: 'role-dest' }
               - column: { name: name, value: 'DESTINATAIRE' }

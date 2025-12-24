@@ -10,4 +10,5 @@ public class LivreurDTO {
     private String telephone;
     private String vehicule;
     private String zoneId;
+    private String userId; // Added userId
 }

@@ -32,7 +32,7 @@ public class RoleController {
     @PreAuthorize("hasAuthority('MANAGE_ROLES')")
     @Operation(summary = "Assign a permission to a role")
     public ResponseEntity<Void> assignPermissionToRole(@PathVariable String roleId, @PathVariable String permissionId) {
-        roleService.assignPermissionToRole(roleId, permissionId);
+        roleService.addPermissionToRole(roleId, permissionId);
         return ResponseEntity.ok().build();
     }
 
@@ -40,7 +40,7 @@ public class RoleController {
     @PreAuthorize("hasAuthority('MANAGE_ROLES')")
     @Operation(summary = "Revoke a permission from a role")
     public ResponseEntity<Void> revokePermissionFromRole(@PathVariable String roleId, @PathVariable String permissionId) {
-        roleService.revokePermissionFromRole(roleId, permissionId);
+        roleService.removePermissionFromRole(roleId, permissionId);
         return ResponseEntity.ok().build();
     }
 }

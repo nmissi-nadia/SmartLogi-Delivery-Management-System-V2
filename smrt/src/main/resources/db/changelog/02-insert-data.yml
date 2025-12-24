@@ -56,6 +56,9 @@ databaseChangeLog:
               - column:
                   name: adresse
                   value: "123 Rue de Paris, 75001 Paris"
+              - column:
+                  name: user_id
+                  value: "user-client1"
 
   - changeSet:
       id: 3-insert-destinataires
@@ -106,8 +109,11 @@ databaseChangeLog:
                   name: vehicule
                   value: "Vélo électrique"
               - column:
-                  name: zone_assignee_id
+                  name: zone_id
                   value: "zone-1"
+              - column:
+                  name: user_id
+                  value: "user-livreur1"
 
   - changeSet:
       id: 5-insert-produits

@@ -8,4 +8,11 @@ import org.mapstruct.Mapper;
 public interface ZoneMapper {
     ZoneDTO toDto(Zone entity);
     Zone toEntity(ZoneDTO dto);
+
+    default Zone fromId(String id) {
+        if (id == null) return null;
+        Zone z = new Zone();
+        z.setId(id);
+        return z;
+    }
 }

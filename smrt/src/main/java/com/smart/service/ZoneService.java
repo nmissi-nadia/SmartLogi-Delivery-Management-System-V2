@@ -26,6 +26,10 @@ public class ZoneService {
         return repository.findById(id).map(mapper::toDto);
     }
 
+    public Optional<Zone> findEntityById(String id) {
+        return repository.findById(id);
+    }
+
     public ZoneDTO save(ZoneDTO dto) {
         Zone entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));

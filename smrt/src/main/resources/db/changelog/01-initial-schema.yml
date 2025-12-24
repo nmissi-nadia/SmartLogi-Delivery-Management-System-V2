@@ -3,7 +3,7 @@ databaseChangeLog:
   # 1. CRÉATION DES TYPES ENUM (PostgreSQL)
   # ====================================================================
   - changeSet:
-      id: 1-create-enums
+      id: 01-initial-schema-1-create-enums
       author: nadia
       changes:
         - sql:
@@ -30,7 +30,7 @@ databaseChangeLog:
   # 2. CRÉATION DES TABLES
   # ====================================================================
   - changeSet:
-      id: 2-create-tables
+      id: 01-initial-schema-2-create-tables
       author: nadia
       changes:
         # Table des zones
@@ -302,8 +302,8 @@ databaseChangeLog:
                   defaultValueComputed: "CURRENT_TIMESTAMP"
 
   - changeSet:
-      id: 3-update-livreur-table
-      author: gemini
+      id: 01-initial-schema-3-update-livreur-table
+      author: nadia
       changes:
         - renameColumn:
             tableName: livreur
@@ -327,8 +327,8 @@ databaseChangeLog:
             referencedColumnNames: id
 
   - changeSet:
-      id: 4-add-user-id-to-client-expediteur
-      author: gemini
+      id: 01-initial-schema-4-add-user-id-to-client-expediteur
+      author: nadia
       changes:
         - addColumn:
             tableName: client_expediteur

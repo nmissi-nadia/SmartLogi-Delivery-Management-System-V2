@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 06-add-role-permission-schema-corrected
+      id: 06-add-role-permission-schema-1-corrected
       author: nadia
       changes:
         - createTable:
@@ -70,7 +70,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_user_roles_role
-                    references: roles(id) # Corrected: references "roles"
+                    references: roles(id) 
         - addPrimaryKey:
             tableName: user_roles
             columnNames: user_id, role_id

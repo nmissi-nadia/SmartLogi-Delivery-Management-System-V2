@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 4-create-users-table
+      id: 04-create-user-table-1-create-users-table
       author: nadia
       changes:
         - createTable:

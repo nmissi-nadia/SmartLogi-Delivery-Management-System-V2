@@ -4,6 +4,7 @@ import com.smart.dto.ColisDTO;
 import com.smart.entity.Colis;
 import com.smart.entity.Enum.PrioriteEnum;
 import com.smart.entity.Enum.StatutColis;
+import com.smart.entity.Zone;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

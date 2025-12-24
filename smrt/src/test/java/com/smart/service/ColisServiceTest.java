@@ -115,7 +115,7 @@ class ColisServiceTest {
         colis.setStatut(StatutColis.CREE);
         colis.setClientExpediteur(client);
         colis.setDestinataire(destinataire);
-        colis.setZoneLivraison(zone);
+        colis.setZone(zone);
 
         colisDTO = new ColisDTO();
         colisDTO.setId("colis1");

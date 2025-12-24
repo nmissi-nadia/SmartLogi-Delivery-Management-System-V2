@@ -62,8 +62,7 @@ public interface ColisRepository extends JpaRepository<Colis, String> {
 
         
 
-            @Query("SELECT z.nom, COUNT(c) FROM Colis c JOIN c.zoneLivraison z GROUP BY z.id")
-
+            @Query("SELECT z.nom, COUNT(c) FROM Colis c JOIN c.zone z GROUP BY z.id")
             List<Object[]> groupByZone();
 
         
