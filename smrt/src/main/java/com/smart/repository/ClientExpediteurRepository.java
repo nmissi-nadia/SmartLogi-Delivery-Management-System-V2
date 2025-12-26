@@ -16,5 +16,6 @@ public interface ClientExpediteurRepository extends JpaRepository<ClientExpedite
     @Query("SELECT c FROM ClientExpediteur c WHERE lower(c.nom) LIKE lower(concat('%', :keyword, '%')) OR lower(c.prenom) LIKE lower(concat('%', :keyword, '%')) OR lower(c.email) LIKE lower(concat('%', :keyword, '%')) OR lower(c.telephone) LIKE lower(concat('%', :keyword, '%'))")
     Page<ClientExpediteur> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
     
-    Optional<ClientExpediteur> findByEmail(String email);
+    @Query("SELECT c FROM ClientExpediteur c WHERE c.user.username = :username")
+    Optional<ClientExpediteur> findByUsername(@Param("username") String username);
 }

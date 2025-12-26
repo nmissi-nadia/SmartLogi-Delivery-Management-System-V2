@@ -9,5 +9,6 @@ public class LivreurDTO {
     private String prenom;
     private String telephone;
     private String vehicule;
-    private String zoneAssigneeId;
+    private String zoneId;
+    private String userId; // Added userId
 }

@@ -2,7 +2,9 @@ package com.smart.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +27,10 @@ public class ClientExpediteur {
     private String email;
     private String telephone;
     private String adresse;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @OneToMany(mappedBy = "clientExpediteur")
     private List<Colis> colisEnvoyes;

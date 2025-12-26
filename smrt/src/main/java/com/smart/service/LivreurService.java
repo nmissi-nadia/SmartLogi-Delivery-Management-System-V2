@@ -44,16 +44,16 @@ public class LivreurService {
         throw new IllegalArgumentException("Le DTO ne peut pas être null");
     }
     
-    if (dto.getZoneAssigneeId() == null) {
+    if (dto.getZoneId() == null) {
         log.error("L'ID de la zone est null dans le DTO: {}", dto);
         throw new IllegalArgumentException("L'ID de la zone est requis");
     }
     
     try {
-        log.debug("Recherche de la zone avec l'ID: {}", dto.getZoneAssigneeId());
-        Zone zone = zoneRepository.findById(dto.getZoneAssigneeId())
+        log.debug("Recherche de la zone avec l'ID: {}", dto.getZoneId());
+        Zone zone = zoneRepository.findById(dto.getZoneId())
             .orElseThrow(() -> {
-                String errorMsg = "Zone non trouvée avec l'ID: " + dto.getZoneAssigneeId();
+                String errorMsg = "Zone non trouvée avec l'ID: " + dto.getZoneId();
                 log.error(errorMsg);
                 return new EntityNotFoundException(errorMsg);
             });
@@ -62,7 +62,7 @@ public class LivreurService {
         Livreur entity = mapper.toEntity(dto);
         
         log.debug("Définition de la zone sur le livreur");
-        entity.setZoneAssignee(zone);
+        entity.setZone(zone);
         
         log.debug("Sauvegarde du livreur...");
         Livreur savedEntity = repository.save(entity);
@@ -81,5 +81,9 @@ public class LivreurService {
     }
     public Page<LivreurDTO> searchByKeyword(String keyword, Pageable pageable) {
         return repository.searchByKeyword(keyword, pageable).map(mapper::toDto);
+    }
+
+    public Optional<Livreur> findByUsername(String username) {
+        return repository.findByUsername(username);
     }
 }

@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,7 +90,7 @@ public class ColisService {
             colis.setStatut(StatutColis.CREE);
             colis.setClientExpediteur(client);
             colis.setDestinataire(destinataire);
-            colis.setZoneLivraison(zone);
+            colis.setZone(zone);
 
             // 5. Sauvegarder le colis
             colis = colisRepository.save(colis);
@@ -434,15 +437,32 @@ public class ColisService {
 
     // Autres méthodes utilitaires...
 
-    public Page<ColisDTO> findAll(String statut, String ville, String priorite, String zoneId, 
-                                LocalDateTime dateDebut, LocalDateTime dateFin, 
-                                Pageable pageable, String clientId, String destinataireId, 
-                                String livreurId) {
+    public Page<ColisDTO> findAll(String statut, String ville, String priorite, String zoneId,
+                                LocalDateTime dateDebut, LocalDateTime dateFin,
+                                Pageable pageable, String destinataireId) {
         log.debug("Récupération de tous les colis");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+        String clientId = null;
+        String livreurId = null;
+
+        if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_CLIENT"))) {
+            clientId = clientExpediteurRepository.findByUsername(username)
+                .map(ClientExpediteur::getId)
+                .orElse(null);
+        } else if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_LIVREUR"))) {
+            livreurId = livreurRepository.findByUsername(username)
+                .map(Livreur::getId)
+                .orElse(null);
+        }
+
         StatutColis statutEnum = statut != null ? StatutColis.valueOf(statut) : null;
         PrioriteEnum prioriteEnum = priorite != null ? PrioriteEnum.valueOf(priorite) : null;
-        return colisRepository.findByCritere(statutEnum, ville, prioriteEnum, zoneId, 
-                                           dateDebut, dateFin, pageable, 
+        return colisRepository.findByCritere(statutEnum, ville, prioriteEnum, zoneId,
+                                           dateDebut, dateFin, pageable,
                                            clientId, destinataireId, livreurId)
                 .map(colisMapper::toDto);
     }

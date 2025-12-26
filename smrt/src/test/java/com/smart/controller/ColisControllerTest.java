@@ -59,19 +59,18 @@ class ColisControllerTest {
     void getAllColis_ShouldReturnPageOfColis() {
         // Arrange
         Page<ColisDTO> page = new PageImpl<>(List.of(colisDTO));
-        when(colisService.findAll(any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
-                .thenReturn(page);
+        when(colisService.findAll(any(), any(), any(), any(), any(), any(), any(), any()))
+            .thenReturn(page);
 
         // Act
         Page<ColisDTO> result = colisController.getAll(
-                "EN_STOCK", "Paris", "HAUTE", "zone1",
-                LocalDate.now(), LocalDate.now(), "client1",
-                "dest1", "liv1", pageable);
+            "EN_STOCK", "Paris", "HAUTE", "zone1",
+            LocalDate.now(), LocalDate.now(), "dest1", pageable);
 
         // Assert
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
-        verify(colisService).findAll(any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
+        verify(colisService).findAll(any(), any(), any(), any(), any(), any(), any(), any());
     }
 
     @Test
@@ -126,16 +125,16 @@ class ColisControllerTest {
     void getAllColis_WithNullParameters_ShouldPass() {
         // Arrange
         Page<ColisDTO> page = new PageImpl<>(List.of(colisDTO));
-        when(colisService.findAll(any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
-                .thenReturn(page);
+        when(colisService.findAll(any(), any(), any(), any(), any(), any(), any(), any()))
+            .thenReturn(page);
 
         // Act
         Page<ColisDTO> result = colisController.getAll(
-                null, null, null, null,
-                null, null, null, null, null, pageable);
+            null, null, null, null,
+            null, null, null, pageable);
 
         // Assert
         assertNotNull(result);
-        verify(colisService).findAll(any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
+        verify(colisService).findAll(any(), any(), any(), any(), any(), any(), any(), any());
     }
 }

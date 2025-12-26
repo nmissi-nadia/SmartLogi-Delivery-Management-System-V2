@@ -24,7 +24,7 @@ public class LivreurMapperTest {
 
         Zone zone = new Zone();
         zone.setId("zone1");
-        entity.setZoneAssignee(zone);
+        entity.setZone(zone);
 
         LivreurDTO dto = mapper.toDto(entity);
 
@@ -34,7 +34,7 @@ public class LivreurMapperTest {
         assertEquals(entity.getPrenom(), dto.getPrenom());
         assertEquals(entity.getTelephone(), dto.getTelephone());
         assertEquals(entity.getVehicule(), dto.getVehicule());
-        assertEquals(entity.getZoneAssignee().getId(), dto.getZoneAssigneeId());
+        assertEquals(entity.getZone().getId(), dto.getZoneId());
     }
 
     @Test
@@ -45,7 +45,7 @@ public class LivreurMapperTest {
         dto.setPrenom("Test Prenom");
         dto.setTelephone("123456789");
         dto.setVehicule("Test Vehicule");
-        dto.setZoneAssigneeId("zone1");
+        dto.setZoneId("zone1");
 
         Livreur entity = mapper.toEntity(dto);
 
@@ -55,7 +55,7 @@ public class LivreurMapperTest {
         assertEquals(dto.getPrenom(), entity.getPrenom());
         assertEquals(dto.getTelephone(), entity.getTelephone());
         assertEquals(dto.getVehicule(), entity.getVehicule());
-        assertNotNull(entity.getZoneAssignee());
-        assertEquals(dto.getZoneAssigneeId(), entity.getZoneAssignee().getId());
+        assertNotNull(entity.getZone());
+        assertEquals(dto.getZoneId(), entity.getZone().getId());
     }
 }

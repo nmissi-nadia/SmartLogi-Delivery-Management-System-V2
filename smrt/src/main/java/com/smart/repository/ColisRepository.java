@@ -21,14 +21,14 @@ public interface ColisRepository extends JpaRepository<Colis, String> {
     List<Colis> findByStatut(StatutColis statut);
     List<Colis> findByVilleDestination(String villeDestination);
     List<Colis> findByPriorite(PrioriteEnum priorite);
-    @Query("SELECT c FROM Colis c WHERE c.zoneLivraison.nom = :zoneNom")
+    @Query("SELECT c FROM Colis c WHERE c.zone.nom = :zoneNom")
     List<Colis> findByZoneNom(@Param("zoneNom") String zoneNom);
 
     @Query("SELECT DISTINCT c FROM Colis c LEFT JOIN c.historique h WHERE " +
             "(:statut IS NULL OR c.statut = :statut) AND " +
             "(:ville IS NULL OR c.villeDestination = :ville) AND " +
             "(:priorite IS NULL OR c.priorite = :priorite) AND " +
-            "(:zoneId IS NULL OR c.zoneLivraison.id = :zoneId) AND " +
+            "(:zoneId IS NULL OR c.zone.id = :zoneId) AND " +
             "(:dateDebut IS NULL OR h.dateChangement >= :dateDebut) AND " +
             "(:dateFin IS NULL OR h.dateChangement <= :dateFin) AND " +
             "(:clientId IS NULL OR c.clientExpediteur.id = :clientId) AND " +
@@ -50,20 +50,19 @@ public interface ColisRepository extends JpaRepository<Colis, String> {
 
     
 
-        @Query("SELECT COALESCE(SUM(c.poids), 0) FROM Colis c WHERE c.livreur.id = :livreurId AND c.zoneLivraison.id = :zoneId")
+        @Query("SELECT COALESCE(SUM(c.poids), 0) FROM Colis c WHERE c.livreur.id = :livreurId AND c.zone.id = :zoneId")
 
         Double getTotalPoidsByLivreurAndZone(@Param("livreurId") String livreurId, @Param("zoneId") String zoneId);
 
     
 
-        @Query("SELECT COUNT(c) FROM Colis c WHERE c.livreur.id = :livreurId AND c.zoneLivraison.id = :zoneId")
+        @Query("SELECT COUNT(c) FROM Colis c WHERE c.livreur.id = :livreurId AND c.zone.id = :zoneId")
 
                 Long getNombreColisByLivreurAndZone(@Param("livreurId") String livreurId, @Param("zoneId") String zoneId);
 
         
 
-            @Query("SELECT z.nom, COUNT(c) FROM Colis c JOIN c.zoneLivraison z GROUP BY z.id")
-
+            @Query("SELECT z.nom, COUNT(c) FROM Colis c JOIN c.zone z GROUP BY z.id")
             List<Object[]> groupByZone();
 
         

@@ -3,19 +3,9 @@ databaseChangeLog:
   # 1. CRÉATION DES TYPES ENUM (PostgreSQL)
   # ====================================================================
   - changeSet:
-      id: 1-create-enums
+      id: 01-initial-schema-1-create-enums
       author: nadia
       changes:
-        - sql:
-            splitStatements: false
-            sql: |
-              DO $$
-              BEGIN
-                IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'role_enum') THEN
-                  CREATE TYPE role_enum AS ENUM ('CLIENT_EXPEDITEUR', 'DESTINATAIRE', 'LIVREUR', 'GESTIONNAIRE_LOGISTIQUE');
-                END IF;
-              END$$;
-
         - sql:
             splitStatements: false
             sql: |
@@ -40,7 +30,7 @@ databaseChangeLog:
   # 2. CRÉATION DES TABLES
   # ====================================================================
   - changeSet:
-      id: 2-create-tables
+      id: 01-initial-schema-2-create-tables
       author: nadia
       changes:
         # Table des zones
@@ -311,35 +301,47 @@ databaseChangeLog:
                   type: TIMESTAMP
                   defaultValueComputed: "CURRENT_TIMESTAMP"
 
-        # Table des utilisateurs
-        - createTable:
-            tableName: app_user
+  - changeSet:
+      id: 01-initial-schema-3-update-livreur-table
+      author: nadia
+      changes:
+        - renameColumn:
+            tableName: livreur
+            oldColumnName: zone_assignee_id
+            newColumnName: zone_id
+            columnDataType: VARCHAR(36)
+        - addColumn:
+            tableName: livreur
             columns:
               - column:
-                  name: id
+                  name: user_id
                   type: VARCHAR(36)
                   constraints:
-                    primaryKey: true
                     nullable: false
+                    unique: true
+        - addForeignKeyConstraint:
+            constraintName: fk_livreur_user
+            baseTableName: livreur
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 01-initial-schema-4-add-user-id-to-client-expediteur
+      author: nadia
+      changes:
+        - addColumn:
+            tableName: client_expediteur
+            columns:
               - column:
-                  name: username
-                  type: VARCHAR(255)
+                  name: user_id
+                  type: VARCHAR(36)
                   constraints:
                     nullable: false
                     unique: true
-              - column:
-                  name: password
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: email
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-                    unique: true
-              - column:
-                  name: role
-                  type: role_enum
-                  constraints:
-                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName: fk_client_expediteur_user
+            baseTableName: client_expediteur
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id

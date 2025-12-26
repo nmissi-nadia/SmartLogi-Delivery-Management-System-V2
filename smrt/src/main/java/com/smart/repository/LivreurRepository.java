@@ -9,8 +9,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 @Repository
 public interface LivreurRepository extends JpaRepository<Livreur, String> {
     @Query("SELECT l FROM Livreur l WHERE lower(l.nom) LIKE lower(concat('%', :keyword, '%')) OR lower(l.prenom) LIKE lower(concat('%', :keyword, '%')) OR lower(l.telephone) LIKE lower(concat('%', :keyword, '%'))")
     Page<Livreur> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
+    @Query("SELECT l FROM Livreur l WHERE l.user.username = :username")
+    Optional<Livreur> findByUsername(@Param("username") String username);
 }

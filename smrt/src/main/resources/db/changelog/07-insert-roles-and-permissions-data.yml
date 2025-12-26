@@ -1,0 +1,89 @@
+databaseChangeLog:
+  - changeSet:
+      id: 07-insert-roles-and-permissions-data-corrected
+      author: nadia
+      changes:
+        # Insert Permissions
+        - insert:
+            tableName: permission
+            columns:
+              - column: { name: id, value: 'perm-manage-roles' }
+              - column: { name: name, value: 'MANAGE_ROLES' }
+        - insert:
+            tableName: permission
+            columns:
+              - column: { name: id, value: 'perm-view-roles' }
+              - column: { name: name, value: 'VIEW_ROLES' }
+        - insert:
+            tableName: permission
+            columns:
+              - column: { name: id, value: 'perm-manage-permissions' }
+              - column: { name: name, value: 'MANAGE_PERMISSIONS' }
+        - insert:
+            tableName: permission
+            columns:
+              - column: { name: id, value: 'perm-view-permissions' }
+              - column: { name: name, value: 'VIEW_PERMISSIONS' }
+        - insert:
+            tableName: permission
+            columns:
+              - column: { name: id, value: 'perm-manage-users' }
+              - column: { name: name, value: 'MANAGE_USERS' }
+        - insert:
+            tableName: permission
+            columns:
+              - column: { name: id, value: 'perm-view-users' }
+              - column: { name: name, value: 'VIEW_USERS' }
+        - insert:
+            tableName: permission
+            columns:
+              - column: { name: id, value: 'perm-view-own-parcels' }
+              - column: { name: name, value: 'VIEW_OWN_PARCELS' }
+        - insert:
+            tableName: permission
+            columns:
+              - column: { name: id, value: 'perm-view-assigned-parcels' }
+              - column: { name: name, value: 'VIEW_ASSIGNED_PARCELS' }
+        - insert:
+            tableName: permission
+            columns:
+              - column: { name: id, value: 'perm-update-parcel-status' }
+              - column: { name: name, value: 'UPDATE_PARCEL_STATUS' }
+
+        # Insert Roles
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: id, value: 'role-gestio' }
+              - column: { name: name, value: 'GESTIONNAIRE_LOGISTIQUE' }
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: id, value: 'role-client' }
+              - column: { name: name, value: 'CLIENT_EXPEDITEUR' }
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: id, value: 'role-livreur' }
+              - column: { name: name, value: 'LIVREUR' }
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: id, value: 'role-dest' }
+              - column: { name: name, value: 'DESTINATAIRE' }
+
+        # Assign Permissions to Roles
+        # GESTIONNAIRE_LOGISTIQUE
+        - insert: { tableName: role_permission, columns: [ { column: { name: role_id, value: 'role-gestio' } }, { column: { name: permission_id, value: 'perm-manage-roles' } } ] }
+        - insert: { tableName: role_permission, columns: [ { column: { name: role_id, value: 'role-gestio' } }, { column: { name: permission_id, value: 'perm-view-roles' } } ] }
+        - insert: { tableName: role_permission, columns: [ { column: { name: role_id, value: 'role-gestio' } }, { column: { name: permission_id, value: 'perm-manage-permissions' } } ] }
+        - insert: { tableName: role_permission, columns: [ { column: { name: role_id, value: 'role-gestio' } }, { column: { name: permission_id, value: 'perm-view-permissions' } } ] }
+        - insert: { tableName: role_permission, columns: [ { column: { name: role_id, value: 'role-gestio' } }, { column: { name: permission_id, value: 'perm-manage-users' } } ] }
+        - insert: { tableName: role_permission, columns: [ { column: { name: role_id, value: 'role-gestio' } }, { column: { name: permission_id, value: 'perm-view-users' } } ] }
+
+        # CLIENT_EXPEDITEUR
+        - insert: { tableName: role_permission, columns: [ { column: { name: role_id, value: 'role-client' } }, { column: { name: permission_id, value: 'perm-view-own-parcels' } } ] }
+
+        # LIVREUR
+        - insert: { tableName: role_permission, columns: [ { column: { name: role_id, value: 'role-livreur' } }, { column: { name: permission_id, value: 'perm-view-assigned-parcels' } } ] }
+        - insert: { tableName: role_permission, columns: [ { column: { name: role_id, value: 'role-livreur' } }, { column: { name: permission_id, value: 'perm-update-parcel-status' } } ] }

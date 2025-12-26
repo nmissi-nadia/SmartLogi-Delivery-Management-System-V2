@@ -1,23 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 4-create-user-enum-type
-      author: nadia
-      changes:
-        - sql:
-            splitStatements: false
-            sql: |
-              DO $$
-              BEGIN
-                IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'app_user_role_enum') THEN
-                  CREATE TYPE app_user_role_enum AS ENUM ('CLIENT_EXPEDITEUR', 'DESTINATAIRE', 'LIVREUR', 'GESTIONNAIRE_LOGISTIQUE');
-                END IF;
-              END$$;
-  - changeSet:
-      id: 4-create-app-user-table
+      id: 04-create-user-table-1-create-users-table
       author: nadia
       changes:
         - createTable:
-            tableName: app_user
+            tableName: users
             columns:
               - column:
                   name: id
@@ -43,12 +30,11 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: role
-                  type: app_user_role_enum
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
                   constraints:
                     nullable: false
       rollback:
         - dropTable:
-            tableName: app_user
-        - sql:
-            sql: DROP TYPE IF EXISTS app_user_role_enum;
+            tableName: users

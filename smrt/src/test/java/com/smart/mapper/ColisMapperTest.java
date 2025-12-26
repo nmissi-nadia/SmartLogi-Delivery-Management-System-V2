@@ -42,7 +42,7 @@ public class ColisMapperTest {
 
         Zone zone = new Zone();
         zone.setId("zone1");
-        entity.setZoneLivraison(zone);
+        entity.setZone(zone);
 
         ColisDTO dto = mapper.toDto(entity);
 
@@ -56,7 +56,7 @@ public class ColisMapperTest {
         assertEquals(entity.getLivreur().getId(), dto.getLivreurId());
         assertEquals(entity.getClientExpediteur().getId(), dto.getClientExpediteurId());
         assertEquals(entity.getDestinataire().getId(), dto.getDestinataireId());
-        assertEquals(entity.getZoneLivraison().getId(), dto.getZoneId());
+        assertEquals(entity.getZone().getId(), dto.getZoneId());
     }
 
     @Test
@@ -85,6 +85,6 @@ public class ColisMapperTest {
         assertEquals(dto.getLivreurId(), entity.getLivreur().getId());
         assertEquals(dto.getClientExpediteurId(), entity.getClientExpediteur().getId());
         assertEquals(dto.getDestinataireId(), entity.getDestinataire().getId());
-        assertEquals(dto.getZoneId(), entity.getZoneLivraison().getId());
+        assertEquals(dto.getZoneId(), entity.getZone().getId());
     }
 }

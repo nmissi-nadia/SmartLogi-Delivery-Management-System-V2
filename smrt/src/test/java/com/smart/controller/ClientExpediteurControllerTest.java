@@ -24,12 +24,17 @@ import jakarta.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import com.smart.entity.ClientExpediteur;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @ExtendWith(MockitoExtension.class)
+@org.mockito.junit.jupiter.MockitoSettings(strictness = org.mockito.quality.Strictness.LENIENT)
 class ClientExpediteurControllerTest {
 
     @Mock
@@ -64,6 +69,18 @@ class ClientExpediteurControllerTest {
         
         colisRequestDTO = new ColisRequestDTO();
         // Initialiser les champs nécessaires
+
+        // Setup a mocked SecurityContext with an authenticated principal name "client1"
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn("client1");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+    }
+
+    @org.junit.jupiter.api.AfterEach
+    void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -167,11 +184,14 @@ class ClientExpediteurControllerTest {
     @Test
     void createColis_WhenClientExists_ShouldCreateColis() {
         // Arrange
+        ClientExpediteur client = new ClientExpediteur();
+        client.setId("client1");
+        when(service.findByUsername(anyString())).thenReturn(Optional.of(client));
         when(clientExpediteurRepository.existsById("client1")).thenReturn(true);
         when(colisService.createColisWithDetails("client1", colisRequestDTO)).thenReturn(colisDTO);
 
         // Act
-        ResponseEntity<ColisDTO> response = controller.createColis("client1", colisRequestDTO);
+        ResponseEntity<ColisDTO> response = controller.createColis(colisRequestDTO);
 
         // Assert
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -186,9 +206,12 @@ class ClientExpediteurControllerTest {
 
         // Simuler le cas où on ne filtre pas par statut
         when(colisService.findColisByClientExpediteur("client1", pageable)).thenReturn(page);
+        ClientExpediteur client = new ClientExpediteur();
+        client.setId("client1");
+        when(service.findByUsername(anyString())).thenReturn(Optional.of(client));
 
         // Act - Appel sans filtre de statut
-        ResponseEntity<Page<ColisDTO>> response = controller.getColisByClient("client1", null, pageable);
+        ResponseEntity<Page<ColisDTO>> response = controller.getColisByClient(null, pageable);
 
         // Assert
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -201,8 +224,12 @@ class ClientExpediteurControllerTest {
         // Arrange
         when(colisService.trackColis("client1", "colis1")).thenReturn(colisDTO);
 
+        ClientExpediteur client = new ClientExpediteur();
+        client.setId("client1");
+        when(service.findByUsername(anyString())).thenReturn(Optional.of(client));
+
         // Act
-        ResponseEntity<ColisDTO> response = controller.trackColis("client1", "colis1");
+        ResponseEntity<ColisDTO> response = controller.trackColis("colis1");
 
         // Assert
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -218,10 +245,13 @@ class ClientExpediteurControllerTest {
 
         // Simuler le cas où on filtre par statut
         when(colisService.findColisByClientExpediteurAndStatut("client1", status, pageable))
-                .thenReturn(page);
+            .thenReturn(page);
+        ClientExpediteur client = new ClientExpediteur();
+        client.setId("client1");
+        when(service.findByUsername(anyString())).thenReturn(Optional.of(client));
 
         // Act - Appel avec filtre de statut
-        ResponseEntity<Page<ColisDTO>> response = controller.getColisByClient("client1", status, pageable);
+        ResponseEntity<Page<ColisDTO>> response = controller.getColisByClient(status, pageable);
 
         // Assert
         assertTrue(response.getStatusCode().is2xxSuccessful());

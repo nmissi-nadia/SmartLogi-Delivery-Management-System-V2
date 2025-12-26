@@ -105,7 +105,7 @@ public class ColisIntegrationTest {
         savedColis.setClientExpediteur(savedClient);
         savedColis.setDestinataire(savedDestinataire);
         savedColis.setLivreur(savedLivreur);
-        savedColis.setZoneLivraison(savedZone);
+        savedColis.setZone(savedZone);
         savedColis = colisRepository.save(savedColis);
     }
 
@@ -130,7 +130,7 @@ public class ColisIntegrationTest {
         colisRecherche.setClientExpediteur(savedClient);
         colisRecherche.setDestinataire(savedDestinataire);
         colisRecherche.setLivreur(savedLivreur);
-        colisRecherche.setZoneLivraison(savedZone);
+        colisRecherche.setZone(savedZone);
         colisRepository.save(colisRecherche);
 
         // When & Then

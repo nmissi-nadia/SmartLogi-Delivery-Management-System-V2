@@ -5,30 +5,37 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CustomUserDetails implements UserDetails {
 
     private final User user;
 
     public CustomUserDetails(User user) {
+        if (user == null) throw new IllegalArgumentException("User cannot be null");
         this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        if (user.getRoles() != null) {
+            user.getRoles().forEach(role -> {
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+                if (role.getPermissions() != null) {
+                    role.getPermissions().forEach(permission -> authorities.add(new SimpleGrantedAuthority(permission.getName())));
+                }
+            });
+        }
+        return authorities;
     }
 
     @Override
-    public String getPassword() {
-        return user.getPassword();
-    }
+    public String getPassword() { return user.getPassword(); }
 
     @Override
-    public String getUsername() {
-        return user.getUsername();
-    }
+    public String getUsername() { return user.getUsername(); }
 
     @Override
     public boolean isAccountNonExpired() { return true; }
@@ -40,5 +47,5 @@ public class CustomUserDetails implements UserDetails {
     public boolean isCredentialsNonExpired() { return true; }
 
     @Override
-    public boolean isEnabled() { return true; }
+    public boolean isEnabled() { return user.isEnabled(); }
 }

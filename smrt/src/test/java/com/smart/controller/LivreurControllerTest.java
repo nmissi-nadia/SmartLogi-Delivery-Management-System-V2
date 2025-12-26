@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import com.smart.entity.Livreur;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -152,7 +153,7 @@ class LivreurControllerTest {
 
         // Act
         ResponseEntity<ColisDTO> response =
-                livreurController.updateColisStatus("liv1", "colis1", "LIVRE");
+            livreurController.updateColisStatus("colis1", "LIVRE");
 
         // Assert
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -164,12 +165,16 @@ class LivreurControllerTest {
     void getColisAssignes_ShouldReturnAssignedColis() {
         // Arrange
         Page<ColisDTO> page = new PageImpl<>(Arrays.asList(colisDTO));
-        when(colisService.findByLivreurIdAndStatut("liv1", "EN_LIVRAISON", pageable))
-                .thenReturn(page);
+        when(colisService.findByLivreurIdAndStatut("liv1", "COLLECTE", pageable))
+            .thenReturn(page);
+
+        Livreur livreur = new Livreur();
+        livreur.setId("liv1");
+        when(livreurService.findByUsername(anyString())).thenReturn(Optional.of(livreur));
 
         // Act
         ResponseEntity<Page<ColisDTO>> response =
-                livreurController.getColisAssignes("liv1", "EN_LIVRAISON", pageable);
+            livreurController.getColisAssignes("COLLECTE", pageable);
 
         // Assert
         assertTrue(response.getStatusCode().is2xxSuccessful());

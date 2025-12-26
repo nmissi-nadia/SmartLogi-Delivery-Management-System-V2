@@ -36,14 +36,14 @@ public class ColisController {
     private static final Logger log = LoggerFactory.getLogger(ColisController.class);
 
     @PostMapping
-    @PreAuthorize("hasRole('CLIENT') or hasRole('GESTIONNAIRE_LOGISTIQUE')")
+    @PreAuthorize("hasAuthority('CREATE_COLIS_CLIENT') or hasAuthority('MANAGE_COLIS')")
     @Operation(summary = "Create a new colis")
     public ColisDTO createColis(@RequestBody ColisDTO colisDTO) {
         return colisService.save(colisDTO);
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
+    @PreAuthorize("hasAuthority('VIEW_COLIS') or hasAuthority('VIEW_COLIS_LIVREUR') or hasAuthority('VIEW_COLIS_CLIENT')")
     @Operation(summary = "Get all colis")
     public Page<ColisDTO> getAll(@RequestParam(required = false) String statut,
                                 @RequestParam(required = false) String ville,
@@ -51,18 +51,16 @@ public class ColisController {
                                 @RequestParam(required = false) String zoneId,
                                 @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateDebut,
                                 @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFin,
-                                @RequestParam(required = false) String clientId,
                                 @RequestParam(required = false) String destinataireId,
-                                @RequestParam(required = false) String livreurId,
                                 Pageable pageable) {
         log.debug("Récupération de tous les colis");
         LocalDateTime startOfDay = dateDebut != null ? dateDebut.atStartOfDay() : null;
         LocalDateTime endOfDay = dateFin != null ? dateFin.atTime(23, 59, 59) : null;
-        return colisService.findAll(statut, ville, priorite, zoneId, startOfDay, endOfDay, pageable, clientId, destinataireId, livreurId);
+        return colisService.findAll(statut, ville, priorite, zoneId, startOfDay, endOfDay, pageable, destinataireId);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('CLIENT') or hasRole('GESTIONNAIRE_LOGISTIQUE') or hasRole('LIVREUR')")
+    @PreAuthorize("hasAuthority('VIEW_COLIS_CLIENT') or hasAuthority('VIEW_COLIS') or hasAuthority('VIEW_COLIS_LIVREUR')")
     @Operation(summary = "Get a colis by ID")
     public ResponseEntity<ColisDTO> getColisById(@PathVariable String id) {
         return colisService.findById(id)
@@ -71,7 +69,7 @@ public class ColisController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
+    @PreAuthorize("hasAuthority('MANAGE_COLIS')")
     @Operation(summary = "Update an existing colis")
     public ResponseEntity<ColisDTO> updateColis(
             @PathVariable String id,
@@ -80,7 +78,7 @@ public class ColisController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
+    @PreAuthorize("hasAuthority('MANAGE_COLIS')")
     @Operation(summary = "Delete a colis")
     public ResponseEntity<Void> deleteColis(@PathVariable String id) {
         colisService.deleteById(id);
@@ -88,7 +86,7 @@ public class ColisController {
     }
 
     @GetMapping("/recherche")
-    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
+    @PreAuthorize("hasAuthority('VIEW_COLIS')")
     @Operation(summary = "Search for colis")
     public ResponseEntity<Page<ColisDTO>> searchColis(
             @RequestParam(required = false) String keyword,
@@ -100,14 +98,14 @@ public class ColisController {
     }
 
     @GetMapping("/statistiques/overview")
-    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
+    @PreAuthorize("hasAuthority('VIEW_COLIS')")
     @Operation(summary = "Get an overview of the colis statistics")
     public ResponseEntity<Map<String, Long>> getStatistiquesOverview() {
         return ResponseEntity.ok(colisService.getStatistiquesOverview());
     }
 
     @PostMapping("/assign")
-    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
+    @PreAuthorize("hasAuthority('MANAGE_COLIS')")
     @Operation(summary = "Assign a livreur to a colis")
     public ResponseEntity<Void> assignColis(@RequestBody Map<String, String> assignment) {
         colisService.assignLivreurToColis(assignment.get("colisId"), assignment.get("livreurId"));
@@ -115,7 +113,7 @@ public class ColisController {
     }
 
     @GetMapping("/non-assignes")
-    @PreAuthorize("hasRole('GESTIONNAIRE_LOGISTIQUE')")
+    @PreAuthorize("hasAuthority('VIEW_COLIS')")
     @Operation(summary = "Get all non-assigned colis")
     public ResponseEntity<List<ColisDTO>> getNonAssignedColis() {
         return ResponseEntity.ok(colisService.findAllNonAssigned());
@@ -123,11 +121,11 @@ public class ColisController {
 
     // Obtenir l'historique d'un colis
     @GetMapping("/{colisId}/historique")
-    @PreAuthorize("hasRole('CLIENT') or hasRole('GESTIONNAIRE_LOGISTIQUE') or hasRole('LIVREUR')")
+    @PreAuthorize("hasAuthority('VIEW_COLIS_CLIENT') or hasAuthority('VIEW_COLIS') or hasAuthority('VIEW_COLIS_LIVREUR')")
     @Operation(summary = "Get the history of a colis")
     public ResponseEntity<List<HistoriqueLivraisonDTO>> getHistoriqueColis(
             @PathVariable String colisId) {
         List<HistoriqueLivraisonDTO> historique = colisService.getHistoriqueForColis(colisId);
-        return ResponseEntity.ok(historique); 
+        return ResponseEntity.ok(historique);
     }
 }

@@ -55,7 +55,7 @@ class LivreurServiceTest {
         livreur.setPrenom("nadia");
         livreur.setTelephone("0612345678");
         livreur.setVehicule("vehicule");
-        livreur.setZoneAssignee(zone);
+        livreur.setZone(zone);
 
         livreurDTO = new LivreurDTO();
         livreurDTO.setId(LIVREUR_ID);
@@ -63,7 +63,7 @@ class LivreurServiceTest {
         livreurDTO.setPrenom("nadia");
         livreurDTO.setTelephone("0612345678");
         livreurDTO.setVehicule("vehicule");
-        livreurDTO.setZoneAssigneeId(ZONE_ID);
+        livreurDTO.setZoneId(ZONE_ID);
         
     }
 

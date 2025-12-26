@@ -195,7 +195,7 @@ public class ColisControllerIntegrationTest {
         colis.setClientExpediteur(client);
         colis.setDestinataire(destinataire);
         colis.setLivreur(livreur);
-        colis.setZoneLivraison(zone);
+        colis.setZone(zone);
         return colis;
     }
 }
