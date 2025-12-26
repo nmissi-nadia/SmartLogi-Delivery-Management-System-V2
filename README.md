@@ -77,7 +77,97 @@ Tous ces rôles héritent d’un modèle commun : **`User`**.
 
 ---
 
+## 🔐 Authentification et Sécurité
 
+Le système supporte deux types d'authentification : JWT (pour les comptes locaux) et OAuth2 (pour les fournisseurs externes comme Google, Facebook, etc.).
+
+### 1. Flux d'authentification JWT (local)
+
+L'authentification basée sur les JSON Web Tokens (JWT) est utilisée pour les utilisateurs enregistrés directement dans l'application.
+
+1.  **Connexion** : L'utilisateur envoie ses identifiants (email/mot de passe) à l'endpoint `/api/auth/login`.
+2.  **Validation** : Le système vérifie les identifiants.
+3.  **Génération du Token** : Si les identifiants sont corrects, un token JWT est généré. Ce token contient des informations sur l'utilisateur (comme son username et ses rôles/permissions).
+4.  **Stockage du Token** : Le client (e.g., une application web) reçoit le token et le stocke localement (par exemple, dans le `localStorage` ou un cookie).
+5.  **Requêtes authentifiées** : Pour chaque requête nécessitant une authentification, le client inclut le token JWT dans l'en-tête `Authorization` avec le préfixe `Bearer `.
+6.  **Vérification du Token** : Le filtre `JwtAuthenticationFilter` intercepte chaque requête, valide le token, et établit le contexte de sécurité de Spring si le token est valide.
+
+### 2. Flux d'authentification OAuth2 (Google, Facebook, etc.)
+
+L'authentification OAuth2 permet aux utilisateurs de se connecter via des comptes de fournisseurs tiers.
+
+1.  **Redirection** : L'utilisateur clique sur un bouton "Se connecter avec Google" (par exemple) et est redirigé vers la page de connexion du fournisseur OAuth2.
+2.  **Authentification externe** : L'utilisateur se connecte sur la plateforme du fournisseur.
+3.  **Redirection vers l'application** : Après succès, le fournisseur redirige l'utilisateur vers l'URL de callback de l'application (`/login/oauth2/code/{provider}`).
+4.  **Traitement des informations** :
+    *   `CustomOAuth2UserService` récupère les informations de l'utilisateur depuis le fournisseur.
+    *   Il vérifie si un utilisateur avec cet email existe déjà dans la base de données. Sinon, il en crée un nouveau avec le rôle par défaut `CLIENT`.
+5.  **Génération du JWT** : `OAuth2AuthenticationSuccessHandler` est invoqué. Il génère un token JWT pour l'utilisateur authentifié (de la même manière que pour une connexion locale).
+6.  **Réponse au client** : Le token JWT est renvoyé au client, qui peut ensuite l'utiliser pour les requêtes API comme pour le flux JWT standard.
+
+---
+
+## 🐳 Lancement avec Docker
+
+Pour lancer l'application et ses services (base de données, pgAdmin) en utilisant Docker, suivez ces étapes.
+
+### Prérequis
+
+- Docker et Docker Compose installés sur votre machine.
+
+### 1. Cloner le dépôt
+
+```bash
+git clone https://github.com/nmissi-nadia/SmartLogi.git
+cd SmartLogi/smrt 
+```
+
+### 2. Configurer les variables d'environnement (Optionnel)
+
+Si vous souhaitez utiliser l'authentification OAuth2, vous devez configurer les clés d'API dans le fichier `smrt/docker-compose.yml`. Remplacez les valeurs vides par vos propres clés.
+
+```yaml
+# smrt/docker-compose.yml
+
+services:
+  app:
+    # ...
+    environment:
+      # ...
+      # Collez vos identifiants de client OAuth2 ici
+      - OAUTH2_GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+      - OAUTH2_GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET
+      # ... autres fournisseurs
+```
+
+### 3. Lancer l'application
+
+À la racine du dossier `smrt` (où se trouve le `docker-compose.yml`), exécutez la commande suivante :
+
+```bash
+docker-compose up --build
+```
+
+- `--build` force la reconstruction de l'image de l'application si des changements ont été faits dans le code source.
+
+### 4. Accès aux services
+
+Une fois les conteneurs démarrés, les services sont accessibles aux adresses suivantes :
+
+- **Application SmartLogi (API)** : `http://localhost:8084`
+- **Documentation Swagger UI** : `http://localhost:8084/swagger-ui/index.html`
+- **pgAdmin (gestion base de données)** : `http://localhost:5050`
+    - **Email** : `admin@smartlogi.com`
+    - **Mot de passe** : `admin123`
+- **Base de données PostgreSQL** : Accessible sur le port `5432` depuis votre machine locale.
+
+### 5. Arrêter l'application
+
+Pour arrêter et supprimer les conteneurs, utilisez la commande suivante :
+
+```bash
+docker-compose down
+```
 
 ---
 
@@ -104,7 +194,7 @@ Tous ces rôles héritent d’un modèle commun : **`User`**.
 classDiagram
 %% ========== UTILISATEURS ==========
     class User {
-        #Long id
+        #String id
         #String nom
         #String prenom
         #String email
@@ -148,7 +238,7 @@ classDiagram
 %% ========== COEUR MÉTIER ==========
 
     class Colis {
-        -Long id
+        -String id
         -String description
         -Double poids
         -Statut statut
@@ -159,20 +249,20 @@ classDiagram
     }
 
     class Zone {
-        -Long id
+        -String id
         -String nom
         -String codePostal
     }
 
     class HistoriqueLivraison {
-        -Long id
+        -String id
         -Date dateChangement
         -String statut
         -String commentaire
     }
 
     class Produit {
-        -Long id
+        -String id
         -String nom
         -String categorie
         -Double poids
@@ -180,8 +270,8 @@ classDiagram
     }
 
     class ColisProduit {
-        -Long idColis
-        -Long idProduit
+        -String idColis
+        -String idProduit
         -int quantite
         -Double prix
         -Date dateAjout
