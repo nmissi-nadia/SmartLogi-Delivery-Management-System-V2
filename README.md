@@ -199,7 +199,6 @@ classDiagram
         #String prenom
         #String email
         #String password
-        #String role
     }
 
     class ClientExpediteur {
@@ -234,6 +233,16 @@ classDiagram
     User <|-- Livreur
     User <|-- GestionnaireLogistique
 
+%% ========== RÔLES ET PERMISSIONS ==========
+    class Role {
+        -Long id
+        -String name
+    }
+
+    class Permission {
+        -Long id
+        -String name
+    }
 
 %% ========== COEUR MÉTIER ==========
 
@@ -278,6 +287,9 @@ classDiagram
     }
 
 %% ========== RELATIONS ENTRE CLASSES ==========
+
+    User "1" -- "1..*" Role : "possède"
+    Role "1" -- "0..*" Permission : "a"
 
     ClientExpediteur "1" --> "0..*" Colis : envoie >
     Destinataire "1" --> "0..*" Colis : recoit >
