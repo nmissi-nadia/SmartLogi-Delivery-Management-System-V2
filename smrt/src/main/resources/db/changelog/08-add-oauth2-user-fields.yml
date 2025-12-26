@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 08-add-oauth2-user-fields
+      author: copilot
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  type: varchar(255)
+              - column:
+                  name: last_name
+                  type: varchar(255)
+              - column:
+                  name: enabled
+                  type: boolean
+                  defaultValueBoolean: true
+              - column:
+                  name: provider
+                  type: varchar(50)
+                  defaultValue: LOCAL
+              - column:
+                  name: provider_id
+                  type: varchar(255)
+      rollback:
+        - dropColumn:
+            columnName: first_name
+            tableName: users
+        - dropColumn:
+            columnName: last_name
+            tableName: users
+        - dropColumn:
+            columnName: enabled
+            tableName: users
+        - dropColumn:
+            columnName: provider
+            tableName: users
+        - dropColumn:
+            columnName: provider_id
+            tableName: users

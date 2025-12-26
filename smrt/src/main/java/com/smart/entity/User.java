@@ -1,5 +1,6 @@
 package com.smart.entity;
 
+import com.smart.entity.Enum.Provider;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,9 +25,22 @@ public class User implements UserDetails {
     private String id;
 
     private String username;
+
+    @Column(nullable = true)
     private String password;
+
     private String email;
-    private boolean active = true;
+
+    private String firstName;
+
+    private String lastName;
+
+    private boolean enabled = true;
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider = Provider.LOCAL;
+
+    private String providerId;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -35,6 +49,7 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
 
     @PrePersist
     public void prePersist() {
@@ -52,22 +67,14 @@ public class User implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+    public boolean isAccountNonExpired() { return true; }
 
     @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+    public boolean isAccountNonLocked() { return true; }
 
     @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+    public boolean isCredentialsNonExpired() { return true; }
 
     @Override
-    public boolean isEnabled() {
-        return this.active;
-    }
+    public boolean isEnabled() { return this.enabled; }
 }

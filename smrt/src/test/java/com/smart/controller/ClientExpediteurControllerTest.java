@@ -29,8 +29,12 @@ import com.smart.entity.ClientExpediteur;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @ExtendWith(MockitoExtension.class)
+@org.mockito.junit.jupiter.MockitoSettings(strictness = org.mockito.quality.Strictness.LENIENT)
 class ClientExpediteurControllerTest {
 
     @Mock
@@ -65,6 +69,18 @@ class ClientExpediteurControllerTest {
         
         colisRequestDTO = new ColisRequestDTO();
         // Initialiser les champs nécessaires
+
+        // Setup a mocked SecurityContext with an authenticated principal name "client1"
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn("client1");
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+    }
+
+    @org.junit.jupiter.api.AfterEach
+    void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test

@@ -1,8 +1,10 @@
 package com.smart.security;
 
 import com.smart.service.CustomUserDetailsService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -12,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -29,13 +32,21 @@ public class SecurityConfig {
     private final JwtTokenProvider tokenProvider;
     private final CustomUserDetailsService userDetailsService;
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
+    private final com.smart.security.oauth2.CustomOAuth2UserService customOAuth2UserService;
+    private final com.smart.security.oauth2.OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private ClientRegistrationRepository clientRegistrationRepository;
 
     public SecurityConfig(JwtTokenProvider tokenProvider,
                           CustomUserDetailsService userDetailsService,
-                          JwtAuthenticationEntryPoint unauthorizedHandler) {
+                          JwtAuthenticationEntryPoint unauthorizedHandler,
+                          com.smart.security.oauth2.CustomOAuth2UserService customOAuth2UserService,
+                          com.smart.security.oauth2.OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) {
         this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
         this.unauthorizedHandler = unauthorizedHandler;
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
     }
 
     @Bean
@@ -51,14 +62,23 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/auth/**",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui.html"
-                        ).permitAll()
+                        .requestMatchers("/auth/**","/oauth2/**","/login/oauth2/**", "/error").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 );
+
+                // Configure OAuth2 login only if a ClientRegistrationRepository bean is available
+                if (clientRegistrationRepository != null) {
+                    http.oauth2Login(oauth2 -> oauth2
+                            .successHandler(oAuth2AuthenticationSuccessHandler)
+                            .failureHandler((request, response, exception) -> {
+                                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                response.getWriter().write("{\"error\": \"" + exception.getMessage() + "\"}");
+                            })
+                    )
+                    ;
+                }
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

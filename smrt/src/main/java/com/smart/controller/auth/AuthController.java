@@ -3,6 +3,8 @@ package com.smart.controller.auth;
 import com.smart.dto.LoginRequest;
 import com.smart.dto.LoginResponse;
 import com.smart.security.JwtTokenProvider;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication", description = "API pour l'authentification")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -26,6 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Authentifier un utilisateur", description = "Permet à un utilisateur de s'authentifier et de recevoir un token JWT.")
     public ResponseEntity<LoginResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

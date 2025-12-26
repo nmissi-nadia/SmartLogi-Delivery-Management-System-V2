@@ -12,6 +12,17 @@ services:
       - SPRING_DATASOURCE_USERNAME=smartlogi
       - SPRING_DATASOURCE_PASSWORD=smartlogi123
       - SPRING_JPA_HIBERNATE_DDL-AUTO=update
+      # OAuth2 provider credentials (set in your environment or secrets manager)
+      - OAUTH2_GOOGLE_CLIENT_ID=
+      - OAUTH2_GOOGLE_CLIENT_SECRET=
+      - OAUTH2_FACEBOOK_CLIENT_ID=
+      - OAUTH2_FACEBOOK_CLIENT_SECRET=
+      - OAUTH2_APPLE_CLIENT_ID=
+      - OAUTH2_APPLE_CLIENT_SECRET=
+      - OAUTH2_OKTA_CLIENT_ID=
+      - OAUTH2_OKTA_CLIENT_SECRET=
+      - OAUTH2_OKTA_ISSUER_URI=
+      - APP_FRONTEND_BASE_URL=http://localhost:4200
     depends_on:
       - db
     networks:

@@ -9,6 +9,7 @@ import com.smart.entity.Zone;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+// Force recompile
 @Mapper(componentModel = "spring", uses = {ZoneMapper.class}, imports = {PrioriteEnum.class, StatutColis.class})
 public interface ColisMapper extends EntityMapper<ColisDTO, Colis> {
 
