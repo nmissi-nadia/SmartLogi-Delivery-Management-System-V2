@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -57,7 +58,7 @@ public class PermissionController {
             @ApiResponse(responseCode = "403", description = "Accès refusé"),
             @ApiResponse(responseCode = "404", description = "Permission non trouvée")
     })
-    public ResponseEntity<Void> deletePermission(@PathVariable String id) {
+    public ResponseEntity<Void> deletePermission(@Parameter(description = "ID of the permission to delete") @PathVariable String id) {
         permissionService.deletePermission(id);
         return ResponseEntity.noContent().build();
     }
