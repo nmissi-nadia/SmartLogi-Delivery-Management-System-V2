@@ -3,15 +3,38 @@ package com.smart.mapper;
 import com.smart.dto.LivreurDTO;
 import com.smart.entity.Livreur;
 import com.smart.entity.Zone;
+import com.smart.entity.User;
+import com.smart.repository.UserRepository;
+import com.smart.service.ZoneService;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {LivreurMapperImpl.class})
 public class LivreurMapperTest {
 
-    private final LivreurMapper mapper = Mappers.getMapper(LivreurMapper.class);
+    @Autowired
+    private LivreurMapper mapper;
+
+    @MockBean
+    private ZoneService zoneService;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @Test
     public void testToDTO() {
@@ -46,6 +69,14 @@ public class LivreurMapperTest {
         dto.setTelephone("123456789");
         dto.setVehicule("Test Vehicule");
         dto.setZoneId("zone1");
+        dto.setUserId("user1");
+
+        Zone zone = new Zone();
+        zone.setId("zone1");
+        User user = new User();
+        user.setId("user1");
+        when(zoneService.findEntityById("zone1")).thenReturn(Optional.of(zone));
+        when(userRepository.findById("user1")).thenReturn(Optional.of(user));
 
         Livreur entity = mapper.toEntity(dto);
 
@@ -57,5 +88,7 @@ public class LivreurMapperTest {
         assertEquals(dto.getVehicule(), entity.getVehicule());
         assertNotNull(entity.getZone());
         assertEquals(dto.getZoneId(), entity.getZone().getId());
+        assertNotNull(entity.getUser());
+        assertEquals(dto.getUserId(), entity.getUser().getId());
     }
 }

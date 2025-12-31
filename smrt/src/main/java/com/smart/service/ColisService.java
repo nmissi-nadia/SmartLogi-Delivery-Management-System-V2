@@ -431,7 +431,7 @@ public class ColisService {
     public List<HistoriqueLivraisonDTO> getHistoriqueForColis(String colisId) {
         return historiqueLivraisonRepository.findByColisIdOrderByDateChangementDesc(colisId)
                 .stream()
-                .map(HistoriqueLivraisonDTO::fromEntity)
+                .map(historiqueLivraisonMapper::toDto)
                 .collect(Collectors.toList());
     }
 
