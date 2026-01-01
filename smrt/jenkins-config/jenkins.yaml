@@ -2,14 +2,19 @@ jenkins:
   systemMessage: "Pipeline SmartLogi-V2 prêt"
 
 jobs:
-
-script: >
-  pipelineJob('SmartLogi-V2-Pipeline') {
-    definition {
-      cpsScm {
-        scm {
-          git {
-            remote {
-              url('https://github.com/nmissi-nadia/SmartLogi-Delivery-Management-System-V2.git')}
-            branches('*/sectest2')}}
-        scriptPath('Jenkinsfile')}}}
+  - script: >
+      pipelineJob('SmartLogi-V2-Pipeline') {
+        definition {
+          cpsScm {
+            scm {
+              git {
+                remote {
+                  url('https://github.com/nmissi-nadia/SmartLogi-Delivery-Management-System-V2.git')
+                }
+                branches('*/sectest2')
+              }
+            }
+            scriptPath('Jenkinsfile')
+          }
+        }
+      }
