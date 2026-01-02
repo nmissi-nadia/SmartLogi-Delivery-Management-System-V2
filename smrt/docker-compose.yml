@@ -7,7 +7,6 @@ services:
     ports:
       - "8084:8084"
     environment:
-      SPRING_PROFILES_ACTIVE: prod
 
       # Database
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/smrt
