@@ -1,10 +1,15 @@
 pipeline {
     agent any
     environment {
-        OAUTH2_OKTA_CLIENT_ID=YcU8uwK1DjZborznma0HgSBNXEvr1ekH
-        OAUTH2_OKTA_CLIENT_SECRET=Uz04sD7P50WUrFH5vlhwO4N0qDUjoy4_DDbau2e7SzGlPW0Z2eNdffyEh0OmI3QF
-        OAUTH2_OKTA_ISSUER_URI=https://dev-mql2wuicvmlclmlu.us.auth0.com/default
-    }
+            SPRING_DATASOURCE_URL = 'jdbc:postgresql://db:5432/smrt'
+            SPRING_DATASOURCE_USERNAME = 'smartlogi'
+            SPRING_DATASOURCE_PASSWORD = 'smartlogi123'
+            SPRING_JPA_HIBERNATE_DDL_AUTO = 'update'
+            APP_FRONTEND_BASE_URL = 'http://localhost:4200'
+            OAUTH2_OKTA_CLIENT_ID = 'YcU8uwK1DjZborznma0HgSBNXEvr1ekH'
+            OAUTH2_OKTA_CLIENT_SECRET = 'Uz04sD7P50WUrFH5vlhwO4N0qDUjoy4_DDbau2e7SzGlPW0Z2eNdffyEh0OmI3QF'
+            OAUTH2_OKTA_ISSUER_URI = 'https://dev-mql2wuicvmlclmlu.us.auth0.com/default'
+        }
     stages {
         stage('Build') {
             steps {
