@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+    environment {
+        OAUTH2_OKTA_CLIENT_ID = credentials('OAUTH2_OKTA_CLIENT_ID')
+        OAUTH2_OKTA_CLIENT_SECRET = credentials('OAUTH2_OKTA_CLIENT_SECRET')
+        OAUTH2_OKTA_ISSUER_URI = credentials('OAUTH2_OKTA_ISSUER_URI')
+        APP_FRONTEND_BASE_URL = 'http://localhost:4200'
+        APP_JWT_SECRET = credentials('APP_JWT_SECRET')
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh """
+                    docker build \
+                        --build-arg OAUTH2_OKTA_CLIENT_ID=$OAUTH2_OKTA_CLIENT_ID \
+                        --build-arg OAUTH2_OKTA_CLIENT_SECRET=$OAUTH2_OKTA_CLIENT_SECRET \
+                        --build-arg OAUTH2_OKTA_ISSUER_URI=$OAUTH2_OKTA_ISSUER_URI \
+                        --build-arg APP_FRONTEND_BASE_URL=$APP_FRONTEND_BASE_URL \
+                        --build-arg APP_JWT_SECRET=$APP_JWT_SECRET \
+                        -t smartlogi-app:latest .
+                """
+            }
+        }
+        stage('Run Docker Container') {
+            steps {
+                sh 'docker rm -f smartlogi-app || true'
+                sh """
+                    docker run -d --name smartlogi-app -p 8084:8084 \
+                        -e OAUTH2_OKTA_CLIENT_ID=$OAUTH2_OKTA_CLIENT_ID \
+                        -e OAUTH2_OKTA_CLIENT_SECRET=$OAUTH2_OKTA_CLIENT_SECRET \
+                        -e OAUTH2_OKTA_ISSUER_URI=$OAUTH2_OKTA_ISSUER_URI \
+                        -e APP_FRONTEND_BASE_URL=$APP_FRONTEND_BASE_URL \
+                        -e APP_JWT_SECRET=$APP_JWT_SECRET \
+                        smartlogi-app:latest
+                """
+            }
+        }
+    }
+}

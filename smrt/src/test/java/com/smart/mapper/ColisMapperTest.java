@@ -9,14 +9,21 @@ import com.smart.entity.Zone;
 import com.smart.entity.Enum.PrioriteEnum;
 import com.smart.entity.Enum.StatutColis;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {ColisMapperImpl.class, ZoneMapperImpl.class})
 public class ColisMapperTest {
 
-    private final ColisMapper mapper = Mappers.getMapper(ColisMapper.class);
+    @Autowired
+    private ColisMapper mapper;
 
     @Test
     public void testToDTO() {
@@ -85,6 +92,7 @@ public class ColisMapperTest {
         assertEquals(dto.getLivreurId(), entity.getLivreur().getId());
         assertEquals(dto.getClientExpediteurId(), entity.getClientExpediteur().getId());
         assertEquals(dto.getDestinataireId(), entity.getDestinataire().getId());
+        assertNotNull(entity.getZone());
         assertEquals(dto.getZoneId(), entity.getZone().getId());
     }
 }

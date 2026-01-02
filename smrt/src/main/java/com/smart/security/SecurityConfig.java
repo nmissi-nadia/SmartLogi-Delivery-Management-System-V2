@@ -74,7 +74,7 @@ public class SecurityConfig {
                             .failureHandler((request, response, exception) -> {
                                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                                response.getWriter().write("{\"error\": \"" + exception.getMessage() + "\"}");
+                                response.getWriter().write("{\"error\": \"OAuth2 authentication failed\"}");
                             })
                     )
                     ;
@@ -100,6 +100,7 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        //TODO: For production, these origins should be externalized to application.properties or a configuration service
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:3000", "http://localhost:8080"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));

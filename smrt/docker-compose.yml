@@ -7,47 +7,41 @@ services:
     ports:
       - "8084:8084"
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/smrt
-      - SPRING_DATASOURCE_USERNAME=smartlogi
-      - SPRING_DATASOURCE_PASSWORD=smartlogi123
-      - SPRING_JPA_HIBERNATE_DDL-AUTO=update
-      # OAuth2 provider credentials (set in your environment or secrets manager)
-      - OAUTH2_GOOGLE_CLIENT_ID=
-      - OAUTH2_GOOGLE_CLIENT_SECRET=
-      - OAUTH2_FACEBOOK_CLIENT_ID=
-      - OAUTH2_FACEBOOK_CLIENT_SECRET=
-      - OAUTH2_APPLE_CLIENT_ID=
-      - OAUTH2_APPLE_CLIENT_SECRET=
-      - OAUTH2_OKTA_CLIENT_ID=
-      - OAUTH2_OKTA_CLIENT_SECRET=
-      - OAUTH2_OKTA_ISSUER_URI=
-      - APP_FRONTEND_BASE_URL=http://localhost:4200
+
+      # Database
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/smrt
+      SPRING_DATASOURCE_USERNAME: smartlogi
+      SPRING_DATASOURCE_PASSWORD: smartlogi123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+      # Frontend
+      APP_FRONTEND_BASE_URL: http://localhost:4200
+
+      # OAuth2
+      # ⚠️ Définies ici pour que Spring Boot puisse démarrer
+      OAUTH2_OKTA_CLIENT_ID: YcU8uwK1DjZborznma0HgSBNXEvr1ekH
+      OAUTH2_OKTA_CLIENT_SECRET: Uz04sD7P50WUrFH5vlhwO4N0qDUjoy4_DDbau2e7SzGlPW0Z2eNdffyEh0OmI3QF
+      OAUTH2_OKTA_ISSUER_URI: https://dev-mql2wuicvmlclmlu.us.auth0.com/default
+
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - smartlogi-network
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 1G
-        reservations:
-          memory: 512M
 
   db:
     image: postgres:15-alpine
     container_name: smartlogi-db
     environment:
-      - POSTGRES_DB=smrt
-      - POSTGRES_USER=smartlogi
-      - POSTGRES_PASSWORD=smartlogi123
+      POSTGRES_DB: smrt
+      POSTGRES_USER: smartlogi
+      POSTGRES_PASSWORD: smartlogi123
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - smartlogi-network
     ports:
       - "5432:5432"
+    networks:
+      - smartlogi-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U smartlogi -d smrt"]
       interval: 5s
@@ -58,8 +52,8 @@ services:
     image: dpage/pgadmin4:latest
     container_name: pgadmin
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@smartlogi.com
-      - PGADMIN_DEFAULT_PASSWORD=admin123
+      PGADMIN_DEFAULT_EMAIL: admin@smartlogi.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
     ports:
       - "5050:80"
     depends_on:

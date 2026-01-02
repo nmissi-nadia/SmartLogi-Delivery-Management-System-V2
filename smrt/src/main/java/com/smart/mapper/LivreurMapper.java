@@ -4,6 +4,7 @@ import com.smart.dto.LivreurDTO;
 import com.smart.entity.Livreur;
 import com.smart.entity.User;
 import com.smart.entity.Zone;
+import com.smart.repository.UserRepository;
 import com.smart.service.ZoneService;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public abstract class LivreurMapper implements EntityMapper<LivreurDTO, Livreur>
     public abstract LivreurDTO toDto(Livreur entity);
 
     @Mapping(source = "zoneId", target = "zone", qualifiedByName = "mapZoneIdToZone")
-    @Mapping(source = "userId", target = "user", qualifiedByName = "mapUserIdToUser") // Assuming LivreurDTO has userId
+    @Mapping(source = "userId", target = "user", qualifiedByName = "mapUserIdToUser")
     public abstract Livreur toEntity(LivreurDTO dto);
 
     @Named("mapZoneIdToZone")
@@ -29,12 +30,15 @@ public abstract class LivreurMapper implements EntityMapper<LivreurDTO, Livreur>
         }
         return zoneService.findEntityById(zoneId).orElse(null);
     }
-    
-    // Placeholder for userId to User mapping, will be implemented once UserService is checked
+
+    @Autowired
+    protected UserRepository userRepository;
+
     @Named("mapUserIdToUser")
     public User mapUserIdToUser(String userId) {
-        // This will need a UserService to find the User by ID
-        // For now, return null or throw an exception if userId is expected to always be valid
-        return null; 
+        if (userId == null) {
+            return null;
+        }
+        return userRepository.findById(userId).orElse(null);
     }
 }

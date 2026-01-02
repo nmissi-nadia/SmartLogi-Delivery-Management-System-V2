@@ -9,8 +9,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface HistoriqueLivraisonMapper {
-    HistoriqueLivraisonMapper INSTANCE = Mappers.getMapper(HistoriqueLivraisonMapper.class);
-    
+
     @Mapping(source = "colis.id", target = "colisId")
     @Mapping(target = "statutLibelle", expression = "java(entity.getStatut().toString())")
     HistoriqueLivraisonDTO toDto(HistoriqueLivraison entity);
