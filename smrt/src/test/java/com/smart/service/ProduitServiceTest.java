@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,15 +41,15 @@ class ProduitServiceTest {
         produit.setId(PRODUIT_ID);
         produit.setNom("Smartphone");
         produit.setCategorie("éléctronique");
-        produit.setPrix(999.99);
-        produit.setPoids(0.2);
+        produit.setPrix(BigDecimal.valueOf(999.99));
+        produit.setPoids(BigDecimal.valueOf(0.2));
 
         produitDTO = new ProduitDTO();
         produitDTO.setId(PRODUIT_ID);
         produitDTO.setNom("Smartphone");
         produitDTO.setCategorie("éléctronique");
         produitDTO.setPrix(999.99);
-        produitDTO.setPoids(0.2);
+        produitDTO.setPoids(BigDecimal.valueOf(0.2));
     }
 
     @Test

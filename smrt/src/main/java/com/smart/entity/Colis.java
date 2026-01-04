@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,7 +29,7 @@ public class Colis {
     private String description;
 
     @Column(name = "poids")
-    private Double poids;
+    private BigDecimal poids;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "priorite")
@@ -45,20 +46,20 @@ public class Colis {
     private StatutColis statut;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "livreur_id")
+    @JoinColumn(name = "id_livreur")
     private Livreur livreur;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_expediteur_id", nullable = false)
+    @JoinColumn(name = "id_client_expediteur", nullable = false)
     private ClientExpediteur clientExpediteur;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "destinataire_id", nullable = false)
+    @JoinColumn(name = "id_destinataire", nullable = false)
     private Destinataire destinataire;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "zone_id")
+    @JoinColumn(name = "id_zone")
     private Zone zone;
 
 

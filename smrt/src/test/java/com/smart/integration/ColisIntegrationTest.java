@@ -17,6 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -98,7 +100,7 @@ public class ColisIntegrationTest {
         // Créer et sauvegarder un colis de test
         savedColis =new Colis();
         savedColis.setDescription("Colis de test");
-        savedColis.setPoids(1.5);
+        savedColis.setPoids(BigDecimal.valueOf(1.5));
         savedColis.setStatut(StatutColis.CREE);
         savedColis.setPriorite(PrioriteEnum.MOYENNE);
         savedColis.setVilleDestination("Paris");
@@ -123,7 +125,7 @@ public class ColisIntegrationTest {
         // Given
         Colis colisRecherche =  new Colis();
         colisRecherche.setDescription("Colis urgent et fragile");
-        colisRecherche.setPoids(2.0);
+        colisRecherche.setPoids(BigDecimal.valueOf(2.0));
         colisRecherche.setStatut(StatutColis.CREE);
         colisRecherche.setPriorite(PrioriteEnum.MOYENNE);
         colisRecherche.setVilleDestination("Paris");

@@ -27,7 +27,7 @@ public class Livreur {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "zone_id")
+    @JoinColumn(name = "id_zone")
     private Zone zone;
 
     @OneToMany(mappedBy = "livreur")

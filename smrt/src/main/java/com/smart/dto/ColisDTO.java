@@ -1,6 +1,8 @@
 package com.smart.dto;
 
 import lombok.Data;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.smart.entity.Enum.PrioriteEnum;
@@ -9,6 +11,7 @@ import com.smart.entity.Enum.StatutColis;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+
 
 @Data
 public class ColisDTO {
@@ -19,7 +22,7 @@ public class ColisDTO {
     
     @NotNull(message = "Le poids est requis")
     @Positive(message = "Le poids doit être positif")
-    private Double poids;
+    private BigDecimal poids;
     
     private PrioriteEnum priorite;
     

@@ -117,7 +117,7 @@ public class ColisService {
                     colisProduit.setColis(colis);
                     colisProduit.setProduit(produit);
                     colisProduit.setQuantite(produitDTO.getQuantite());
-                    colisProduit.setPrix(produit.getPrix() * produitDTO.getQuantite());
+                    colisProduit.setPrix(produit.getPrix().multiply(java.math.BigDecimal.valueOf(produitDTO.getQuantite())));
                     colisProduit.setDateAjout(LocalDateTime.now());
                     colisProduitRepository.save(colisProduit);
                 }

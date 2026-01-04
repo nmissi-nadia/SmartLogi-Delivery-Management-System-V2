@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +39,7 @@ class ProduitControllerTest {
         produitDTO.setNom("Téléphone");
         produitDTO.setCategorie("Electronics");
         produitDTO.setPrix(999.99);
-        produitDTO.setPoids(0.2);
+        produitDTO.setPoids(BigDecimal.valueOf(0.2));
     }
 
     @Test

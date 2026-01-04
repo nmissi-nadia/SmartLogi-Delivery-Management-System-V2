@@ -15,12 +15,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -99,7 +101,7 @@ class ColisServiceTest {
         produit = new Produit();
         produit.setId("prod1");
         produit.setNom("Produit Test");
-        produit.setPrix(100.0);
+        produit.setPrix(BigDecimal.valueOf(100.0));
         ProduitDTO produitDTO = new ProduitDTO();
         produitDTO.setNom("Produit Test");
         produitDTO.setCategorie("TEST");
@@ -109,7 +111,7 @@ class ColisServiceTest {
         colis = new Colis();
         colis.setId("colis1");
         colis.setDescription("Colis de test");
-        colis.setPoids(1.5);
+        colis.setPoids(BigDecimal.valueOf(1.5));
         colis.setPriorite(PrioriteEnum.HAUTE);
         colis.setVilleDestination("Paris");
         colis.setStatut(StatutColis.CREE);
@@ -124,7 +126,7 @@ class ColisServiceTest {
 
         colisRequestDTO = new ColisRequestDTO();
         colisRequestDTO.setDescription("Colis de test");
-        colisRequestDTO.setPoids(1.5);
+        colisRequestDTO.setPoids(BigDecimal.valueOf(1.5));
         colisRequestDTO.setPriorite("HAUTE");
         colisRequestDTO.setVilleDestination("Paris");
         
@@ -308,11 +310,11 @@ class ColisServiceTest {
         // Arrange
         String livreurId = "liv1";
         String zoneId = "zone1";
-        Double poidsTotal = 50.5;
+        BigDecimal poidsTotal = BigDecimal.valueOf(50.5);
         Long nombreColis = 5L;
 
-        when(colisRepository.getTotalPoidsByLivreurAndZone(livreurId, zoneId)).thenReturn(poidsTotal);
-        when(colisRepository.getNombreColisByLivreurAndZone(livreurId, zoneId)).thenReturn(nombreColis);
+            when(colisRepository.getTotalPoidsByLivreurAndZone(livreurId, zoneId)).thenReturn(50.5);
+            when(colisRepository.getNombreColisByLivreurAndZone(livreurId, zoneId)).thenReturn(nombreColis);
 
         // Act
         Map<String, Object> result = colisService.getStatistiques(livreurId, zoneId);
