@@ -18,10 +18,10 @@ services:
       APP_FRONTEND_BASE_URL: http://localhost:4200
 
       # OAuth2
-      # ⚠️ Définies ici pour que Spring Boot puisse démarrer
-      OAUTH2_OKTA_CLIENT_ID: YcU8uwK1DjZborznma0HgSBNXEvr1ekH
-      OAUTH2_OKTA_CLIENT_SECRET: Uz04sD7P50WUrFH5vlhwO4N0qDUjoy4_DDbau2e7SzGlPW0Z2eNdffyEh0OmI3QF
-      OAUTH2_OKTA_ISSUER_URI: https://dev-mql2wuicvmlclmlu.us.auth0.com/default
+      # Les valeurs sont maintenant chargées depuis le fichier .env
+      OAUTH2_OKTA_CLIENT_ID: ${OAUTH2_OKTA_CLIENT_ID}
+      OAUTH2_OKTA_CLIENT_SECRET: ${OAUTH2_OKTA_CLIENT_SECRET}
+      OAUTH2_OKTA_ISSUER_URI: ${OAUTH2_OKTA_ISSUER_URI}
 
     depends_on:
       db:
@@ -61,9 +61,26 @@ services:
     networks:
       - smartlogi-network
 
+  sonarqube:
+    image: sonarqube:community
+    container_name: smartlogi-sonarqube
+    ports:
+      - "9000:9000"
+    networks:
+      - smartlogi-network
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+
 networks:
   smartlogi-network:
     driver: bridge
 
 volumes:
   postgres_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:

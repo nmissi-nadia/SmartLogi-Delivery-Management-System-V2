@@ -171,6 +171,63 @@ docker-compose down
 
 ---
 
+## 🚀 CI/CD avec Jenkins
+
+Pour industrialiser le cycle de vie de l'application, une chaîne d'intégration et de déploiement continus (CI/CD) a été mise en place avec Jenkins.
+
+Cette chaîne automatise la compilation, les tests, l'analyse de la qualité du code et la création d'images Docker, garantissant ainsi des livraisons rapides et fiables.
+
+### 1. Prérequis
+
+- Un serveur Jenkins fonctionnel.
+- Plugins Jenkins installés : `Pipeline`, `Docker Pipeline`, `JaCoCo`, `JUnit`, `Warnings Next Generation`, `SonarQube Scanner`.
+- Un serveur SonarQube accessible par Jenkins.
+- Docker installé sur l'agent Jenkins.
+
+### 2. Configuration des Secrets
+
+Le pipeline nécessite des informations sensibles (tokens, identifiants). Celles-ci sont centralisées dans le fichier `smrt/jenkins.properties`. **Ce fichier ne doit jamais être versionné**.
+
+Créez le fichier `smrt/jenkins.properties` et remplissez-le avec vos propres valeurs :
+
+```properties
+# SonarQube
+SONAR_TOKEN=your_sonarqube_token
+
+# Docker
+DOCKER_HUB_USERNAME=your_dockerhub_username
+DOCKER_HUB_PASSWORD=your_dockerhub_password
+
+# Application Secrets (for Docker build)
+OAUTH2_GOOGLE_CLIENT_ID=your_google_client_id
+OAUTH2_GOOGLE_CLIENT_SECRET=your_google_client_secret
+OAUTH2_OKTA_CLIENT_ID=your_okta_client_id
+OAUTH2_OKTA_CLIENT_SECRET=your_okta_client_secret
+OAUTH2_OKTA_ISSUER_URI=your_okta_issuer_uri
+APP_JWT_SECRET=your_app_jwt_secret
+APP_FRONTEND_BASE_URL=http://localhost:4200
+```
+Dans Jenkins, assurez-vous de configurer les identifiants DockerHub avec l'ID `dockerhub-credentials`.
+
+### 3. Étapes du Pipeline Jenkins
+
+Le pipeline est défini dans le fichier `smrt/Jenkinsfile` et comprend les étapes suivantes :
+
+| Étape | Description |
+|---|---|
+| **Checkout** | Récupère le code source depuis le dépôt Git. |
+| **Load Secrets** | Charge les secrets depuis le fichier `jenkins.properties`. |
+| **Build** | Compile le code source de l'application avec Maven (`mvnw compile`). |
+| **Test & Coverage** | Exécute les tests unitaires et d'intégration (`mvnw test`) et publie les rapports de tests (JUnit) et de couverture de code (JaCoCo). |
+| **SonarQube Analysis** | Lance une analyse statique du code avec SonarQube pour détecter les bugs, vulnérabilités et "code smells". |
+| **Quality Gate** | Attend le résultat de l'analyse SonarQube et bloque le pipeline si la "Quality Gate" n'est pas respectée. |
+| **Build Docker Image** | Construit l'image Docker de l'application en injectant les secrets nécessaires. |
+| **Push Docker Image** | Pousse l'image Docker vers un registre (ex: Docker Hub). |
+
+À la fin du pipeline, l'espace de travail est nettoyé.
+
+---
+
 ## 📜 Endpoints REST (exemples)
 
 | Méthode | Endpoint | Description |
