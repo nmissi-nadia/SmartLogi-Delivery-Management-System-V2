@@ -39,7 +39,7 @@ class ProduitControllerTest {
         produitDTO.setNom("Téléphone");
         produitDTO.setCategorie("Electronics");
         produitDTO.setPrix(999.99);
-        produitDTO.setPoids(BigDecimal.valueOf(0.2));
+        produitDTO.setPoids(0.2);
     }
 
     @Test
