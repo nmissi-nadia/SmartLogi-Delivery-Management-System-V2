@@ -13,7 +13,7 @@ public interface ColisProduitMapper extends EntityMapper<ColisProduitDTO, ColisP
     @Mapping(target = "colis", source = "colis")
     @Mapping(target = "produit", source = "produit")
     @Mapping(target = "quantite", source = "dto.quantite")
-    @Mapping(target = "prix", expression = "java(produit.getPrix().multiply(java.math.BigDecimal.valueOf(dto.getQuantite())))")
+    @Mapping(target = "prix", expression = "java(produit.getPrix() * dto.getQuantite())")
     @Mapping(target = "dateAjout", expression = "java(java.time.LocalDateTime.now())")
     ColisProduit toEntity(ColisProduitDTO dto, Colis colis, Produit produit);
 }

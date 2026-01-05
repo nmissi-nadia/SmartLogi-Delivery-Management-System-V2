@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -28,6 +27,6 @@ public class ColisProduit {
     private Produit produit;
 
     private Integer quantite;
-    private BigDecimal prix; // Prix au moment de l'ajout
+    private Double prix; // Prix au moment de l'ajout
     private LocalDateTime dateAjout;
 }

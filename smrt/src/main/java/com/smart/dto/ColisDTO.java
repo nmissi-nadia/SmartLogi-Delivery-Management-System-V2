@@ -2,7 +2,6 @@ package com.smart.dto;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.smart.entity.Enum.PrioriteEnum;
@@ -22,7 +21,7 @@ public class ColisDTO {
     
     @NotNull(message = "Le poids est requis")
     @Positive(message = "Le poids doit être positif")
-    private BigDecimal poids;
+    private Double poids;
     
     private PrioriteEnum priorite;
     

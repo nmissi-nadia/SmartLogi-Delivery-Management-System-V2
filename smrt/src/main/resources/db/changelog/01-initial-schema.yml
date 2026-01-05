@@ -170,7 +170,7 @@ databaseChangeLog:
                   type: VARCHAR(100)
               - column:
                   name: poids
-                  type: DECIMAL(10, 2)
+                  type: DOUBLE
               - column:
                   name: prix
                   type: DECIMAL(10, 2)
@@ -190,7 +190,7 @@ databaseChangeLog:
                   type: TEXT
               - column:
                   name: poids
-                  type: DECIMAL(10, 2)
+                  type: DOUBLE
               - column:
                   name: statut
                   type: colis_status_enum
@@ -295,7 +295,7 @@ databaseChangeLog:
                   defaultValue: "1"
               - column:
                   name: prix
-                  type: DECIMAL(10, 2)
+                  type: DOUBLE
               - column:
                   name: date_ajout
                   type: TIMESTAMP

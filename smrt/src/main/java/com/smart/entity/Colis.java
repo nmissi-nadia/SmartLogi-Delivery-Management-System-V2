@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +28,7 @@ public class Colis {
     private String description;
 
     @Column(name = "poids")
-    private BigDecimal poids;
+    private Double poids;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "priorite")

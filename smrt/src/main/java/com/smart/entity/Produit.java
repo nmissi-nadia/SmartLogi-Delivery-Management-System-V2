@@ -6,7 +6,6 @@ import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -20,8 +19,8 @@ public class Produit {
 
     private String nom;
     private String categorie;
-    private BigDecimal poids;
-    private BigDecimal prix;
+    private Double poids;
+    private Double prix;
 
     @PrePersist
     public void prePersist() {
