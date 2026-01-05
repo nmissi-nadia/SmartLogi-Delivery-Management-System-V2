@@ -6,8 +6,11 @@ services:
     container_name: smartlogi-app
     ports:
       - "8084:8084"
-    environment:
 
+    env_file:
+      - .env
+
+    environment:
       # Database
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/smrt
       SPRING_DATASOURCE_USERNAME: smartlogi
@@ -17,15 +20,18 @@ services:
       # Frontend
       APP_FRONTEND_BASE_URL: http://localhost:4200
 
-      # OAuth2
-      # Les valeurs sont maintenant chargées depuis le fichier .env
-      OAUTH2_OKTA_CLIENT_ID: ${OAUTH2_OKTA_CLIENT_ID}
-      OAUTH2_OKTA_CLIENT_SECRET: ${OAUTH2_OKTA_CLIENT_SECRET}
-      OAUTH2_OKTA_ISSUER_URI: ${OAUTH2_OKTA_ISSUER_URI}
+      # OAuth2 (Spring lit directement depuis .env)
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OKTA_CLIENT_ID: ${OAUTH2_OKTA_CLIENT_ID}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OKTA_CLIENT_SECRET: ${OAUTH2_OKTA_CLIENT_SECRET}
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OKTA_ISSUER_URI: ${OAUTH2_OKTA_ISSUER_URI}
+
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID: ${OAUTH2_GOOGLE_CLIENT_ID}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET: ${OAUTH2_GOOGLE_CLIENT_SECRET}
 
     depends_on:
       db:
         condition: service_healthy
+
     networks:
       - smartlogi-network
 
@@ -49,7 +55,7 @@ services:
       retries: 5
 
   pgadmin:
-    image: dpage/pgadmin4:latest
+    image: dpage/pgadmin4
     container_name: pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@smartlogi.com
@@ -66,14 +72,14 @@ services:
     container_name: smartlogi-sonarqube
     ports:
       - "9000:9000"
-    networks:
-      - smartlogi-network
     environment:
-      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
     volumes:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_extensions:/opt/sonarqube/extensions
       - sonarqube_logs:/opt/sonarqube/logs
+    networks:
+      - smartlogi-network
 
 networks:
   smartlogi-network:
