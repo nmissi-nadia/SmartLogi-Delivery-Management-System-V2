@@ -84,7 +84,7 @@ public class ColisService {
             // 4. Créer le colis
             Colis colis = new Colis();
             colis.setDescription(request.getDescription());
-            colis.setPoids(request.getPoids());
+            colis.setPoids(java.math.BigDecimal.valueOf(request.getPoids()));
             colis.setPriorite(PrioriteEnum.valueOf(request.getPriorite()));
             colis.setVilleDestination(request.getVilleDestination());
             colis.setStatut(StatutColis.CREE);
@@ -479,7 +479,7 @@ public class ColisService {
             colis.setDescription(colisDTO.getDescription());
         }
         if (colisDTO.getPoids() != null) {
-            colis.setPoids(colisDTO.getPoids());
+            colis.setPoids(java.math.BigDecimal.valueOf(colisDTO.getPoids()));
         }
         if (colisDTO.getPriorite() != null) {
             colis.setPriorite(colisDTO.getPriorite()); // Pas besoin de valueOf car c'est déjà un PrioriteEnum
