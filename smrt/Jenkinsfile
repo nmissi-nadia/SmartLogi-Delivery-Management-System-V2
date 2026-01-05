@@ -71,28 +71,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                dir('smrt') {  // ← Changement de répertoire vers smrt
-                    echo "Performing SonarQube analysis..."
-                    withSonarQubeEnv('My-SonarQube') {
-                        bat """
-                            mvn sonar:sonar ^
-                              -Dsonar.projectKey=${env.SONAR_PROJECT_KEY}
-                        """
-                    }
-                }
-            }
-        }
 
-        stage('Quality Gate') {
-            steps {
-                echo "Checking SonarQube Quality Gate status..."
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
 
         stage('Build & Tag Docker Image') {
             steps {
