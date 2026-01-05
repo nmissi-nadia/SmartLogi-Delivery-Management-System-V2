@@ -443,8 +443,13 @@ public class ColisService {
         log.debug("Récupération de tous les colis");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        String username = null;
+        Collection<? extends GrantedAuthority> authorities = Collections.emptyList();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            username = authentication.getName();
+            authorities = authentication.getAuthorities();
+        }
 
         String clientId = null;
         String livreurId = null;

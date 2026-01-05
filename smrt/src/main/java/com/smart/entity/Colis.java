@@ -7,9 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +29,6 @@ public class Colis {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "priorite")
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private PrioriteEnum priorite;
 
     @Column(name = "ville_destination")
@@ -41,7 +37,6 @@ public class Colis {
     
     @Enumerated(EnumType.STRING)
     @Column(name = "statut")
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private StatutColis statut;
 
     @ManyToOne(fetch = FetchType.LAZY)
