@@ -114,14 +114,7 @@ pipeline {
             }
         }
         
-        stage('Deploy') {
-            steps {
-                echo "Deploying application using Docker Compose..."
-                // This uses the CI-specific compose file to start the application.
-                // It's assumed that the 'docker-compose-ci.yml' is configured to use the ':latest' tag of your image.
-                sh 'docker-compose -f docker-compose-ci.yml up -d'
-            }
-        }
+
     }
     
     post {
