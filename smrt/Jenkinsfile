@@ -27,12 +27,13 @@ pipeline {
 
         stage('Compile') {
             steps {
-                echo "Compiling the application..."
-                // Execute Maven compile goal. The './' is important for Linux/macOS agents.
-                // On Windows, 'mvnw.cmd' is used automatically.
-                bat 'mvnw.cmd clean compile'
+                dir("${WORKSPACE}") { // Assure que tu es à la racine
+                    echo "Compiling the application..."
+                    bat 'mvnw.cmd clean compile'
+                }
             }
         }
+
 
         stage('Unit & Integration Tests') {
             steps {
