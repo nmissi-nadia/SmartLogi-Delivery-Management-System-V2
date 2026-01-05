@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -94,7 +93,7 @@ public class ColisRepositoryTest {
         colis.setId("colis" + UUID.randomUUID().toString().substring(0, 8));
         colis.setVilleDestination("Paris");
         colis.setStatut(StatutColis.CREE);
-        colis.setPoids(BigDecimal.valueOf(2.5));
+        colis.setPoids(2.5);
         colis.setDescription("Description test");
         colis.setPriorite(PrioriteEnum.MOYENNE);
         colis.setClientExpediteur(client);

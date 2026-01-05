@@ -4,7 +4,6 @@ import com.smart.entity.Enum.PrioriteEnum;
 import com.smart.entity.Enum.StatutColis;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class ColisDTOTest {
         // When
         dto.setId("1");
         dto.setDescription("Colis fragile");
-        dto.setPoids(BigDecimal.valueOf(2.5));
+        dto.setPoids(2.5);
         dto.setStatut(StatutColis.CREE);
         dto.setPriorite(PrioriteEnum.MOYENNE);
         dto.setVilleDestination("Paris");
