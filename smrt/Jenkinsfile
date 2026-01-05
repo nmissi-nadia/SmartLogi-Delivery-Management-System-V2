@@ -27,10 +27,10 @@ pipeline {
 
         stage('Compile') {
             steps {
-                dir("${WORKSPACE}") { // Assure que tu es à la racine
+
                     echo "Compiling the application..."
                     bat 'mvn clean compile'
-                }
+
             }
         }
 
