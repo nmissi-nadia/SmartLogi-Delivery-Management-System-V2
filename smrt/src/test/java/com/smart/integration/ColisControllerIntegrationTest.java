@@ -18,8 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -98,7 +96,7 @@ public class ColisControllerIntegrationTest {
         savedZone = zoneRepository.save(savedZone);
 
         // Créer et sauvegarder un colis de test
-        savedColis = createTestColis("Colis de test", BigDecimal.valueOf(1.5),
+        savedColis = createTestColis("Colis de test", 1.5,
                                    savedClient, savedDestinataire,
                                    savedLivreur, savedZone);
         savedColis = colisRepository.save(savedColis);
@@ -118,7 +116,7 @@ public class ColisControllerIntegrationTest {
     @Test
     public void testGetAllColisWithFilters() throws Exception {
         // Given
-        Colis secondColis = createTestColis("Colis livré", BigDecimal.valueOf(3.0), savedClient, savedDestinataire, savedLivreur, savedZone);
+        Colis secondColis = createTestColis("Colis livré", 3.0, savedClient, savedDestinataire, savedLivreur, savedZone);
         secondColis.setStatut(StatutColis.LIVRE);
         secondColis.setVilleDestination("Lyon");
         secondColis.setPriorite(PrioriteEnum.HAUTE);
@@ -144,7 +142,7 @@ public class ColisControllerIntegrationTest {
     @Test
     public void testSearchColis() throws Exception {
         // Given
-        Colis colisRecherche = createTestColis("Colis urgent", BigDecimal.valueOf(2.0), savedClient, savedDestinataire, savedLivreur, savedZone);
+        Colis colisRecherche = createTestColis("Colis urgent", 2.0, savedClient, savedDestinataire, savedLivreur, savedZone);
         colisRepository.save(colisRecherche);
 
         // When & Then - Test search by keyword
@@ -161,7 +159,7 @@ public class ColisControllerIntegrationTest {
         // Given
         ColisDTO updateDto = new ColisDTO();
         updateDto.setDescription("Description mise à jour");
-        updateDto.setPoids(BigDecimal.valueOf(5.0));
+        updateDto.setPoids(5.0);
         updateDto.setStatut(StatutColis.COLLECTE);
         updateDto.setVilleDestination("Marseille");
         updateDto.setPriorite(PrioriteEnum.HAUTE);
@@ -185,7 +183,7 @@ public class ColisControllerIntegrationTest {
                 .andExpect(jsonPath("$", is(empty())));
     }
 
-    private Colis createTestColis(String description, BigDecimal poids,
+    private Colis createTestColis(String description, Double poids,
                                  ClientExpediteur client, Destinataire destinataire,
                                  Livreur livreur, Zone zone) {
         Colis colis = new Colis();

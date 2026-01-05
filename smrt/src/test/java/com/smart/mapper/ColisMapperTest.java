@@ -18,7 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.math.BigDecimal;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {ColisMapperImpl.class, ZoneMapperImpl.class})
@@ -32,7 +31,7 @@ public class ColisMapperTest {
         Colis entity = new Colis();
         entity.setId("1");
         entity.setDescription("Test Description");
-        entity.setPoids(BigDecimal.valueOf(2.5));
+        entity.setPoids(2.5);
         entity.setPriorite(PrioriteEnum.MOYENNE);
         entity.setVilleDestination("Test Ville");
         entity.setStatut(StatutColis.CREE);
@@ -73,7 +72,7 @@ public class ColisMapperTest {
         ColisDTO dto = new ColisDTO();
         dto.setId("1");
         dto.setDescription("Test Description");
-        dto.setPoids(BigDecimal.valueOf(2.5));
+        dto.setPoids(2.5);
         dto.setPriorite(PrioriteEnum.MOYENNE);
         dto.setVilleDestination("Test Ville");
         dto.setStatut(StatutColis.CREE);
