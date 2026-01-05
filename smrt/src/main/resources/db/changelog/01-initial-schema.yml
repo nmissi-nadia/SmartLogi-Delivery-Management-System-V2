@@ -173,7 +173,7 @@ databaseChangeLog:
                   type: DOUBLE
               - column:
                   name: prix
-                  type: DECIMAL(10, 2)
+                  type: DOUBLE
 
         # Table des colis
         - createTable:
