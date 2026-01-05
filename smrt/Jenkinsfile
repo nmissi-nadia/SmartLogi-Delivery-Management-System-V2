@@ -29,7 +29,7 @@ pipeline {
             steps {
                 dir("${WORKSPACE}") { // Assure que tu es à la racine
                     echo "Compiling the application..."
-                    bat 'mvnw.cmd clean compile'
+                    bat 'mvn clean compile'
                 }
             }
         }
@@ -45,7 +45,7 @@ pipeline {
                     string(credentialsId: 'okta-client-secret', variable: 'OAUTH2_OKTA_CLIENT_SECRET'),
                     string(credentialsId: 'okta-issuer-uri', variable: 'OAUTH2_OKTA_ISSUER_URI')
                 ]) {
-                    bat 'mvnw.cmd verify'
+                    bat 'mvn verify'
                 }
             }
             post {
@@ -67,7 +67,7 @@ pipeline {
                 // The 'withSonarQubeEnv' wrapper injects the server URL and credentials.
                 withSonarQubeEnv('My-SonarQube') { // Make sure this matches your SonarQube Server name in Jenkins
                     bat """
-                        mvnw.cmd sonar:sonar ^
+                        mvn sonar:sonar ^
                           -Dsonar.projectKey=${env.SONAR_PROJECT_KEY}
                     """
                 }
