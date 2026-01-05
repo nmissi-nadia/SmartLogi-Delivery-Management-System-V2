@@ -30,7 +30,7 @@ pipeline {
                 echo "Compiling the application..."
                 // Execute Maven compile goal. The './' is important for Linux/macOS agents.
                 // On Windows, 'mvnw.cmd' is used automatically.
-                sh './mvnw compile'
+                bat './mvnw compile'
             }
         }
 
@@ -39,7 +39,7 @@ pipeline {
                 echo "Running tests and generating coverage report..."
                 // The 'verify' phase runs all tests (unit and integration) and package the application.
                 // JaCoCo is expected to be configured in pom.xml to generate the coverage report.
-                sh './mvnw verify'
+                bat './mvnw verify'
             }
             post {
                 always {
@@ -59,7 +59,7 @@ pipeline {
                 // The SonarQube server ('My-SonarQube') must be configured in 'Manage Jenkins -> Configure System'.
                 // The 'withSonarQubeEnv' wrapper injects the server URL and credentials.
                 withSonarQubeEnv('My-SonarQube') { // Make sure this matches your SonarQube Server name in Jenkins
-                    sh """
+                    bat """
                         ./mvnw sonar:sonar \
                           -Dsonar.projectKey=${env.SONAR_PROJECT_KEY}
                     """
