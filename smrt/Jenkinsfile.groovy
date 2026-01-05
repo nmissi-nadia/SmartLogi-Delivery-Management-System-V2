@@ -39,8 +39,6 @@ pipeline {
                 echo "Running tests and generating coverage report..."
                 // The 'verify' phase runs all tests (unit and integration) and package the application.
                 // JaCoCo is expected to be configured in pom.xml to generate the coverage report.
-                
-                // Injection des credentials Jenkins dans les variables d'environnement
                 withCredentials([
                     string(credentialsId: 'okta-client-id', variable: 'OAUTH2_OKTA_CLIENT_ID'),
                     string(credentialsId: 'okta-client-secret', variable: 'OAUTH2_OKTA_CLIENT_SECRET'),
