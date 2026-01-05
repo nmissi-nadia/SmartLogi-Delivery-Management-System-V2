@@ -3,6 +3,7 @@ package com.smart.controller;
 import com.smart.dto.ColisDTO;
 import com.smart.dto.LivreurDTO;
 import com.smart.entity.Enum.StatutColis;
+import com.smart.entity.Livreur;
 import com.smart.service.ColisService;
 import com.smart.service.LivreurService;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,18 +12,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import com.smart.entity.Livreur;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,6 +35,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class LivreurControllerTest {
 
     @Mock
@@ -37,6 +43,12 @@ class LivreurControllerTest {
 
     @Mock
     private ColisService colisService;
+
+    @Mock
+    private Authentication authentication;
+
+    @Mock
+    private SecurityContext securityContext;
 
     @InjectMocks
     private LivreurController livreurController;
@@ -58,6 +70,11 @@ class LivreurControllerTest {
         colisDTO = new ColisDTO();
         colisDTO.setId("colis1");
         colisDTO.setStatut(StatutColis.LIVRE);
+
+        // Setup Security Context pour les tests qui en ont besoin
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(authentication.getName()).thenReturn("livreur@test.com");
     }
 
     @Test
@@ -103,20 +120,6 @@ class LivreurControllerTest {
         assertEquals("liv1", response.getBody().getId());
     }
 
-//    @Test
-//    void create_ShouldReturnCreatedLivreur() {
-//        // Arrange
-//        when(livreurService.save(any(LivreurDTO.class))).thenReturn(livreurDTO);
-//
-//        // Act
-//        LivreurDTO result = livreurController.create(livreurDTO);
-//
-//        // Assert
-//        assertNotNull(result);
-//        assertEquals("liv1", result.getId());
-//        verify(livreurService).save(any(LivreurDTO.class));
-//    }
-
     @Test
     void update_WhenLivreurExists_ShouldReturnUpdatedLivreur() {
         // Arrange
@@ -153,7 +156,7 @@ class LivreurControllerTest {
 
         // Act
         ResponseEntity<ColisDTO> response =
-            livreurController.updateColisStatus("colis1", "LIVRE");
+                livreurController.updateColisStatus("colis1", "LIVRE");
 
         // Assert
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -164,22 +167,26 @@ class LivreurControllerTest {
     @Test
     void getColisAssignes_ShouldReturnAssignedColis() {
         // Arrange
+        String username = "livreur@test.com";
         Page<ColisDTO> page = new PageImpl<>(Arrays.asList(colisDTO));
-        when(colisService.findByLivreurIdAndStatut("liv1", "COLLECTE", pageable))
-            .thenReturn(page);
 
         Livreur livreur = new Livreur();
         livreur.setId("liv1");
-        when(livreurService.findByUsername(anyString())).thenReturn(Optional.of(livreur));
+
+        // Mock authentication - déjà fait dans setUp()
+        when(livreurService.findByUsername(username)).thenReturn(Optional.of(livreur));
+        when(colisService.findByLivreurIdAndStatut("liv1", "COLLECTE", pageable))
+                .thenReturn(page);
 
         // Act
         ResponseEntity<Page<ColisDTO>> response =
-            livreurController.getColisAssignes("COLLECTE", pageable);
+                livreurController.getColisAssignes("COLLECTE", pageable);
 
         // Assert
         assertTrue(response.getStatusCode().is2xxSuccessful());
         assertNotNull(response.getBody());
         assertEquals(1, response.getBody().getTotalElements());
+        verify(livreurService).findByUsername(username);
     }
 
     @Test

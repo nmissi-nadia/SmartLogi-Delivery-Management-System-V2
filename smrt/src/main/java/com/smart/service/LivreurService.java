@@ -72,7 +72,7 @@ public class LivreurService {
         
     } catch (Exception e) {
         log.error("Erreur lors de la sauvegarde du livreur", e);
-        throw e; 
+        throw e;
     }
 }
 
