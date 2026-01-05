@@ -5,8 +5,7 @@ pipeline {
         SONAR_HOST_URL      = "http://localhost:9000"
         SONAR_PROJECT_KEY   = "SmartLogi-DMS"
         DOCKER_IMAGE_NAME   = "smartlogi-app"
-        // Ajoutez le chemin du projet si nécessaire
-        PROJECT_DIR         = "smrt"  // Changez si pom.xml est ailleurs
+        PROJECT_DIR         = "smrt"  // ← IMPORTANT : Le projet Maven est dans ce dossier
     }
 
     stages {
@@ -24,14 +23,17 @@ pipeline {
                     echo Current directory:
                     cd
                     echo.
-                    echo Listing files:
+                    echo Root directory contents:
                     dir
                     echo.
-                    echo Checking for pom.xml:
-                    if exist pom.xml (
-                        echo [SUCCESS] pom.xml found!
+                    echo Contents of smrt directory:
+                    dir smrt
+                    echo.
+                    echo Checking for pom.xml in smrt:
+                    if exist smrt\\pom.xml (
+                        echo [SUCCESS] pom.xml found in smrt directory!
                     ) else (
-                        echo [ERROR] pom.xml NOT found!
+                        echo [ERROR] pom.xml NOT found in smrt directory!
                         exit /b 1
                     )
                 '''
@@ -40,7 +42,7 @@ pipeline {
 
         stage('Compile') {
             steps {
-                dir(env.PROJECT_DIR) {
+                dir('smrt') {  // ← Changement de répertoire vers smrt
                     echo "Compiling the application..."
                     bat 'mvn clean compile'
                 }
@@ -49,7 +51,7 @@ pipeline {
 
         stage('Unit & Integration Tests') {
             steps {
-                dir(env.PROJECT_DIR) {
+                dir('smrt') {  // ← Changement de répertoire vers smrt
                     echo "Running tests and generating coverage report..."
                     withCredentials([
                         string(credentialsId: 'okta-client-id', variable: 'OAUTH2_OKTA_CLIENT_ID'),
@@ -62,16 +64,16 @@ pipeline {
             }
             post {
                 always {
-                    echo "Archiving test results..."
-                    junit "${env.PROJECT_DIR}/target/surefire-reports/**/*.xml"
-                    jacoco execPattern: "${env.PROJECT_DIR}/target/jacoco.exec"
+                    echo "Archiving test results and coverage reports..."
+                    junit 'smrt/target/surefire-reports/**/*.xml'
+                    jacoco execPattern: 'smrt/target/jacoco.exec'
                 }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                dir(env.PROJECT_DIR) {
+                dir('smrt') {  // ← Changement de répertoire vers smrt
                     echo "Performing SonarQube analysis..."
                     withSonarQubeEnv('My-SonarQube') {
                         bat """
@@ -99,8 +101,9 @@ pipeline {
                     def imageTag = env.BUILD_NUMBER
                     def latestTag = "latest"
                     def fullImageName = env.DOCKER_IMAGE_NAME
-                    
-                    docker.build(fullImageName + ":${imageTag}", env.PROJECT_DIR)
+
+                    // Build depuis le dossier smrt où se trouve le Dockerfile
+                    docker.build(fullImageName + ":${imageTag}", "./smrt")
                     docker.image(fullImageName + ":${imageTag}").tag(latestTag)
                 }
             }
