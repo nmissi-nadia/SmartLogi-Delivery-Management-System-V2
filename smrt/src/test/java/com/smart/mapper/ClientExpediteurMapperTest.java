@@ -3,55 +3,20 @@ package com.smart.mapper;
 import com.smart.dto.ClientExpediteurDTO;
 import com.smart.entity.ClientExpediteur;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {ClientExpediteurMapperImpl.class})
 public class ClientExpediteurMapperTest {
 
-    private final ClientExpediteurMapper mapper = new ClientExpediteurMapper() {
-        @Override
-        public ClientExpediteur toEntity(ClientExpediteurDTO dto) {
-            if (dto == null) {
-                return null;
-            }
-            ClientExpediteur entity = new ClientExpediteur();
-            entity.setId(dto.getId());
-            entity.setNom(dto.getNom());
-            entity.setPrenom(dto.getPrenom());
-            entity.setEmail(dto.getEmail());
-            entity.setTelephone(dto.getTelephone());
-            entity.setAdresse(dto.getAdresse());
-            return entity;
-        }
-
-        @Override
-        public ClientExpediteurDTO toDto(ClientExpediteur entity) {
-            if (entity == null) {
-                return null;
-            }
-            ClientExpediteurDTO dto = new ClientExpediteurDTO();
-            dto.setId(entity.getId());
-            dto.setNom(entity.getNom());
-            dto.setPrenom(entity.getPrenom());
-            dto.setEmail(entity.getEmail());
-            dto.setTelephone(entity.getTelephone());
-            dto.setAdresse(entity.getAdresse());
-            return dto;
-        }
-
-        @Override
-        public List<ClientExpediteur> toEntity(List<ClientExpediteurDTO> dtoList) {
-            return null;
-        }
-
-        @Override
-        public List<ClientExpediteurDTO> toDto(List<ClientExpediteur> entityList) {
-            return null;
-        }
-    };
+    @Autowired
+    private ClientExpediteurMapper mapper;
 
     @Test
     public void testToDTO() {

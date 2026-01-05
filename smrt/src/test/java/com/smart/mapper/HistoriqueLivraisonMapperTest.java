@@ -5,7 +5,10 @@ import com.smart.entity.Colis;
 import com.smart.entity.HistoriqueLivraison;
 import com.smart.entity.Enum.StatutColis;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 
@@ -13,9 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {HistoriqueLivraisonMapperImpl.class})
 public class HistoriqueLivraisonMapperTest {
 
-    private final HistoriqueLivraisonMapper mapper = Mappers.getMapper(HistoriqueLivraisonMapper.class);
+    @Autowired
+    private HistoriqueLivraisonMapper mapper;
 
     @Test
     public void testToDTO() {

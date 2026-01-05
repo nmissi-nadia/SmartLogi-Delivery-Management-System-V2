@@ -3,14 +3,20 @@ package com.smart.mapper;
 import com.smart.dto.ProduitDTO;
 import com.smart.entity.Produit;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {ProduitMapperImpl.class})
 public class ProduitMapperTest {
 
-    private final ProduitMapper mapper = Mappers.getMapper(ProduitMapper.class);
+    @Autowired
+    private ProduitMapper mapper;
 
     @Test
     public void testToDTO() {

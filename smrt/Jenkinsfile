@@ -49,7 +49,41 @@ pipeline {
             }
         }
 
+        stage('Unit & Integration Tests') {
+            steps {
+                dir('smrt') {  // ← Changement de répertoire vers smrt
+                    echo "Running tests and generating coverage report..."
+                    withCredentials([
+                        string(credentialsId: 'okta-client-id', variable: 'OAUTH2_OKTA_CLIENT_ID'),
+                        string(credentialsId: 'okta-client-secret', variable: 'OAUTH2_OKTA_CLIENT_SECRET'),
+                        string(credentialsId: 'okta-issuer-uri', variable: 'OAUTH2_OKTA_ISSUER_URI')
+                    ]) {
+                        bat 'mvn verify'
+                    }
+                }
+            }
+            post {
+                always {
+                    echo "Archiving test results and coverage reports..."
+                    junit 'smrt/target/surefire-reports/**/*.xml'
+                    jacoco execPattern: 'smrt/target/jacoco.exec'
+                }
+            }
+        }
 
+        stage('SonarQube Analysis') {
+            steps {
+                dir('smrt') {  // ← Changement de répertoire vers smrt
+                    echo "Performing SonarQube analysis..."
+                    withSonarQubeEnv('My-SonarQube') {
+                        bat """
+                            mvn sonar:sonar ^
+                              -Dsonar.projectKey=${env.SONAR_PROJECT_KEY}
+                        """
+                    }
+                }
+            }
+        }
 
         stage('Quality Gate') {
             steps {

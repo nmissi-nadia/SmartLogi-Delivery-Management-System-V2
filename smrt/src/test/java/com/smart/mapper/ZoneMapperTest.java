@@ -3,14 +3,20 @@ package com.smart.mapper;
 import com.smart.dto.ZoneDTO;
 import com.smart.entity.Zone;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {ZoneMapperImpl.class})
 public class ZoneMapperTest {
 
-    private final ZoneMapper mapper = Mappers.getMapper(ZoneMapper.class);
+    @Autowired
+    private ZoneMapper mapper;
 
     @Test
     public void testToDTO() {
