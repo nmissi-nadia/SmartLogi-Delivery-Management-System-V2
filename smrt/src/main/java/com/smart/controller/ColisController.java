@@ -1,6 +1,7 @@
 package com.smart.controller;
 
 import com.smart.dto.ColisDTO;
+import com.smart.dto.ColisRequestDTO;
 import com.smart.dto.HistoriqueLivraisonDTO;
 import com.smart.entity.HistoriqueLivraison;
 import com.smart.service.ColisService;
@@ -10,8 +11,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,8 +41,10 @@ public class ColisController {
     @PostMapping
     @PreAuthorize("hasAuthority('CREATE_COLIS_CLIENT') or hasAuthority('MANAGE_COLIS')")
     @Operation(summary = "Create a new colis")
-    public ColisDTO createColis(@RequestBody ColisDTO colisDTO) {
-        return colisService.save(colisDTO);
+    public ColisDTO createColis(@RequestBody @Valid ColisRequestDTO request) {
+        log.debug("Création d'un nouveau colis");
+        // Don't pass clientId - the service will get it from the authenticated user
+        return colisService.createColisWithDetails(null, request);
     }
 
     @GetMapping

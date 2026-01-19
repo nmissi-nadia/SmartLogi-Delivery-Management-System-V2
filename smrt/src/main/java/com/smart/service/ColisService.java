@@ -57,13 +57,18 @@ public class ColisService {
  * Créer une nouvelle demande de livraison
  */
     @Transactional
-        public ColisDTO createColisWithDetails(String clientId,ColisRequestDTO request) {
-            // 1. Gérer le client expéditeur
-            ClientExpediteur client = clientExpediteurRepository.findById(clientId)
-                .orElseGet(() -> {
-                    ClientExpediteur newClient = clientExpediteurMapper.toEntity(request.getClientExpediteur());
-                    return clientExpediteurRepository.save(newClient);
-                });
+        public ColisDTO createColisWithDetails(String clientId, ColisRequestDTO request) {
+            // 1. Gérer le client expéditeur - Récupérer le client de l'utilisateur authentifié
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication != null ? authentication.getName() : null;
+            
+            if (username == null) {
+                throw new RuntimeException("Utilisateur non authentifié");
+            }
+            
+            // Récupérer le ClientExpediteur lié à l'utilisateur authentifié
+            ClientExpediteur client = clientExpediteurRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Client non trouvé pour l'utilisateur : " + username));
 
             // 2. Gérer le destinataire
             Destinataire destinataire = destinataireRepository.findByEmail(request.getDestinataire().getEmail())
@@ -466,8 +471,15 @@ public class ColisService {
 
         StatutColis statutEnum = statut != null ? StatutColis.valueOf(statut) : null;
         PrioriteEnum prioriteEnum = priorite != null ? PrioriteEnum.valueOf(priorite) : null;
+        
+        // Note: Date filtering is currently not supported in the query due to PostgreSQL type issues
+        // TODO: Implement date filtering using a different approach (e.g., Specification API or native query)
+        if (dateDebut != null || dateFin != null) {
+            log.warn("Date filtering is currently not supported. Ignoring dateDebut and dateFin parameters.");
+        }
+        
         return colisRepository.findByCritere(statutEnum, ville, prioriteEnum, zoneId,
-                                           dateDebut, dateFin, pageable,
+                                           pageable,
                                            clientId, destinataireId, livreurId)
                 .map(colisMapper::toDto);
     }

@@ -72,7 +72,6 @@ public class DestinataireController {
     // colis
     // Voir les détails d'un colis
     @GetMapping("/{destinataireId}/colis/{colisId}")
-    @PreAuthorize("hasAuthority('VIEW_COLIS_DESTINATAIRE')")
     @Operation(summary = "Voir les détails d'un colis pour un destinataire")
     public ResponseEntity<ColisDTO> viewColis(
             @PathVariable String destinataireId,
@@ -83,7 +82,6 @@ public class DestinataireController {
 
     // Confirmer réception
     @PostMapping("/{destinataireId}/colis/{colisId}/confirmation")
-    @PreAuthorize("hasAuthority('MANAGE_COLIS_DESTINATAIRE')")
     @Operation(summary = "Confirmer la réception d'un colis pour un destinataire")
     public ResponseEntity<ColisDTO> confirmReception(
             @PathVariable String destinataireId,

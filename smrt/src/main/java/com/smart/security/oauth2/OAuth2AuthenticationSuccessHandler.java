@@ -108,12 +108,8 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 
         String jwt = tokenProvider.generateToken(jwtAuth);
 
-        Map<String, String> tokenResponse = new HashMap<>();
-        tokenResponse.put("token", jwt);
-
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding("UTF-8");
-        objectMapper.writeValue(response.getWriter(), tokenResponse);
+        String frontendUrl = "http://localhost:4200/auth/oauth2/redirect?token=" + jwt;
+        response.sendRedirect(frontendUrl);
     }
 
 }

@@ -2,6 +2,7 @@ package com.smart.controller.auth;
 
 import com.smart.dto.LoginRequest;
 import com.smart.dto.LoginResponse;
+import com.smart.dto.LogoutResponse;
 import com.smart.security.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,5 +43,14 @@ public class AuthController {
 
         String jwt = tokenProvider.generateToken(authentication);
         return ResponseEntity.ok(new LoginResponse(jwt));
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "Déconnecter un utilisateur", description = "Permet à un utilisateur de se déconnecter en nettoyant le contexte de sécurité.")
+    public ResponseEntity<LogoutResponse> logout() {
+        // Clear the security context
+        SecurityContextHolder.clearContext();
+        
+        return ResponseEntity.ok(new LogoutResponse("Déconnexion réussie"));
     }
 }

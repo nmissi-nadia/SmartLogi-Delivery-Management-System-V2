@@ -24,13 +24,11 @@ public interface ColisRepository extends JpaRepository<Colis, String> {
     @Query("SELECT c FROM Colis c WHERE c.zone.nom = :zoneNom")
     List<Colis> findByZoneNom(@Param("zoneNom") String zoneNom);
 
-    @Query("SELECT DISTINCT c FROM Colis c LEFT JOIN c.historique h WHERE " +
+    @Query("SELECT c FROM Colis c WHERE " +
             "(:statut IS NULL OR c.statut = :statut) AND " +
             "(:ville IS NULL OR c.villeDestination = :ville) AND " +
             "(:priorite IS NULL OR c.priorite = :priorite) AND " +
             "(:zoneId IS NULL OR c.zone.id = :zoneId) AND " +
-            "(:dateDebut IS NULL OR h.dateChangement >= :dateDebut) AND " +
-            "(:dateFin IS NULL OR h.dateChangement <= :dateFin) AND " +
             "(:clientId IS NULL OR c.clientExpediteur.id = :clientId) AND " +
             "(:destinataireId IS NULL OR c.destinataire.id = :destinataireId) AND " +
             "(:livreurId IS NULL OR c.livreur.id = :livreurId)")
@@ -38,9 +36,10 @@ public interface ColisRepository extends JpaRepository<Colis, String> {
                                @Param("ville") String ville,
                                @Param("priorite") PrioriteEnum priorite,
                                @Param("zoneId") String zoneId,
-                               @Param("dateDebut") LocalDateTime dateDebut,
-                               @Param("dateFin") LocalDateTime dateFin,
-                               Pageable pageable, @Param("clientId") String clientId, @Param("destinataireId") String destinataireId, @Param("livreurId") String livreurId);
+                               Pageable pageable, 
+                               @Param("clientId") String clientId, 
+                               @Param("destinataireId") String destinataireId, 
+                               @Param("livreurId") String livreurId);
 
     Page<Colis> findAll(Pageable pageable);
 

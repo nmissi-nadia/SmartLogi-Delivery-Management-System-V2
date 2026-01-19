@@ -48,6 +48,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        // Utiliser contains pour gérer le préfixe /api
+        return path.contains("/auth/") || 
+               path.contains("/oauth2/") || 
+               path.contains("/swagger-ui/") ||
+               path.contains("/v3/api-docs/");
+    }
 
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
