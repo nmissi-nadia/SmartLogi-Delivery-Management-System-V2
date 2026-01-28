@@ -43,6 +43,12 @@ public interface ColisRepository extends JpaRepository<Colis, String> {
 
     Page<Colis> findAll(Pageable pageable);
 
+    /**
+     * Récupère tous les colis d'un destinataire spécifique
+     * Utilisé pour l'espace public de suivi des colis
+     */
+    List<Colis> findByDestinataire_Id(String destinataireId);
+
         @Query("SELECT c FROM Colis c WHERE lower(c.description) LIKE lower(concat('%', :keyword, '%')) OR lower(c.villeDestination) LIKE lower(concat('%', :keyword, '%'))")
 
         Page<Colis> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);

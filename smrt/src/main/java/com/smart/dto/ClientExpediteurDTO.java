@@ -10,4 +10,5 @@ public class ClientExpediteurDTO {
     private String email;
     private String telephone;
     private String adresse;
+    private String userId; // Added userId for User association
 }

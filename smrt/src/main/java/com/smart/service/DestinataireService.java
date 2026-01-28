@@ -34,4 +34,13 @@ public class DestinataireService {
     public void deleteById(String id) {
         repository.deleteById(id);
     }
+
+    /**
+     * Recherche un destinataire par nom ET email (exact match)
+     * Utilisé pour l'authentification publique des destinataires
+     */
+    public Optional<DestinataireDTO> findByNomAndEmail(String nom, String email) {
+        return repository.findByNomAndEmail(nom, email)
+                .map(mapper::toDto);
+    }
 }

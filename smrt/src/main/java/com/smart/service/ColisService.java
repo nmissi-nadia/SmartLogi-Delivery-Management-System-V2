@@ -48,6 +48,16 @@ public class ColisService {
     private final ZoneMapper zoneMapper;
     private final HistoriqueLivraisonMapper historiqueLivraisonMapper;
     
+    /**
+     * Récupère tous les colis d'un destinataire spécifique
+     * Utilisé pour l'espace public de suivi des colis
+     */
+    public List<ColisDTO> findByDestinataireId(String destinataireId) {
+        return colisRepository.findByDestinataire_Id(destinataireId).stream()
+                .map(colisMapper::toDto)
+                .collect(Collectors.toList());
+    }
+    
 
     // ===========================================
     // 1. MÉTHODES CLIENT EXPÉDITEUR

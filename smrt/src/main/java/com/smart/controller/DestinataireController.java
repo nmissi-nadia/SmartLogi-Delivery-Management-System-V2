@@ -26,7 +26,6 @@ public class DestinataireController {
 
 
     @GetMapping
-    @PreAuthorize("hasAuthority('VIEW_USERS')")
     @Operation(summary = "Récupérer tous les destinataires")
     public List<DestinataireDTO> getAll() {
         return service.findAll();
